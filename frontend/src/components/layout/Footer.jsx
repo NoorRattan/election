@@ -39,7 +39,7 @@ export default function Footer() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+                    className="text-sm text-primary-600 hover:text-primary-800 hover:underline underline focus:outline-2 focus:outline-primary-600 rounded"
                   >
                     {label} ↗
                   </a>
@@ -89,7 +89,7 @@ export default function Footer() {
                   href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded"
+                  className="text-sm text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-neutral-400 rounded"
                 >
                   GitHub Repository ↗
                 </a>
@@ -104,7 +104,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-8 pt-6 border-t border-neutral-200">
-          <p className="text-xs text-neutral-400 text-center">
+          <p className="text-xs text-neutral-500 text-center">
             © {new Date().getFullYear()} Electra. Content sourced from official government websites. Not
             affiliated with any government body.
           </p>

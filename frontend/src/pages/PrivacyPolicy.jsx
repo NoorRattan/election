@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
     <main id="main-content" className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <Link
         to="/"
-        className="inline-flex items-center text-sm text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded mb-6"
+        className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded mb-6"
       >
         ← Back to Home
       </Link>
@@ -65,7 +65,7 @@ export default function PrivacyPolicy() {
               You can withdraw consent at any time in{' '}
               <Link
                 to="/profile"
-                className="text-primary-600 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
                 Profile → Settings
               </Link>
@@ -88,7 +88,7 @@ export default function PrivacyPolicy() {
               You can permanently delete your account and all associated data from{' '}
               <Link
                 to="/profile"
-                className="text-primary-600 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
                 Profile → Account → Delete My Account
               </Link>
@@ -140,7 +140,7 @@ export default function PrivacyPolicy() {
               href="https://policies.google.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-600 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
             >
               policies.google.com/privacy ↗
             </a>
@@ -159,7 +159,7 @@ export default function PrivacyPolicy() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
                 GitHub issue ↗
               </a>{' '}

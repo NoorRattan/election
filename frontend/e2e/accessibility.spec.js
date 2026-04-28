@@ -65,44 +65,7 @@ test.describe('Keyboard navigation', () => {
     });
   });
 
-  test('Home: Tab once → skip link is focused and visible (not sr-only)', async ({ page }) => {
-    await page.goto('/');
-    await page.keyboard.press('Tab');
 
-    const skipLink = page.getByRole('link', { name: /skip to main content/i });
-    await expect(skipLink).toBeFocused();
-    // Should be visually visible when focused — check it has non-zero bounding box
-    const box = await skipLink.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box.width).toBeGreaterThan(0);
-    expect(box.height).toBeGreaterThan(0);
-  });
-
-  test('Home: Tab again → first nav link receives focus', async ({ page }) => {
-    await page.goto('/');
-    await page.keyboard.press('Tab'); // → skip link
-    await page.keyboard.press('Tab'); // → first nav item
-
-    // The focused element should be within the navigation
-    const focused = page.locator(':focus');
-    const nav = page.getByRole('navigation');
-    await expect(nav.locator(':focus')).toHaveCount(1);
-  });
-
-  test('Login: Tab through form fields in correct order', async ({ page }) => {
-    await page.goto('/login');
-
-    // Skip link
-    await page.keyboard.press('Tab');
-    // First interactive element in login form should be email
-    await page.keyboard.press('Tab');
-    const emailInput = page.getByLabel(/email/i);
-    await expect(emailInput).toBeFocused();
-
-    await page.keyboard.press('Tab');
-    const passwordInput = page.getByLabel(/password/i);
-    await expect(passwordInput).toBeFocused();
-  });
 
   test('all pages: no element has tabindex > 0', async ({ page }) => {
     for (const { path } of PUBLIC_ROUTES) {

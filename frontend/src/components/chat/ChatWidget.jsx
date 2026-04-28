@@ -35,8 +35,15 @@ export default function ChatWidget() {
   const inputRef      = useRef(null);
   const logRef        = useRef(null);
 
+  const initialMount = useRef(true);
+
   // Move focus into panel on open; restore to button on close
   useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+      return;
+    }
+    
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {

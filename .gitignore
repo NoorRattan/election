@@ -53,6 +53,11 @@ frontend/.vite/
 frontend/coverage/
 frontend/.nyc_output/
 
+# ─── Playwright E2E output ─────────────────────────────────────────────────
+frontend/playwright-report/
+frontend/test-results/
+frontend/test-output*.txt
+
 # ─── Secrets — NEVER COMMIT THESE ────────────────────────────────────────────
 .env
 .env.local

@@ -48,7 +48,7 @@ export default function Login() {
 
         <div className="relative my-5">
           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-neutral-200"/></div>
-          <div className="relative text-center"><span className="bg-neutral-50 px-3 text-xs text-neutral-400">or</span></div>
+          <div className="relative text-center"><span className="bg-neutral-50 px-3 text-xs text-neutral-600">or</span></div>
         </div>
 
         {/* Email/password form */}
@@ -80,7 +80,7 @@ export default function Login() {
         </form>
 
         <p className="text-xs text-neutral-500 text-center mt-6">
-          By signing in you agree to our <Link to="/privacy" className="text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-primary-600 rounded">Privacy Policy</Link>.
+          By signing in you agree to our <Link to="/privacy" className="text-neutral-700 underline hover:text-neutral-900 focus:outline-2 focus:outline-primary-600 rounded">Privacy Policy</Link>.
         </p>
       </div>
     </div>
