@@ -1,0 +1,20 @@
+# For local development only.
+# Connects to the real Firestore project using service account credentials in backend/.env
+# Optional: add a Firebase Emulator service and set FIRESTORE_EMULATOR_HOST=localhost:8080
+
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app    # Hot-reload: changes reflect without rebuild
+    command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+    environment:
+      - ENVIRONMENT=development

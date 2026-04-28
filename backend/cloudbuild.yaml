@@ -1,0 +1,68 @@
+# Cloud Build configuration for Electra backend
+# Triggered by: .github/workflows/deploy.yml (gcloud builds submit backend/)
+# Or manually: gcloud builds submit backend/ --config backend/cloudbuild.yaml
+#
+# Steps:
+#   1. Build the Docker image from the backend/ Dockerfile
+#   2. Push it to Google Container Registry
+#   3. Deploy to Cloud Run in the specified region
+
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/electra-api:$_COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/electra-api:latest'
+      - '.'
+    # Note: working directory is already backend/ because the build context
+    # was submitted with: gcloud builds submit backend/
+
+  # Step 2: Push image to Container Registry (both tags)
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/electra-api'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'electra-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/electra-api:$_COMMIT_SHA'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - '$_REGION'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '0'
+      - '--set-env-vars'
+      - 'ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+
+# Images to be pushed to Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/electra-api:$_COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/electra-api:latest'
+
+# Substitution variables (can be overridden at trigger level)
+substitutions:
+  _REGION: 'us-central1'    # Default deployment region
+  _COMMIT_SHA: 'manual'     # Fallback for manual deployments
+
+# Build options
+options:
+  logging: CLOUD_LOGGING_ONLY    # Send logs to Cloud Logging only (not GCS)
+  machineType: 'E2_HIGHCPU_8'   # Faster build machine for Docker builds

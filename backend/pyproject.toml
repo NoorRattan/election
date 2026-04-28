@@ -1,0 +1,67 @@
+# backend/pyproject.toml
+# Python project configuration for Electra API.
+# Linting:    ruff check app/ tests/
+# Formatting: ruff format app/ tests/
+# Coverage:   pytest --cov=app (threshold: 80% enforced here via fail_under)
+
+[project]
+name = "electra-api"
+version = "1.0.0"
+description = "Electra Election Education Assistant — FastAPI backend"
+requires-python = ">=3.11"
+
+# ── ruff — linter + formatter (replaces flake8 + black + isort) ───────────────
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["app", "tests"]
+exclude = [
+    "__pycache__",
+    ".venv",
+    "venv",
+    "dist",
+    ".pytest_cache",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long — ruff format handles wrapping
+    "B008",  # FastAPI's Depends() uses function calls as default args (intentional pattern)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+# ── coverage.py configuration ─────────────────────────────────────────────────
+
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "tests/*",
+    "seed_data.py",
+    # Google SDK service files — require live credentials for meaningful coverage.
+    # Covered at the route level via mocking in test_auth.py / test_chat.py etc.
+    "app/services/firestore_service.py",
+    "app/services/dialogflow_service.py",
+    "app/services/auth_service.py",
+]
+
+[tool.coverage.report]
+fail_under = 80       # CI enforces this threshold — mirrors --cov-fail-under=80 in pytest.ini
+show_missing = true   # Print line numbers of uncovered code
+skip_covered = false  # Show all files, not just those below threshold

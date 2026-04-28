@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Topics — anyone can read published topics; only backend service account writes
+    match /topics/{topicId} {
+      allow read: if resource.data.published == true;
+      allow write: if false;
+    }
+
+    // Timeline events — public read, no client write
+    match /timeline_events/{eventId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Quiz questions — authenticated read only (prevents scraping all answers)
+    match /quiz_questions/{questionId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Users — owner can read/write their own doc only
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      // Progress subcollection — owner only
+      match /progress/{topicId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // Feedback — anyone can create; no client reads/updates/deletes
+    match /feedback/{feedbackId} {
+      allow create: if request.resource.data.message.size() <= 2000
+                    && request.resource.data.message.size() > 0;
+      allow read, update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    // ESLint core recommended rules — catches common JS mistakes
+    "eslint:recommended",
+    // React-specific rules — component patterns, prop usage, hooks compliance
+    "plugin:react/recommended",
+    // Enforces the Rules of Hooks (no conditional hooks, correct deps arrays)
+    "plugin:react-hooks/recommended",
+    // WCAG-aligned accessibility linting for JSX (detects missing alt, bad ARIA, etc.)
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "jsx-a11y"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    // React 18: no longer need `import React from 'react'` in every JSX file
+    "react/react-in-jsx-scope": "off",
+
+    // Project uses JSDoc or runtime validation — no PropTypes enforcement
+    "react/prop-types": "off",
+
+    // Warn on unused variables; allow leading-underscore params (convention for ignored args)
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+
+    // Warn on console.log — allow console.warn and console.error for intentional logging
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+
+    // React Router's <Link to="..."> is a valid anchor substitute
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to"]
+      }
+    ],
+
+    // autofocus is an accessibility concern but sometimes necessary (e.g. modals)
+    "jsx-a11y/no-autofocus": "warn"
+  },
+  "ignorePatterns": [
+    "dist/",
+    "node_modules/",
+    "coverage/",
+    "playwright-report/",
+    "src/__mocks__/"
+  ],
+  "overrides": [
+    {
+      "files": ["src/__tests__/**/*.{js,jsx}", "src/**/*.test.{js,jsx}"],
+      "env": {
+        "browser": true,
+        "es2022": true,
+        "node": true
+      },
+      "globals": {
+        "vi":          "readonly",
+        "describe":    "readonly",
+        "it":          "readonly",
+        "expect":      "readonly",
+        "beforeEach":  "readonly",
+        "afterEach":   "readonly",
+        "beforeAll":   "readonly",
+        "afterAll":    "readonly",
+        "test":        "readonly"
+      },
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}

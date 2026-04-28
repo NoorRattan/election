@@ -1,0 +1,111 @@
+# ─── Python / Backend ────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+*.py,cover
+
+# mypy / pyright
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# ─── Node / Frontend ─────────────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/coverage/
+frontend/.nyc_output/
+
+# ─── Secrets — NEVER COMMIT THESE ────────────────────────────────────────────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+backend/.env
+frontend/.env.local
+
+# Firebase / GCP service account keys
+serviceAccountKey.json
+*-serviceAccountKey.json
+*ServiceAccount*.json
+*-key.json
+gcp-key.json
+
+# ─── IDE / Editor ────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ─── Docker ──────────────────────────────────────────────────────────────────
+*.log
+docker-compose.override.yml
+
+# ─── Misc ────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp
+.cache/
+
+# ─── DO NOT IGNORE (templates must be committed) ─────────────────────────────
+# !backend/.env.example    ← committed — shows required variable names
+# !frontend/.env.example   ← committed — shows required variable names
+
+# Environments
+.env
+.env.*
+!.env.example

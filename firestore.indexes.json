@@ -1,0 +1,58 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "topics",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "published", "order": "ASCENDING" },
+        { "fieldPath": "order",     "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "topics",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "published", "order": "ASCENDING" },
+        { "fieldPath": "country",   "arrayConfig": "CONTAINS" },
+        { "fieldPath": "order",     "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "topics",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "published", "order": "ASCENDING" },
+        { "fieldPath": "category",  "order": "ASCENDING" },
+        { "fieldPath": "order",     "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "topics",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "published", "order": "ASCENDING" },
+        { "fieldPath": "country",   "arrayConfig": "CONTAINS" },
+        { "fieldPath": "category",  "order": "ASCENDING" },
+        { "fieldPath": "order",     "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "timeline_events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "country", "order": "ASCENDING" },
+        { "fieldPath": "date",    "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "timeline_events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "country", "order": "ASCENDING" },
+        { "fieldPath": "level",   "order": "ASCENDING" },
+        { "fieldPath": "date",    "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
