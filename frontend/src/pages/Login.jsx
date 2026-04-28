@@ -79,8 +79,8 @@ export default function Login() {
           <Button type="submit" variant="primary" loading={loading} className="w-full">Sign In</Button>
         </form>
 
-        <p className="text-xs text-neutral-400 text-center mt-6">
-          By signing in you agree to our <Link to="/privacy" className="text-primary-600 hover:underline">Privacy Policy</Link>.
+        <p className="text-xs text-neutral-500 text-center mt-6">
+          By signing in you agree to our <Link to="/privacy" className="text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-primary-600 rounded">Privacy Policy</Link>.
         </p>
       </div>
     </div>
