@@ -57,9 +57,9 @@ export default defineConfig({
   // Start the dev server automatically for local runs
   // In CI, the frontend is built and served separately (see .github/workflows/e2e.yml)
   webServer: {
-    command: 'npm run dev',
+    command: process.env.CI ? 'npm run preview -- --port 5173' : 'npm run dev',
     url: 'http://localhost:5173',
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120000, // 2 min for Vite cold start
   },
 });

@@ -54,13 +54,6 @@ jobs:
           VITE_FIREBASE_MEASUREMENT_ID: G-TEST00000
           VITE_GOOGLE_MAPS_API_KEY: test-maps-key
 
-      # ── Serve built frontend in background ─────────────────────────────────
-      - name: Serve built frontend
-        run: npx serve dist -p 5173 &
-
-      # ── Wait for server to be ready ────────────────────────────────────────
-      - name: Wait for frontend to be ready
-        run: npx wait-on http://localhost:5173 --timeout 30000
 
       # ── Run E2E tests (Chromium only in CI) ───────────────────────────────
       # Firefox and mobile Safari run locally only (npm run e2e) to keep CI fast.
