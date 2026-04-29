@@ -48,7 +48,6 @@ def mock_dialogflow(mocker):
 
 
 class TestChatEndpoint:
-
     def test_valid_message_returns_200(self, client, mock_dialogflow):
         response = client.post("/api/v1/chat", json=VALID_CHAT)
         assert response.status_code == 200
@@ -75,24 +74,33 @@ class TestChatEndpoint:
         assert VALID_CHAT["country"] in str(call_kwargs)
 
     def test_message_too_long_returns_422(self, client):
-        response = client.post("/api/v1/chat", json={
-            **VALID_CHAT,
-            "message": "x" * 501,
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                **VALID_CHAT,
+                "message": "x" * 501,
+            },
+        )
         assert response.status_code == 422
 
     def test_empty_message_returns_422(self, client):
-        response = client.post("/api/v1/chat", json={
-            **VALID_CHAT,
-            "message": "",
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                **VALID_CHAT,
+                "message": "",
+            },
+        )
         assert response.status_code == 422
 
     def test_whitespace_only_message_returns_422(self, client):
-        response = client.post("/api/v1/chat", json={
-            **VALID_CHAT,
-            "message": "   ",
-        })
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                **VALID_CHAT,
+                "message": "   ",
+            },
+        )
         assert response.status_code == 422
 
     def test_missing_session_id_returns_422(self, client):
@@ -107,7 +115,6 @@ class TestChatEndpoint:
 
 
 class TestChatGracefulDegradation:
-
     def test_returns_200_when_dialogflow_not_configured(self, client, mocker):
         """When DIALOGFLOW_AGENT_ID is empty, endpoint returns static reply (not 503)."""
         mocker.patch(
@@ -136,7 +143,6 @@ class TestChatGracefulDegradation:
 
 
 class TestChatRateLimit:
-
     def test_chat_endpoint_accepts_valid_language_code(self, client, mock_dialogflow):
         """Verify language_code field is accepted (it is passed to Dialogflow)."""
         for lang in ["en", "en-GB", "hi", "pa"]:

@@ -5,7 +5,6 @@ SECURITY NOTE: QuizQuestion intentionally omits correctIndex and explanation.
 These fields are only revealed post-submission via QuestionResult.
 """
 
-
 from pydantic import BaseModel, ConfigDict, field_validator
 
 
@@ -19,8 +18,8 @@ class QuizQuestion(BaseModel):
 
     id: str
     question: str
-    options: list[str]       # Always exactly 4 strings
-    country: list[str]       # e.g. ["UK"] or ["ALL"] or ["UK", "US"]
+    options: list[str]  # Always exactly 4 strings
+    country: list[str]  # e.g. ["UK"] or ["ALL"] or ["UK", "US"]
 
 
 class QuizQuestionsResponse(BaseModel):
@@ -67,16 +66,16 @@ class QuestionResult(BaseModel):
 
     question_id: str
     correct: bool
-    correct_index: int        # Now safe to reveal — user has already submitted
-    explanation: str          # Explanation of why the correct answer is right
+    correct_index: int  # Now safe to reveal — user has already submitted
+    explanation: str  # Explanation of why the correct answer is right
 
 
 class QuizSubmitResponse(BaseModel):
     """Response body for POST /api/v1/quiz/submit."""
 
     topic_id: str
-    score: int                   # Percentage 0-100, rounded integer
-    total: int                   # Total number of answers evaluated
-    correct: int                 # Number of correct answers
+    score: int  # Percentage 0-100, rounded integer
+    total: int  # Total number of answers evaluated
+    correct: int  # Number of correct answers
     results: list[QuestionResult]
-    progress_updated: bool       # False if Firestore write failed (non-fatal)
+    progress_updated: bool  # False if Firestore write failed (non-fatal)

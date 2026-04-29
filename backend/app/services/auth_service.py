@@ -31,7 +31,10 @@ async def create_or_update_user_on_login(uid: str, token_data: dict) -> None:
     Called after successful login to sync user data to Firestore.
     Preserves any existing country preference — does not overwrite with None.
     """
-    await db.upsert_user(uid, {
-        "email": token_data.get("email"),
-        "display_name": token_data.get("name"),
-    })
+    await db.upsert_user(
+        uid,
+        {
+            "email": token_data.get("email"),
+            "display_name": token_data.get("name"),
+        },
+    )

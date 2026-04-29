@@ -19,7 +19,7 @@ from app.models import (
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-_SLUG_PATTERN = re.compile(r'^[a-zA-Z0-9_\-]+$')
+_SLUG_PATTERN = re.compile(r"^[a-zA-Z0-9_\-]+$")
 
 
 @router.get("/quiz/{topic_id}", response_model=QuizQuestionsResponse)
@@ -93,12 +93,14 @@ async def submit_quiz(request: QuizSubmitRequest, token: AuthToken):
         if is_correct:
             correct_count += 1
 
-        results.append(QuestionResult(
-            question_id=answer.question_id,
-            correct=is_correct,
-            correct_index=question_data["correct_index"],
-            explanation=question_data["explanation"],
-        ))
+        results.append(
+            QuestionResult(
+                question_id=answer.question_id,
+                correct=is_correct,
+                correct_index=question_data["correct_index"],
+                explanation=question_data["explanation"],
+            )
+        )
 
     total = len(results)
     score = round((correct_count / total) * 100) if total > 0 else 0
@@ -111,7 +113,10 @@ async def submit_quiz(request: QuizSubmitRequest, token: AuthToken):
     except Exception as exc:
         logger.error(
             "Failed to update progress for uid '%s', topic '%s': %s",
-            uid, request.topic_id, exc, exc_info=True,
+            uid,
+            request.topic_id,
+            exc,
+            exc_info=True,
         )
 
     return QuizSubmitResponse(

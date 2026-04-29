@@ -2,7 +2,6 @@
 Pydantic model for the POST /feedback endpoint.
 """
 
-
 from pydantic import BaseModel, field_validator
 
 VALID_CATEGORIES = {"bug", "content", "suggestion", "other"}
@@ -13,7 +12,7 @@ class FeedbackRequest(BaseModel):
 
     message: str
     category: str
-    country: str | None = None    # Country context; null if user hasn't selected one
+    country: str | None = None  # Country context; null if user hasn't selected one
 
     @field_validator("message")
     @classmethod
@@ -29,7 +28,5 @@ class FeedbackRequest(BaseModel):
     @classmethod
     def validate_category(cls, v: str) -> str:
         if v not in VALID_CATEGORIES:
-            raise ValueError(
-                f"category must be one of: {', '.join(sorted(VALID_CATEGORIES))}"
-            )
+            raise ValueError(f"category must be one of: {', '.join(sorted(VALID_CATEGORIES))}")
         return v

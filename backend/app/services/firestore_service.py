@@ -37,11 +37,11 @@ def _ts_to_iso_date(ts) -> str:
     """Convert Firestore Timestamp or datetime to 'YYYY-MM-DD' string."""
     if ts is None:
         return ""
-    if hasattr(ts, "date"):          # datetime object
+    if hasattr(ts, "date"):  # datetime object
         return ts.date().isoformat()
-    if hasattr(ts, "to_datetime"):   # Firestore DatetimeWithNanoseconds
+    if hasattr(ts, "to_datetime"):  # Firestore DatetimeWithNanoseconds
         return ts.to_datetime().date().isoformat()
-    return str(ts)[:10]              # Fallback: take first 10 chars of string repr
+    return str(ts)[:10]  # Fallback: take first 10 chars of string repr
 
 
 def _ts_to_datetime(ts) -> datetime | None:
@@ -75,15 +75,17 @@ async def get_topics(
     result = []
     for doc in docs:
         data = doc.to_dict()
-        result.append({
-            "id": doc.id,
-            "slug": data.get("slug", doc.id),
-            "title": data.get("title", ""),
-            "category": data.get("category", ""),
-            "country": data.get("country", []),
-            "order": data.get("order", 0),
-            "updated_at": _ts_to_datetime(data.get("updatedAt")),
-        })
+        result.append(
+            {
+                "id": doc.id,
+                "slug": data.get("slug", doc.id),
+                "title": data.get("title", ""),
+                "category": data.get("category", ""),
+                "country": data.get("country", []),
+                "order": data.get("order", 0),
+                "updated_at": _ts_to_datetime(data.get("updatedAt")),
+            }
+        )
     return result
 
 
@@ -131,16 +133,18 @@ async def get_timeline_events(
     result = []
     for doc in docs:
         data = doc.to_dict()
-        result.append({
-            "id": doc.id,
-            "name": data.get("name", ""),
-            "description": data.get("description", ""),
-            "date": _ts_to_iso_date(data.get("date")),
-            "type": data.get("type", ""),
-            "level": data.get("level", ""),
-            "state_province": data.get("state_province") or data.get("stateProv"),
-            "official_url": data.get("official_url") or data.get("officialUrl", ""),
-        })
+        result.append(
+            {
+                "id": doc.id,
+                "name": data.get("name", ""),
+                "description": data.get("description", ""),
+                "date": _ts_to_iso_date(data.get("date")),
+                "type": data.get("type", ""),
+                "level": data.get("level", ""),
+                "state_province": data.get("state_province") or data.get("stateProv"),
+                "official_url": data.get("official_url") or data.get("officialUrl", ""),
+            }
+        )
     return result
 
 
@@ -152,7 +156,7 @@ async def get_quiz_questions(topic_id: str) -> list[dict]:
     db = get_db()
     query = (
         db.collection("quiz_questions")
-        .where("topicId", "==", topic_id)   # Firestore field is camelCase
+        .where("topicId", "==", topic_id)  # Firestore field is camelCase
         .limit(10)
     )
     docs = await query.get()
@@ -160,15 +164,17 @@ async def get_quiz_questions(topic_id: str) -> list[dict]:
     result = []
     for doc in docs:
         data = doc.to_dict()
-        result.append({
-            "id": doc.id,
-            "question": data.get("question", ""),
-            "options": data.get("options", []),
-            "country": data.get("country", ["ALL"]),
-            "correct_index": data.get("correctIndex", 0),   # camelCase → snake_case
-            "explanation": data.get("explanation", ""),
-            "difficulty": data.get("difficulty", "medium"),
-        })
+        result.append(
+            {
+                "id": doc.id,
+                "question": data.get("question", ""),
+                "options": data.get("options", []),
+                "country": data.get("country", ["ALL"]),
+                "correct_index": data.get("correctIndex", 0),  # camelCase → snake_case
+                "explanation": data.get("explanation", ""),
+                "difficulty": data.get("difficulty", "medium"),
+            }
+        )
     return result
 
 
@@ -201,9 +207,9 @@ async def get_user(uid: str) -> dict | None:
     return {
         "uid": uid,
         "email": data.get("email"),
-        "display_name": data.get("displayName"),    # camelCase → snake_case
+        "display_name": data.get("displayName"),  # camelCase → snake_case
         "country": data.get("country"),
-        "age_group": data.get("ageGroup"),          # camelCase → snake_case
+        "age_group": data.get("ageGroup"),  # camelCase → snake_case
         # gdprConsentAt: Firestore Timestamp → Python datetime (None for pre-consent users)
         "gdpr_consent_at": _ts_to_datetime(data.get("gdprConsentAt")),
         "created_at": _ts_to_datetime(data.get("createdAt")),
@@ -228,7 +234,7 @@ async def upsert_user(uid: str, data: dict) -> None:
     if data.get("country"):
         firestore_data["country"] = data["country"]
     if data.get("age_group"):
-        firestore_data["ageGroup"] = data["age_group"]        # snake_case → camelCase
+        firestore_data["ageGroup"] = data["age_group"]  # snake_case → camelCase
 
     # Only set createdAt on first creation
     doc = await doc_ref.get()
@@ -250,7 +256,7 @@ async def update_user(uid: str, updates: dict) -> None:
     if "country" in updates and updates["country"] is not None:
         firestore_updates["country"] = updates["country"]
     if "age_group" in updates and updates["age_group"] is not None:
-        firestore_updates["ageGroup"] = updates["age_group"]        # snake_case → camelCase
+        firestore_updates["ageGroup"] = updates["age_group"]  # snake_case → camelCase
     # GDPR consent timestamp — set when user enables analytics consent in Profile settings
     # Stored as Firestore Timestamp; datetime is accepted directly by the Firestore client
     if "gdpr_consent_at" in updates and updates["gdpr_consent_at"] is not None:
@@ -288,32 +294,29 @@ async def get_user_progress(uid: str) -> list[dict]:
     result = []
     for doc in docs:
         data = doc.to_dict()
-        result.append({
-            "topic_id": data.get("topicId", doc.id),       # topicId → topic_id
-            "completed": data.get("completed", False),
-            "quiz_score": data.get("quizScore"),            # quizScore → quiz_score
-            "completed_at": _ts_to_datetime(data.get("completedAt")),
-            "attempts": data.get("attempts", 0),
-        })
+        result.append(
+            {
+                "topic_id": data.get("topicId", doc.id),  # topicId → topic_id
+                "completed": data.get("completed", False),
+                "quiz_score": data.get("quizScore"),  # quizScore → quiz_score
+                "completed_at": _ts_to_datetime(data.get("completedAt")),
+                "attempts": data.get("attempts", 0),
+            }
+        )
     return result
 
 
 async def update_progress(uid: str, topic_id: str, score: int) -> None:
     """Create or update progress document for a topic. Increments attempts."""
     db = get_db()
-    progress_ref = (
-        db.collection("users")
-        .document(uid)
-        .collection("progress")
-        .document(topic_id)
-    )
+    progress_ref = db.collection("users").document(uid).collection("progress").document(topic_id)
 
     existing = await progress_ref.get()
 
     firestore_data: dict = {
-        "topicId": topic_id,    # snake_case → camelCase for storage
+        "topicId": topic_id,  # snake_case → camelCase for storage
         "completed": True,
-        "quizScore": score,     # snake_case → camelCase for storage
+        "quizScore": score,  # snake_case → camelCase for storage
         "attempts": 1,
     }
 
@@ -324,7 +327,7 @@ async def update_progress(uid: str, topic_id: str, score: int) -> None:
         # Keep original completedAt — don't overwrite on retry
         await progress_ref.update(firestore_data)
     else:
-        firestore_data["completedAt"] = SERVER_TIMESTAMP   # camelCase for storage
+        firestore_data["completedAt"] = SERVER_TIMESTAMP  # camelCase for storage
         await progress_ref.set(firestore_data)
 
 
@@ -333,14 +336,16 @@ async def save_feedback(data: dict) -> None:
     db = get_db()
     feedback_ref = db.collection("feedback").document()  # auto-ID
 
-    await feedback_ref.set({
-        "message": data.get("message", ""),
-        "category": data.get("category", "other"),
-        "country": data.get("country"),
-        "userId": data.get("user_id"),      # snake_case → camelCase
-        "createdAt": SERVER_TIMESTAMP,
-        "reviewed": False,
-    })
+    await feedback_ref.set(
+        {
+            "message": data.get("message", ""),
+            "category": data.get("category", "other"),
+            "country": data.get("country"),
+            "userId": data.get("user_id"),  # snake_case → camelCase
+            "createdAt": SERVER_TIMESTAMP,
+            "reviewed": False,
+        }
+    )
 
 
 async def get_user_stats(uid: str) -> dict:
@@ -353,9 +358,7 @@ async def get_user_stats(uid: str) -> dict:
     total_topics = len(topics_docs)
 
     # Get user progress
-    progress_docs = await (
-        db.collection("users").document(uid).collection("progress").get()
-    )
+    progress_docs = await db.collection("users").document(uid).collection("progress").get()
 
     completed_count = 0
     scores = []

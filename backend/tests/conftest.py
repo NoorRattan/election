@@ -66,6 +66,7 @@ from app.middleware.auth import require_auth  # noqa: E402
 # FIXTURES
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture(scope="module")
 def client():
     """TestClient for the FastAPI app. Module-scoped for speed."""
@@ -110,6 +111,7 @@ def authed_client(client, auth_token):
     TestClient with the require_auth dependency overridden to return a fake token.
     Use this for testing any endpoint that requires authentication.
     """
+
     async def _fake_auth():
         return auth_token
 

@@ -68,9 +68,7 @@ async def query_dialogflow(
         else:
             api_endpoint = f"{location}-dialogflow.googleapis.com"
 
-        client = SessionsClient(
-            client_options={"api_endpoint": api_endpoint}
-        )
+        client = SessionsClient(client_options={"api_endpoint": api_endpoint})
 
         # Build session path
         session_path = client.session_path(project, location, agent_id, session_id)
@@ -85,9 +83,7 @@ async def query_dialogflow(
         # Add country as query parameter if provided
         query_params = None
         if country:
-            query_params = session_types.QueryParameters(
-                parameters={"country": country}
-            )
+            query_params = session_types.QueryParameters(parameters={"country": country})
 
         request = session_types.DetectIntentRequest(
             session=session_path,
@@ -135,6 +131,7 @@ async def query_dialogflow(
         )
         # Import here to avoid circular dependency at module level
         from fastapi import HTTPException
+
         raise HTTPException(
             status_code=503,
             detail="Chat service temporarily unavailable. Please try again.",

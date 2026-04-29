@@ -30,10 +30,13 @@ async def get_profile(token: AuthToken):
 
     if user_data is None:
         # First login — create the document
-        await db.upsert_user(uid, {
-            "email": token.get("email"),
-            "display_name": token.get("name"),
-        })
+        await db.upsert_user(
+            uid,
+            {
+                "email": token.get("email"),
+                "display_name": token.get("name"),
+            },
+        )
         user_data = await db.get_user(uid)
         if user_data is None:
             # Should never happen, but guard defensively
@@ -54,18 +57,18 @@ async def update_profile(updates: UserProfileUpdate, token: AuthToken):
     uid = token["uid"]
 
     # Build dict of only the fields that were explicitly provided (not None)
-    updates_dict = {
-        k: v for k, v in updates.model_dump().items() if v is not None
-    }
+    updates_dict = {k: v for k, v in updates.model_dump().items() if v is not None}
 
     # Guard: at least one recognised field must be present
     # gdpr_consent_at: analytics consent timestamp (GDPR compliance)
-    has_any_field = any([
-        updates.display_name    is not None,
-        updates.country         is not None,
-        updates.age_group       is not None,
-        updates.gdpr_consent_at is not None,
-    ])
+    has_any_field = any(
+        [
+            updates.display_name is not None,
+            updates.country is not None,
+            updates.age_group is not None,
+            updates.gdpr_consent_at is not None,
+        ]
+    )
     if not has_any_field:
         raise HTTPException(
             status_code=400,

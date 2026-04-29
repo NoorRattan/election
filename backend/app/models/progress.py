@@ -14,7 +14,7 @@ class TopicProgress(BaseModel):
 
     topic_id: str
     completed: bool
-    quiz_score: int | None = None      # 0-100 percentage; null if quiz never taken
+    quiz_score: int | None = None  # 0-100 percentage; null if quiz never taken
     completed_at: datetime | None = None
     attempts: int = 0
 

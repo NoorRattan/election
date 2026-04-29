@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
+
 async def require_auth(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
 ) -> dict:
@@ -69,5 +70,6 @@ async def require_auth(
         ) from exc
 
     return decoded_token
+
 
 AuthToken = Annotated[dict, Depends(require_auth)]

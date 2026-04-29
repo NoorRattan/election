@@ -61,7 +61,7 @@ class TestListTopics:
         )
         resp = client.get("/api/v1/topics?country=INVALID")
         assert resp.status_code == 400
-        mock.assert_not_called()   # Must NOT reach Firestore
+        mock.assert_not_called()  # Must NOT reach Firestore
 
     def test_invalid_category_returns_400(self, client, mock_db, mocker):
         mock = mocker.patch(

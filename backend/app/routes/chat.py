@@ -15,7 +15,7 @@ router = APIRouter()
 @router.post("/chat", response_model=ChatResponse)
 @limiter.limit("30/minute")
 async def chat(
-    request: Request,       # Required by slowapi
+    request: Request,  # Required by slowapi
     body: ChatRequest,
 ):
     """

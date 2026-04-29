@@ -13,11 +13,16 @@ router = APIRouter()
 
 VALID_COUNTRIES = {"UK", "US", "IN", "ALL"}
 VALID_CATEGORIES = {
-    "registration", "eligibility", "ballot",
-    "campaign", "counting", "dispute", "timeline",
+    "registration",
+    "eligibility",
+    "ballot",
+    "campaign",
+    "counting",
+    "dispute",
+    "timeline",
 }
 
-_SLUG_PATTERN = re.compile(r'^[a-zA-Z0-9\-]+$')
+_SLUG_PATTERN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 
 @router.get("/topics", response_model=TopicsResponse)

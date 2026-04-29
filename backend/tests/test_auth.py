@@ -176,4 +176,3 @@ class TestGdprConsent:
             json={"gdpr_consent_at": None, "country": "UK"},
         )
         assert response.status_code == 200
-

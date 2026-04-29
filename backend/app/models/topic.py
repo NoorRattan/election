@@ -33,10 +33,10 @@ class TopicDetail(BaseModel):
     id: str
     slug: str
     title: str
-    content: str          # Full Markdown string — rendered by react-markdown on frontend
+    content: str  # Full Markdown string — rendered by react-markdown on frontend
     category: str
     country: list[str]
-    prerequisites: list[str] = []   # List of topic slugs; empty list if none
+    prerequisites: list[str] = []  # List of topic slugs; empty list if none
     order: int
     updated_at: datetime | None = None
 

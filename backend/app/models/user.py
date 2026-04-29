@@ -29,8 +29,8 @@ class UserProfile(BaseModel):
     uid: str
     email: str | None = None
     display_name: str | None = None
-    country: str | None = None        # null until user selects a country
-    age_group: str | None = None      # null until user fills profile
+    country: str | None = None  # null until user selects a country
+    age_group: str | None = None  # null until user fills profile
     gdpr_consent_at: datetime | None = None  # null for pre-consent users
     created_at: datetime | None = None
     stats: UserStats
@@ -43,9 +43,9 @@ class UserProfileUpdate(BaseModel):
     not in this model, because Pydantic cannot easily enforce "at least one non-None").
     """
 
-    display_name:    str | None      = None
-    country:         str | None      = None
-    age_group:       str | None      = None
+    display_name: str | None = None
+    country: str | None = None
+    age_group: str | None = None
     gdpr_consent_at: datetime | None = None  # Set when user enables analytics consent
 
     @field_validator("country")

@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     def origins_list(self) -> list[str]:
         return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
 
+
 @lru_cache
 def get_settings() -> Settings:
     return Settings()

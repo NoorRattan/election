@@ -86,9 +86,10 @@ class TestSubmitQuiz:
     def test_no_auth_returns_401(self, client):
         resp = client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 2}
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [{"question_id": "q_vr_001", "selected_index": 2}],
+            },
         )
         assert resp.status_code == 401
 
@@ -101,9 +102,12 @@ class TestSubmitQuiz:
         mocker.patch("app.routes.quiz.db.update_progress", new_callable=AsyncMock)
         resp = authed_client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 2}  # correct_index is 2
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [
+                    {"question_id": "q_vr_001", "selected_index": 2}  # correct_index is 2
+                ],
+            },
         )
         assert resp.status_code == 200
         body = resp.json()
@@ -120,9 +124,12 @@ class TestSubmitQuiz:
         mocker.patch("app.routes.quiz.db.update_progress", new_callable=AsyncMock)
         resp = authed_client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 0}  # wrong — correct is 2
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [
+                    {"question_id": "q_vr_001", "selected_index": 0}  # wrong — correct is 2
+                ],
+            },
         )
         assert resp.status_code == 200
         body = resp.json()
@@ -138,9 +145,10 @@ class TestSubmitQuiz:
         mocker.patch("app.routes.quiz.db.update_progress", new_callable=AsyncMock)
         resp = authed_client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 2}
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [{"question_id": "q_vr_001", "selected_index": 2}],
+            },
         )
         assert "explanation" in resp.json()["results"][0]
 
@@ -154,9 +162,12 @@ class TestSubmitQuiz:
     def test_invalid_selected_index_returns_422(self, authed_client):
         resp = authed_client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 99}  # invalid
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [
+                    {"question_id": "q_vr_001", "selected_index": 99}  # invalid
+                ],
+            },
         )
         assert resp.status_code == 422
 
@@ -173,11 +184,12 @@ class TestSubmitQuiz:
         )
         resp = authed_client.post(
             "/api/v1/quiz/submit",
-            json={"topic_id": "voter-registration", "answers": [
-                {"question_id": "q_vr_001", "selected_index": 2}
-            ]},
+            json={
+                "topic_id": "voter-registration",
+                "answers": [{"question_id": "q_vr_001", "selected_index": 2}],
+            },
         )
-        assert resp.status_code == 200   # Non-fatal — still returns score
+        assert resp.status_code == 200  # Non-fatal — still returns score
         assert resp.json()["progress_updated"] is False
 
 
