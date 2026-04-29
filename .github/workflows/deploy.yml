@@ -12,23 +12,33 @@ jobs:
   deploy-backend:
     needs: backend-test
     runs-on: ubuntu-latest
+    env:
+      CAN_DEPLOY_BACKEND: ${{ secrets.GCP_SA_KEY != '' && secrets.GCP_PROJECT_ID != '' && secrets.GCP_PROJECT_ID_NUMBER != '' && secrets.VITE_API_BASE_URL != '' }}
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Skip backend deployment when cloud secrets are absent
+        if: env.CAN_DEPLOY_BACKEND != 'true'
+        run: echo "Cloud Run deployment skipped because required GitHub secrets are not configured for this repository."
+
       - uses: google-github-actions/auth@v2
+        if: env.CAN_DEPLOY_BACKEND == 'true'
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - uses: google-github-actions/setup-gcloud@v2
+        if: env.CAN_DEPLOY_BACKEND == 'true'
 
       - name: Build and push Docker image via Cloud Build
+        if: env.CAN_DEPLOY_BACKEND == 'true'
         run: |
           gcloud builds submit backend/ \
             --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/electra-api \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Grant Secret Manager access to compute SA
+        if: env.CAN_DEPLOY_BACKEND == 'true'
         run: |
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.GCP_PROJECT_ID_NUMBER }}-compute@developer.gserviceaccount.com" \
@@ -37,6 +47,7 @@ jobs:
             --project ${{ secrets.GCP_PROJECT_ID }} || true
 
       - name: Deploy to Cloud Run
+        if: env.CAN_DEPLOY_BACKEND == 'true'
         run: |
           gcloud run deploy electra-api \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/electra-api \
@@ -55,6 +66,7 @@ jobs:
       # Note: smoke-test.sh normalises the URL — strips trailing /api/v1 if present,
       #       then appends its own paths. Handles both https://host/api/v1 and https://host.
       - name: Post-deploy smoke test
+        if: env.CAN_DEPLOY_BACKEND == 'true'
         run: bash scripts/smoke-test.sh
         env:
           API_URL: ${{ secrets.VITE_API_BASE_URL }}
@@ -62,6 +74,8 @@ jobs:
   deploy-frontend:
     needs: deploy-backend
     runs-on: ubuntu-latest
+    env:
+      CAN_DEPLOY_FRONTEND: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' && secrets.GCP_PROJECT_ID != '' && secrets.VITE_API_BASE_URL != '' && secrets.VITE_FIREBASE_API_KEY != '' && secrets.VITE_FIREBASE_AUTH_DOMAIN != '' && secrets.VITE_FIREBASE_PROJECT_ID != '' && secrets.VITE_FIREBASE_STORAGE_BUCKET != '' && secrets.VITE_FIREBASE_MESSAGING_SENDER_ID != '' && secrets.VITE_FIREBASE_APP_ID != '' && secrets.VITE_FIREBASE_MEASUREMENT_ID != '' && secrets.VITE_GOOGLE_MAPS_API_KEY != '' }}
     defaults:
       run:
         working-directory: frontend
@@ -69,22 +83,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Skip frontend deployment when hosting secrets are absent
+        if: env.CAN_DEPLOY_FRONTEND != 'true'
+        run: echo "Firebase Hosting deployment skipped because required GitHub secrets are not configured for this repository."
+
       - uses: actions/setup-node@v4
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         with:
           node-version: '20.19.0'
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm ci
 
       # UPDATED (Prompt 09 — GAP-05): Frontend ESLint step added before build.
       # Runs BEFORE build so that jsx-a11y accessibility violations fail fast.
       # Warnings do not fail CI — only errors do.
       - name: Lint frontend
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm run lint
 
       - name: Build production bundle
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         env:
           VITE_API_BASE_URL:                  ${{ secrets.VITE_API_BASE_URL }}
           VITE_FIREBASE_API_KEY:              ${{ secrets.VITE_FIREBASE_API_KEY }}
@@ -99,10 +121,12 @@ jobs:
 
       # FIX #19: Frontend coverage enforced in CI (was missing before audit)
       - name: Run frontend tests with coverage
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm run test:coverage
 
       # FIX #18: Pinned to @v0.9.0 — NOT floating @v0 which can break on upstream changes
       - uses: FirebaseExtended/action-hosting-deploy@v0.9.0
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
         with:
           repoToken:              ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
