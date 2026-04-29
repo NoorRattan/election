@@ -23,7 +23,7 @@ import pytest
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
 VALID_CHAT = {
-    "message": "How do I register to vote in the UK?",
+    "message": "Can you explain parliament?",
     "session_id": "550e8400-e29b-41d4-a716-446655440000",
     "country": "UK",
     "language_code": "en",
@@ -140,6 +140,63 @@ class TestChatGracefulDegradation:
         response = client.post("/api/v1/chat", json=VALID_CHAT)
         assert response.status_code == 503
         assert "unavailable" in response.json()["detail"].lower()
+
+
+class TestChatLocalAnswers:
+    def test_answers_simple_math_without_dialogflow(self, client, mocker):
+        mock_dialogflow = mocker.patch(
+            "app.routes.chat.query_dialogflow",
+            new_callable=AsyncMock,
+        )
+
+        response = client.post(
+            "/api/v1/chat",
+            json={**VALID_CHAT, "message": "what is 2+2"},
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "2+2 = 4" in data["reply"]
+        assert data["intent"] == "utility_math"
+        mock_dialogflow.assert_not_called()
+
+    def test_answers_common_election_question_without_dialogflow(self, client, mocker):
+        mock_dialogflow = mocker.patch(
+            "app.routes.chat.query_dialogflow",
+            new_callable=AsyncMock,
+        )
+
+        response = client.post(
+            "/api/v1/chat",
+            json={**VALID_CHAT, "message": "How do I register to vote in the UK?"},
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "registration" in data["reply"].lower()
+        assert data["suggested_topics"] == ["voter-registration"]
+        mock_dialogflow.assert_not_called()
+
+    def test_replaces_dialogflow_no_match_with_helpful_fallback(self, client, mocker):
+        mocker.patch(
+            "app.routes.chat.query_dialogflow",
+            new_callable=AsyncMock,
+            return_value={
+                "reply": "What was that?",
+                "intent": "Default Negative Intent",
+                "suggested_topics": [],
+            },
+        )
+
+        response = client.post(
+            "/api/v1/chat",
+            json={**VALID_CHAT, "message": "banana"},
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "voter registration" in data["reply"].lower()
+        assert data["intent"] == "electra_local_fallback"
 
 
 class TestChatRateLimit:
