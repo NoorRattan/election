@@ -2,8 +2,8 @@
 Dialogflow CX proxy service for the Electra chat feature.
 
 CRITICAL IMPORT PATH: Use the STABLE SDK, NOT the beta module.
-  CORRECT:   from google.cloud.dialogflow_cx_v3.services.sessions import SessionsClient
-  INCORRECT: from google.cloud.dialogflow_cx_v3beta1 ... (this is the old beta — DO NOT USE)
+  CORRECT:   from google.cloud.dialogflowcx_v3.services.sessions import SessionsClient
+  INCORRECT: from google.cloud.dialogflowcx_v3beta1 ... (this is the old beta — DO NOT USE)
 
 Package: google-cloud-dialogflow-cx==1.15.0 (see requirements.txt)
 
@@ -55,8 +55,8 @@ async def query_dialogflow(
 
     try:
         # Import inside function to avoid top-level ImportError crashing startup
-        from google.cloud.dialogflow_cx_v3.services.sessions import SessionsClient
-        from google.cloud.dialogflow_cx_v3.types import session as session_types
+        from google.cloud.dialogflowcx_v3.services.sessions import SessionsClient
+        from google.cloud.dialogflowcx_v3.types import session as session_types
 
         location = settings.dialogflow_location
         project = settings.google_cloud_project
