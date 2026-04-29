@@ -75,6 +75,9 @@ serviceAccountKey.json
 *-key.json
 gcp-key.json
 
+# Local Dialogflow maintenance helpers with project-specific resource IDs
+backend/update_agent.py
+
 # ─── IDE / Editor ────────────────────────────────────────────────────────────
 .idea/
 .vscode/

@@ -24,9 +24,11 @@ vi.mock('firebase/app', () => ({
 
 vi.mock('firebase/auth', () => ({
   getAuth:            vi.fn(() => ({ currentUser: null, signOut: vi.fn() })),
-  GoogleAuthProvider: vi.fn().mockImplementation(() => ({
-    setCustomParameters: vi.fn(),
-  })),
+  GoogleAuthProvider: vi.fn(function GoogleAuthProvider() {
+    return {
+      setCustomParameters: vi.fn(),
+    };
+  }),
   signInWithPopup:    vi.fn(),
   signInWithEmailAndPassword: vi.fn(),
   createUserWithEmailAndPassword: vi.fn(),
@@ -39,4 +41,3 @@ vi.mock('firebase/analytics', () => ({
   isSupported:   vi.fn(() => Promise.resolve(false)),
   logEvent:      vi.fn(),
 }));
-

@@ -5,7 +5,7 @@
  */
 
 import { logEvent } from 'firebase/analytics';
-import { analytics } from '../firebase';
+import { getAnalyticsInstance } from '../firebase';
 
 const CONSENT_KEY = 'electra_analytics_consent';
 
@@ -22,10 +22,13 @@ export function revokeAnalyticsConsent() {
 }
 
 export function trackEvent(eventName, params = {}) {
-  if (!hasConsent() || !analytics) return;
-  try {
-    logEvent(analytics, eventName, params);
-  } catch { /* non-fatal */ }
+  if (!hasConsent()) return;
+  getAnalyticsInstance().then((analytics) => {
+    if (!analytics) return;
+    try {
+      logEvent(analytics, eventName, params);
+    } catch { /* non-fatal */ }
+  });
 }
 
 export function trackPageView(pageName) {

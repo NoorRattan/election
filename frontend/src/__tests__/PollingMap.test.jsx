@@ -40,24 +40,36 @@ vi.mock('../utils/countryConfig', () => ({
 
 // ── Google Maps API mock ─────────────────────────────────────────────────────
 function createGoogleMock() {
+  const MockMap = vi.fn(function MockMap() {
+    return {
+      setCenter: vi.fn(),
+      panTo: vi.fn(),
+      setZoom: vi.fn(),
+      setOptions: vi.fn(),
+      addListener: vi.fn(() => ({ remove: vi.fn() })),
+    };
+  });
+
+  const MockMarker = vi.fn(function MockMarker() {
+    return {};
+  });
+
+  const MockGeocoder = vi.fn(function MockGeocoder() {
+    return {
+      geocode: vi.fn((_, callback) =>
+        callback(
+          [{ geometry: { location: { lat: () => 51.5, lng: () => -0.1 } } }],
+          'OK'
+        )
+      ),
+    };
+  });
+
   return {
     maps: {
-      Map: vi.fn().mockImplementation(() => ({
-        setCenter: vi.fn(),
-        panTo: vi.fn(),
-        setZoom: vi.fn(),
-        setOptions: vi.fn(),
-        addListener: vi.fn(() => ({ remove: vi.fn() })),
-      })),
-      Marker: vi.fn().mockImplementation(() => ({})),
-      Geocoder: vi.fn().mockImplementation(() => ({
-        geocode: vi.fn((_, callback) =>
-          callback(
-            [{ geometry: { location: { lat: () => 51.5, lng: () => -0.1 } } }],
-            'OK'
-          )
-        ),
-      })),
+      Map: MockMap,
+      Marker: MockMarker,
+      Geocoder: MockGeocoder,
     },
   };
 }

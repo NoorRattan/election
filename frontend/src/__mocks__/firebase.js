@@ -21,3 +21,7 @@ export const googleProvider = {
 };
 
 export let analytics = null;
+
+export function getAnalyticsInstance() {
+  return Promise.resolve(analytics);
+}

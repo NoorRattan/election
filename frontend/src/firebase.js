@@ -37,8 +37,20 @@ googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // Analytics: initialise only if supported AND after consent (consent checked in analytics.js)
 export let analytics = null;
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
+let analyticsPromise = null;
+
+export function getAnalyticsInstance() {
+  if (analytics) return Promise.resolve(analytics);
+
+  if (!analyticsPromise) {
+    analyticsPromise = isSupported()
+      .then((supported) => {
+        if (!supported) return null;
+        analytics = getAnalytics(app);
+        return analytics;
+      })
+      .catch(() => null);
   }
-});
+
+  return analyticsPromise;
+}

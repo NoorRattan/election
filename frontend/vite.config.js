@@ -50,13 +50,10 @@ export default defineConfig({
         'src/test-setup.js',
       ],
       thresholds: {
-        lines:      50,
-        functions:  55,
-        // Branches include optional chaining and nullish coalescing throughout,
-        // requiring integration tests to fully cover. This threshold is realistic
-        // for a component-heavy React app where pages/contexts need live Firebase.
-        branches:   40,
-        statements: 50,
+        lines:      70,
+        functions:  60,
+        branches:   60,
+        statements: 70,
       },
     },
   },
@@ -65,10 +62,20 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor:   ['react', 'react-dom', 'react-router-dom'],
-          firebase: ['firebase/app', 'firebase/auth', 'firebase/analytics'],
-          charts:   ['recharts'],
+        manualChunks(id) {
+          if (id.includes('node_modules/firebase') || id.includes('node_modules/@firebase')) {
+            return 'firebase';
+          }
+          if (id.includes('node_modules/recharts')) {
+            return 'charts';
+          }
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router-dom')
+          ) {
+            return 'vendor';
+          }
         },
       },
     },

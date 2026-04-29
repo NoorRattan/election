@@ -68,7 +68,7 @@ all instances. For production hardening, replace with a Firestore-based or Redis
 
 ### Prerequisites
 - Python 3.11+
-- Node.js 20+
+- Node.js 20.19+
 - A Google Cloud project with Firestore, Firebase Auth, and Cloud Run enabled
 - A Firebase project (can be the same GCP project)
 
