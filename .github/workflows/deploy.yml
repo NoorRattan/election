@@ -37,7 +37,7 @@ jobs:
             --allow-unauthenticated \
             --memory 512Mi \
             --max-instances 10 \
-            --set-env-vars ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }} \
+            --set-env-vars ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }},ALLOWED_ORIGINS=https://electra-app-2026.web.app,https://electra-app-2026.firebaseapp.com \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
       # UPDATED (Prompt 09 — GAP-06): Post-deploy smoke test added.
