@@ -86,10 +86,14 @@ test.describe('Timeline page', () => {
           body: JSON.stringify({ events: US_EVENTS_FIXTURE }),
         });
       } else {
+        let eventsToReturn = UK_EVENTS_FIXTURE;
+        if (level && level !== 'null' && level !== 'undefined') {
+          eventsToReturn = eventsToReturn.filter(e => e.level === level);
+        }
         route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ events: UK_EVENTS_FIXTURE }),
+          body: JSON.stringify({ events: eventsToReturn }),
         });
       }
     });
