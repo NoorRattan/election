@@ -13,7 +13,7 @@ students, and civic groups.
 ## Live Application
 
 - **Frontend:** [https://electra-app-2026.web.app](https://electra-app-2026.web.app)
-- **Backend API:** [https://electra-api-368835973060.us-central1.run.app/docs](https://electra-api-368835973060.us-central1.run.app/docs)
+- **Backend API:** [https://electra-api-vmqaqf2faq-uc.a.run.app/docs](https://electra-api-vmqaqf2faq-uc.a.run.app/docs)
 
 ## Architecture
 
