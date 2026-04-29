@@ -10,6 +10,11 @@ students, and civic groups.
 
 ---
 
+## Live Application
+
+- **Frontend:** [https://electra-app-2026.web.app](https://electra-app-2026.web.app)
+- **Backend API:** [https://electra-api-368835973060.us-central1.run.app/docs](https://electra-api-368835973060.us-central1.run.app/docs)
+
 ## Architecture
 
 ```
@@ -116,7 +121,7 @@ cd frontend && npm run test:coverage
 
 | Variable | Description | Example |
 |---|---|---|
-| `GOOGLE_CLOUD_PROJECT` | GCP project ID | `my-electra-project` |
+| `GOOGLE_CLOUD_PROJECT` | GCP project ID | `electra-app-2026` |
 | `FIREBASE_SERVICE_ACCOUNT_KEY` | Path to service account JSON (dev only) | `./serviceAccountKey.json` |
 | `DIALOGFLOW_AGENT_ID` | Dialogflow CX agent ID (leave empty to disable) | `abc123-uuid` |
 | `DIALOGFLOW_LOCATION` | Dialogflow location | `global` |
