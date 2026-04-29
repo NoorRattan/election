@@ -86,7 +86,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/NoorRattan/election"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-neutral-400 rounded"

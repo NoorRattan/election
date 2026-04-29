@@ -156,7 +156,7 @@ export default function PrivacyPolicy() {
             <li>
               For urgent requests: raise a{' '}
               <a
-                href="https://github.com"
+                href="https://github.com/NoorRattan/election/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"

@@ -131,7 +131,7 @@ export default function AccessibilityStatement() {
             If you encounter an accessibility barrier, please use the{' '}
             <strong>Feedback form</strong> on this site (available in the footer) or raise a{' '}
             <a
-              href="https://github.com"
+              href="https://github.com/NoorRattan/election/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
