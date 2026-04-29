@@ -26,7 +26,7 @@ def _init_firebase() -> None:
 
     key_path = settings.firebase_service_account_key
 
-    if os.path.exists(key_path):
+    if key_path and os.path.isfile(key_path):
         # Development: service account JSON file present on disk
         cred = firebase_admin.credentials.Certificate(key_path)
         firebase_admin.initialize_app(cred, {
@@ -97,6 +97,16 @@ app.include_router(quiz.router,     prefix=PREFIX, tags=["Quiz"])
 app.include_router(user.router,     prefix=PREFIX, tags=["User"])
 app.include_router(feedback.router, prefix=PREFIX, tags=["Feedback"])
 app.include_router(chat.router,     prefix=PREFIX, tags=["Chat"])
+
+@app.get("/", include_in_schema=False)
+async def root():
+    return {
+        "name": "Electra API",
+        "version": settings.api_version,
+        "status": "ok",
+        "docs": "/docs" if not settings.is_production else None,
+    }
+
 
 @app.get("/api/v1/health", tags=["Health"])
 async def health_check():
