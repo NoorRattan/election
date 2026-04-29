@@ -113,6 +113,7 @@ Security and dependency changes:
 - Added frontend `engines.node >=20.19.0`.
 - Updated GitHub Actions Node setup from generic `20` to `20.19.0`.
 - Updated README prerequisite from `Node.js 20+` to `Node.js 20.19+`.
+- Added `workflow_call` to the backend test workflow because `deploy.yml` calls it as a reusable workflow.
 
 Analytics privacy and browser-noise changes:
 
@@ -304,6 +305,7 @@ Fixes applied:
 - Analytics is now truly consent-lazy.
 - CSP explicitly includes Google Analytics endpoints for consented analytics collection.
 - Local Dialogflow helper is ignored.
+- Public Actions deploy workflow structure was repaired after the first push exposed that `backend-test.yml` was not callable from `deploy.yml`.
 
 Remaining security hardening for a 100-style review:
 
