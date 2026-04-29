@@ -35,8 +35,8 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen" aria-live="polite">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-label="Loading" />
+      <div className="flex items-center justify-center min-h-screen" role="status" aria-label="Loading">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-hidden="true" />
       </div>
     );
   }
@@ -53,8 +53,8 @@ function ProtectedRoute({ children }) {
  */
 function PageLoader() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]" aria-live="polite">
-      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-label="Loading page" />
+    <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Loading page">
+      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-hidden="true" />
     </div>
   );
 }

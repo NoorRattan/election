@@ -15,7 +15,7 @@ const TOPICS_FIXTURE = [
     title: 'Voter Registration',
     summary: 'How to register to vote in your country.',
     category: 'Registration',
-    country: 'UK',
+    country: ['UK'],
     difficulty: 'beginner',
   },
   {
@@ -24,7 +24,7 @@ const TOPICS_FIXTURE = [
     title: 'How Voting Works',
     summary: 'What happens on election day.',
     category: 'Voting Process',
-    country: 'US',
+    country: ['US'],
     difficulty: 'beginner',
   },
   {
@@ -33,7 +33,7 @@ const TOPICS_FIXTURE = [
     title: 'The Electoral College',
     summary: 'Understanding the US Electoral College system.',
     category: 'Electoral Systems',
-    country: 'US',
+    country: ['US'],
     difficulty: 'intermediate',
   },
 ];
@@ -44,7 +44,7 @@ const TOPIC_DETAIL_FIXTURE = {
   title: 'Voter Registration',
   summary: 'How to register to vote in your country.',
   category: 'Registration',
-  country: 'UK',
+  country: ['UK'],
   difficulty: 'beginner',
   content: '## How to Register\n\nRegistering to vote in the UK is quick and straightforward.\n\n**Step 1**: Visit the official government website.',
   sources: ['https://www.electoralcommission.org.uk'],
@@ -55,8 +55,7 @@ const TOPIC_DETAIL_FIXTURE = {
 test.describe('Topics page', () => {
   test.beforeEach(async ({ page }) => {
     // Mock the topics list endpoint
-    await page.route('**/api/v1/topics*', (route) => {
-      const url = new URL(route.request().url());
+    await page.route(/\/api\/v1\/topics(?:\?.*)?$/, (route) => {
       // Return the same fixture regardless of query params for simplicity
       route.fulfill({
         status: 200,
@@ -96,7 +95,7 @@ test.describe('Topics page', () => {
     const tabList = page.getByRole('tablist');
     await expect(tabList).toBeVisible();
     // At minimum, an "All" tab should be present
-    await expect(tabList.getByRole('tab', { name: /all/i })).toBeVisible();
+    await expect(tabList.getByRole('tab', { name: /^all$/i })).toBeVisible();
   });
 
   test('clicking "Registration" tab filters visible topics', async ({ page }) => {

@@ -177,6 +177,14 @@ test.describe('Quiz results', () => {
 
   test('"Continue Learning" button should link to /topics', async ({ page }) => {
     // Verify the route exists
+    await page.route('**/api/v1/topics*', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ topics: [], total: 0 }),
+      });
+    });
+
     await page.goto('/topics');
     await expect(page).toHaveURL(/\/topics/);
   });

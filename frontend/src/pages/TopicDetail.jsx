@@ -19,7 +19,7 @@ export default function TopicDetail() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return <div className="flex justify-center py-20" aria-live="polite"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-label="Loading topic"/></div>;
+  if (loading) return <div className="flex justify-center py-20" role="status" aria-label="Loading topic"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" aria-hidden="true"/></div>;
   if (error)   return <div className="max-w-3xl mx-auto px-4 py-16 text-center"><p className="text-error-600 text-lg" role="alert">{error}</p><Link to="/topics" className="mt-4 inline-block text-primary-600 hover:underline">← Back to Topics</Link></div>;
 
   return (

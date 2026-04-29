@@ -32,14 +32,14 @@ export default function Quiz() {
   const currentAnswer = currentQ ? selectedAnswers.get(currentQ.id) : undefined;
 
   if (authLoading || status === 'idle') {
-    return <div className="flex justify-center py-20"><div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600" aria-label="Loading"/></div>;
+    return <div className="flex justify-center py-20" role="status" aria-label="Loading"><div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600" aria-hidden="true"/></div>;
   }
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
       {status === 'loading' && (
-        <div aria-live="polite" className="text-center py-16">
-          <div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600 mx-auto mb-4" aria-label="Loading questions"/>
+        <div role="status" aria-label="Loading questions" className="text-center py-16">
+          <div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600 mx-auto mb-4" aria-hidden="true"/>
           <p className="text-neutral-500">Loading questions…</p>
         </div>
       )}

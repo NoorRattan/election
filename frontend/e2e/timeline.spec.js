@@ -125,8 +125,8 @@ test.describe('Timeline page', () => {
   });
 
   test('"Add to Calendar" button is present on upcoming events', async ({ page }) => {
-    const calendarBtn = page.getByRole('button', { name: /add to calendar/i }).or(
-      page.getByRole('link', { name: /add to calendar/i })
+    const calendarBtn = page.getByRole('button', { name: /add.*calendar/i }).or(
+      page.getByRole('link', { name: /add.*calendar/i })
     );
     await expect(calendarBtn.first()).toBeVisible();
   });

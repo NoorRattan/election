@@ -13,6 +13,13 @@ test.describe('Home page', () => {
     await page.route('**/api/v1/feedback', (route) => {
       route.fulfill({ status: 201, body: JSON.stringify({ id: 'test-feedback-id' }) });
     });
+    await page.route('**/api/v1/timeline*', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ events: [] }),
+      });
+    });
 
     await page.goto('/');
   });
@@ -58,19 +65,22 @@ test.describe('Home page', () => {
     await page.evaluate(() => localStorage.removeItem('electra_country'));
     await page.reload();
 
-    await expect(page.getByRole('button', { name: /united kingdom/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /united states/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /india/i })).toBeVisible();
+    await expect(page.getByRole('radio', { name: /united kingdom/i })).toBeVisible();
+    await expect(page.getByRole('radio', { name: /united states/i })).toBeVisible();
+    await expect(page.getByRole('radio', { name: /india/i })).toBeVisible();
   });
 
-  test('selecting UK shows selected state with aria-checked="true"', async ({ page }) => {
+  test('selecting UK stores country and updates selected country UI', async ({ page }) => {
     await page.evaluate(() => localStorage.removeItem('electra_country'));
     await page.reload();
 
-    const ukButton = page.getByRole('button', { name: /united kingdom/i });
-    await ukButton.click();
+    const ukOption = page.getByRole('radio', { name: /united kingdom/i });
+    await ukOption.click();
 
-    await expect(ukButton).toHaveAttribute('aria-checked', 'true');
+    await expect(
+      page.getByRole('button', { name: /selected country: united kingdom/i })
+    ).toBeVisible();
+    await expect(page.getByRole('radio', { name: /united kingdom/i })).toHaveCount(0);
   });
 
   test('Footer has "Privacy Policy" link that navigates to /privacy', async ({ page }) => {
@@ -102,7 +112,11 @@ test.describe('Home page', () => {
     await page.getByRole('textbox', { name: /message/i }).fill('This is a test feedback message.');
 
     // Submit
-    await page.getByRole('button', { name: /send feedback/i }).click();
+    await page
+      .getByRole('dialog')
+      .getByRole('form', { name: /feedback form/i })
+      .getByRole('button', { name: /send feedback/i })
+      .click();
 
     // Success state should appear
     await expect(page.getByText(/thank you for your feedback/i)).toBeVisible();

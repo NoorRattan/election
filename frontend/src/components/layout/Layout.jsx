@@ -10,6 +10,7 @@ export default function Layout({ children }) {
       <main
         id="main-content"
         aria-label="Main content"
+        tabIndex={-1}
         className="flex-1 w-full"
       >
         {children || <Outlet />}

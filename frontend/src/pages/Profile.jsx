@@ -99,8 +99,8 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
-        <div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600" aria-label="Loading profile" />
+      <div className="flex justify-center py-20" role="status" aria-label="Loading profile">
+        <div className="animate-spin h-10 w-10 rounded-full border-b-2 border-primary-600" aria-hidden="true" />
       </div>
     );
   }
