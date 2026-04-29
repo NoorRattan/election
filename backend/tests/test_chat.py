@@ -158,6 +158,7 @@ class TestChatLocalAnswers:
         data = response.json()
         assert "2+2 = 4" in data["reply"]
         assert data["intent"] == "utility_math"
+        assert data["suggested_topics"] == []
         mock_dialogflow.assert_not_called()
 
     def test_answers_common_election_question_without_dialogflow(self, client, mocker):

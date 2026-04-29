@@ -56,19 +56,13 @@ async def update_profile(updates: UserProfileUpdate, token: AuthToken):
     """
     uid = token["uid"]
 
-    # Build dict of only the fields that were explicitly provided (not None)
-    updates_dict = {k: v for k, v in updates.model_dump().items() if v is not None}
+    # Build dict of fields explicitly provided by the client. Keep null values so
+    # users can clear optional profile fields such as country or age group.
+    updates_dict = updates.model_dump(exclude_unset=True)
 
     # Guard: at least one recognised field must be present
     # gdpr_consent_at: analytics consent timestamp (GDPR compliance)
-    has_any_field = any(
-        [
-            updates.display_name is not None,
-            updates.country is not None,
-            updates.age_group is not None,
-            updates.gdpr_consent_at is not None,
-        ]
-    )
+    has_any_field = bool(updates.model_fields_set)
     if not has_any_field:
         raise HTTPException(
             status_code=400,

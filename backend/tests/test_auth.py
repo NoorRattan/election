@@ -77,12 +77,25 @@ class TestUserProfile:
         assert body["stats"]["topics_completed"] == 3
 
     def test_put_valid_country_returns_200(self, authed_client, mocker):
-        mocker.patch("app.routes.user.db.update_user", new_callable=AsyncMock)
+        mock_update = mocker.patch("app.routes.user.db.update_user", new_callable=AsyncMock)
         resp = authed_client.put(
             "/api/v1/user/profile",
             json={"country": "IN"},
         )
         assert resp.status_code == 200
+        mock_update.assert_called_once_with("test-uid-123", {"country": "IN"})
+
+    def test_put_null_optional_fields_clears_profile_values(self, authed_client, mocker):
+        mock_update = mocker.patch("app.routes.user.db.update_user", new_callable=AsyncMock)
+        resp = authed_client.put(
+            "/api/v1/user/profile",
+            json={"display_name": None, "country": None, "age_group": None},
+        )
+        assert resp.status_code == 200
+        mock_update.assert_called_once_with(
+            "test-uid-123",
+            {"display_name": None, "country": None, "age_group": None},
+        )
 
     def test_put_invalid_country_returns_422(self, authed_client):
         resp = authed_client.put(

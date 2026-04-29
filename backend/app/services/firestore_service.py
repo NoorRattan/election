@@ -251,15 +251,15 @@ async def update_user(uid: str, updates: dict) -> None:
 
     firestore_updates: dict = {"lastSeen": SERVER_TIMESTAMP}
 
-    if "display_name" in updates and updates["display_name"] is not None:
+    if "display_name" in updates:
         firestore_updates["displayName"] = updates["display_name"]  # snake_case → camelCase
-    if "country" in updates and updates["country"] is not None:
+    if "country" in updates:
         firestore_updates["country"] = updates["country"]
-    if "age_group" in updates and updates["age_group"] is not None:
+    if "age_group" in updates:
         firestore_updates["ageGroup"] = updates["age_group"]  # snake_case → camelCase
     # GDPR consent timestamp — set when user enables analytics consent in Profile settings
     # Stored as Firestore Timestamp; datetime is accepted directly by the Firestore client
-    if "gdpr_consent_at" in updates and updates["gdpr_consent_at"] is not None:
+    if "gdpr_consent_at" in updates:
         firestore_updates["gdprConsentAt"] = updates["gdpr_consent_at"]
 
     await doc_ref.update(firestore_updates)

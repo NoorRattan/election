@@ -24,6 +24,15 @@ def test_answers_symbol_math():
     assert result is not None
     assert result["intent"] == "utility_math"
     assert "2+2 = 4" in result["reply"]
+    assert result["suggested_topics"] == []
+
+
+def test_answers_long_addition_with_leading_zero():
+    result = answer_locally("9+63+5251+01")
+
+    assert result is not None
+    assert result["intent"] == "utility_math"
+    assert "9+63+5251+1 = 5324" in result["reply"]
 
 
 def test_answers_word_math():
@@ -43,6 +52,24 @@ def test_answers_registration_by_country_context():
     assert result is not None
     assert "United States" in result["reply"]
     assert result["suggested_topics"] == ["voter-registration"]
+
+
+def test_answers_assistant_location_help():
+    result = answer_locally("where is election assist")
+
+    assert result is not None
+    assert result["intent"] == "assistant_help"
+    assert "using Electra Assistant now" in result["reply"]
+    assert result["suggested_topics"] == []
+
+
+def test_answers_current_status_without_claiming_live_results():
+    result = answer_locally("what is the current election status", "IN")
+
+    assert result is not None
+    assert result["intent"] == "current_election_status"
+    assert "do not provide live election results" in result["reply"]
+    assert "India" in result["reply"]
 
 
 def test_answers_eligibility_from_alias():

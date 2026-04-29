@@ -215,9 +215,14 @@ describe('page smoke coverage', () => {
     renderWithProviders(<Timeline />);
 
     expect(screen.getByRole('heading', { name: /election timeline/i })).toBeVisible();
+    expect(screen.getByLabelText(/timeline country/i)).toHaveValue('UK');
     expect(screen.getByRole('button', { name: /all levels/i })).toBeVisible();
     expect(screen.getByRole('button', { name: /^local$/i })).toBeVisible();
     expect(screen.queryByRole('button', { name: /^state$/i })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/timeline country/i), { target: { value: 'US' } });
+    expect(screen.getByLabelText(/timeline country/i)).toHaveValue('US');
+    expect(screen.getByRole('button', { name: /^state$/i })).toBeVisible();
   });
 
   it('Quiz renders an active question for an authenticated user', () => {
@@ -274,7 +279,7 @@ describe('page smoke coverage', () => {
       display_name: 'Ada Voter',
       email: 'ada@example.com',
       country: 'UK',
-      age_group: '25-34',
+      age_group: '18-25',
       gdpr_consent_at: '2026-01-01T00:00:00.000Z',
       stats: {
         total_topics: 10,
@@ -294,10 +299,19 @@ describe('page smoke coverage', () => {
     expect(screen.getByText(/4 of 10 topics completed/i)).toBeVisible();
     expect(screen.getByRole('switch', { name: /usage analytics/i })).toBeChecked();
 
+    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Ada Updated' } });
     fireEvent.change(screen.getByLabelText(/country/i), { target: { value: 'US' } });
+    fireEvent.change(screen.getByLabelText(/age group/i), { target: { value: '26-40' } });
+    fireEvent.click(screen.getByRole('button', { name: /save profile/i }));
+
     await waitFor(() => {
-      expect(apiMock.userApi.updateProfile).toHaveBeenCalledWith({ country: 'US' });
+      expect(apiMock.userApi.updateProfile).toHaveBeenCalledWith({
+        display_name: 'Ada Updated',
+        country: 'US',
+        age_group: '26-40',
+      });
     });
+    expect(await screen.findByText(/profile saved/i)).toBeVisible();
   });
 
   it('NotFound provides recovery navigation', () => {

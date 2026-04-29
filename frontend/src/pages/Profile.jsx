@@ -1,12 +1,3 @@
-/**
- * Profile page — route /profile (ProtectedRoute)
- *
- * UPDATED (Prompt 06 — GAP-06):
- * Added Analytics Consent subsection in the Settings section.
- * Uses ConsentToggle component. Reads/writes localStorage key
- * "electra_analytics_consent" and syncs gdpr_consent_at to backend on enable.
- */
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userApi } from '../services/api';
@@ -21,27 +12,33 @@ import ConsentToggle from '../components/ui/ConsentToggle';
 const ANALYTICS_CONSENT_KEY = 'electra_analytics_consent';
 
 const AGE_GROUPS = [
-  { value: '',        label: 'Prefer not to say' },
-  { value: '18-24',   label: '18–24' },
-  { value: '25-34',   label: '25–34' },
-  { value: '35-44',   label: '35–44' },
-  { value: '45-54',   label: '45–54' },
-  { value: '55-64',   label: '55–64' },
-  { value: '65+',     label: '65 and over' },
+  { value: '', label: 'Prefer not to say' },
+  { value: '13-17', label: '13-17' },
+  { value: '18-25', label: '18-25' },
+  { value: '26-40', label: '26-40' },
+  { value: '40+', label: '40 and over' },
 ];
+
+const VALID_AGE_GROUPS = new Set(AGE_GROUPS.map(({ value }) => value));
 
 export default function Profile() {
   const { signOut } = useAuth();
   const { setCountry } = useCountry();
   const navigate = useNavigate();
 
-  const [profile,  setProfile]  = useState(null);
+  const [profile, setProfile] = useState(null);
   const [progress, setProgress] = useState([]);
-  const [loading,  setLoading]  = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
   const [deleting, setDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [form, setForm] = useState({
+    display_name: '',
+    country: '',
+    age_group: '',
+  });
 
-  // Settings state
   const [analyticsConsent, setAnalyticsConsentState] = useState(
     () => localStorage.getItem(ANALYTICS_CONSENT_KEY) === 'true'
   );
@@ -52,18 +49,12 @@ export default function Profile() {
       .then(([p, pr]) => {
         setProfile(p);
         setProgress(pr.progress || []);
+        setForm({
+          display_name: p.display_name || '',
+          country: p.country || '',
+          age_group: VALID_AGE_GROUPS.has(p.age_group) ? p.age_group : '',
+        });
 
-        // Sync analytics consent from server (server is authoritative across devices).
-        // If gdpr_consent_at is set on the server and localStorage doesn't reflect it,
-        // seed localStorage so analytics.js activates on the next render.
-        // We intentionally do NOT clear consent if the server field is null —
-        // the field may be missing for users who consented before this feature launched.
-        //
-        // FIX (Prompt 10 — GAP-02): Read localStorage directly instead of the
-        // analyticsConsent React state variable. The state value is captured at
-        // effect creation time (always the initial value with [] deps), making it
-        // a stale closure. localStorage.getItem() always reflects the current value.
-        // The [] dependency array is now correct — no external state is captured.
         const serverConsented = !!p.gdpr_consent_at;
         const alreadyConsented = localStorage.getItem(ANALYTICS_CONSENT_KEY) === 'true';
         if (serverConsented && !alreadyConsented) {
@@ -74,6 +65,29 @@ export default function Profile() {
       .finally(() => setLoading(false));
   }, []);
 
+  async function handleProfileSave(e) {
+    e.preventDefault();
+    setSaving(true);
+    setSaveMessage('');
+
+    const updates = {
+      display_name: form.display_name.trim() || null,
+      country: form.country || null,
+      age_group: form.age_group || null,
+    };
+
+    try {
+      await userApi.updateProfile(updates);
+      setProfile((current) => ({ ...current, ...updates }));
+      setCountry(updates.country);
+      setSaveMessage('Profile saved.');
+    } catch {
+      setSaveMessage('Could not save profile. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  }
+
   async function handleDeleteAccount() {
     setDeleting(true);
     try {
@@ -81,17 +95,17 @@ export default function Profile() {
       await signOut();
       setCountry(null);
       navigate('/');
-    } catch { setDeleting(false); setShowDeleteModal(false); }
+    } catch {
+      setDeleting(false);
+      setShowDeleteModal(false);
+    }
   }
 
   function handleConsentChange(val) {
     setAnalyticsConsentState(val);
     if (val) {
       localStorage.setItem(ANALYTICS_CONSENT_KEY, 'true');
-      // Sync gdpr_consent_at to backend — fire-and-forget
-      userApi.updateProfile({ gdpr_consent_at: new Date().toISOString() }).catch(() => {
-        // Non-fatal — consent is still recorded in localStorage
-      });
+      userApi.updateProfile({ gdpr_consent_at: new Date().toISOString() }).catch(() => {});
     } else {
       localStorage.removeItem(ANALYTICS_CONSENT_KEY);
     }
@@ -107,13 +121,13 @@ export default function Profile() {
   if (!profile) return null;
 
   const pct = profile.stats.total_topics > 0
-    ? Math.round((profile.stats.topics_completed / profile.stats.total_topics) * 100) : 0;
+    ? Math.round((profile.stats.topics_completed / profile.stats.total_topics) * 100)
+    : 0;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10">
       <h1 className="text-3xl font-bold text-neutral-900">My Profile</h1>
 
-      {/* ── Account info ─────────────────────────────────────────────── */}
       <section aria-labelledby="profile-info">
         <h2 id="profile-info" className="text-xl font-semibold text-neutral-800 mb-4">Account</h2>
         <div className="bg-white rounded-xl border border-neutral-200 p-6 space-y-2">
@@ -123,7 +137,6 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* ── Learning stats ───────────────────────────────────────────── */}
       <section aria-labelledby="profile-stats">
         <h2 id="profile-stats" className="text-xl font-semibold text-neutral-800 mb-4">Learning Stats</h2>
         <div className="bg-white rounded-xl border border-neutral-200 p-6 space-y-4">
@@ -138,7 +151,6 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* ── Progress list ────────────────────────────────────────────── */}
       {progress.length > 0 && (
         <section aria-labelledby="profile-progress">
           <h2 id="profile-progress" className="text-xl font-semibold text-neutral-800 mb-4">My Progress</h2>
@@ -147,7 +159,7 @@ export default function Profile() {
               <li key={p.topic_id} className="flex items-center justify-between px-6 py-4">
                 <span className="text-sm text-neutral-800 capitalize">{p.topic_id.replace(/-/g, ' ')}</span>
                 <div className="flex items-center gap-3">
-                  {p.completed && <Badge variant="success">✓ Done</Badge>}
+                  {p.completed && <Badge variant="success">Done</Badge>}
                   {p.quiz_score !== null && <span className="text-sm text-neutral-500">{p.quiz_score}%</span>}
                 </div>
               </li>
@@ -156,52 +168,76 @@ export default function Profile() {
         </section>
       )}
 
-      {/* ── Settings ─────────────────────────────────────────────────── */}
       <section aria-labelledby="profile-settings">
         <h2 id="profile-settings" className="text-xl font-semibold text-neutral-800 mb-4">Settings</h2>
         <div className="bg-white rounded-xl border border-neutral-200 p-6 space-y-6">
+          <form onSubmit={handleProfileSave} className="space-y-4">
+            <div>
+              <label htmlFor="profile-display-name" className="block text-sm font-medium text-neutral-700 mb-1">
+                Name
+              </label>
+              <input
+                id="profile-display-name"
+                type="text"
+                value={form.display_name}
+                onChange={(e) => setForm((current) => ({ ...current, display_name: e.target.value }))}
+                maxLength={80}
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600"
+              />
+            </div>
 
-          {/* Country preference */}
-          <div>
-            <label htmlFor="profile-country" className="block text-sm font-medium text-neutral-700 mb-1">
-              Country
-            </label>
-            <select
-              id="profile-country"
-              defaultValue={profile.country || ''}
-              onChange={(e) => {
-                setCountry(e.target.value || null);
-                userApi.updateProfile({ country: e.target.value || null }).catch(() => {});
-              }}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 bg-white"
-            >
-              <option value="">No preference</option>
-              <option value="UK">United Kingdom</option>
-              <option value="US">United States</option>
-              <option value="IN">India</option>
-            </select>
-          </div>
+            <div>
+              <label htmlFor="profile-email" className="block text-sm font-medium text-neutral-700 mb-1">
+                Email
+              </label>
+              <input
+                id="profile-email"
+                type="email"
+                value={profile.email || ''}
+                disabled
+                className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-500"
+              />
+            </div>
 
-          {/* Age group */}
-          <div>
-            <label htmlFor="profile-age-group" className="block text-sm font-medium text-neutral-700 mb-1">
-              Age Group
-            </label>
-            <select
-              id="profile-age-group"
-              defaultValue={profile.age_group || ''}
-              onChange={(e) => {
-                userApi.updateProfile({ age_group: e.target.value || null }).catch(() => {});
-              }}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 bg-white"
-            >
-              {AGE_GROUPS.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label htmlFor="profile-country" className="block text-sm font-medium text-neutral-700 mb-1">
+                Country
+              </label>
+              <select
+                id="profile-country"
+                value={form.country}
+                onChange={(e) => setForm((current) => ({ ...current, country: e.target.value }))}
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 bg-white"
+              >
+                <option value="">No preference</option>
+                <option value="UK">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="IN">India</option>
+              </select>
+            </div>
 
-          {/* ── Analytics & Privacy ───────────────────────────────────── */}
+            <div>
+              <label htmlFor="profile-age-group" className="block text-sm font-medium text-neutral-700 mb-1">
+                Age Group
+              </label>
+              <select
+                id="profile-age-group"
+                value={form.age_group}
+                onChange={(e) => setForm((current) => ({ ...current, age_group: e.target.value }))}
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 bg-white"
+              >
+                {AGE_GROUPS.map(({ value, label }) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Button type="submit" variant="primary" loading={saving}>Save Profile</Button>
+              {saveMessage && <p className="text-sm text-neutral-600" role="status">{saveMessage}</p>}
+            </div>
+          </form>
+
           <div className="border-t border-neutral-100 pt-4">
             <h3 className="text-sm font-semibold text-neutral-800 mb-2">Analytics & Privacy</h3>
             <ConsentToggle
@@ -212,11 +248,9 @@ export default function Profile() {
               onChange={handleConsentChange}
             />
           </div>
-
         </div>
       </section>
 
-      {/* ── Danger zone ──────────────────────────────────────────────── */}
       <section aria-labelledby="profile-account">
         <h2 id="profile-account" className="text-xl font-semibold text-neutral-800 mb-4">Danger Zone</h2>
         <div className="bg-white rounded-xl border border-error-200 p-6">

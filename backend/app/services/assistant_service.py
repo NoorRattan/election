@@ -126,13 +126,21 @@ def answer_locally(message: str, country: str | None = None) -> dict | None:
     if _is_greeting(normalized):
         return {
             "reply": (
-                "Hi! I am Electra. I can explain voter registration, eligibility, voter ID, "
+                "Hi! I'm Electra. I can explain voter registration, eligibility, voter ID, "
                 "ballot types, voting methods, timelines, campaign rules, counting, and election "
                 "disputes for the UK, US, and India."
             ),
             "intent": "greeting",
             "suggested_topics": ["voter-registration", "voter-eligibility", "voting-methods"],
         }
+
+    assistant_help = _answer_assistant_help(normalized)
+    if assistant_help:
+        return assistant_help
+
+    status_answer = _answer_current_status(normalized, country)
+    if status_answer:
+        return status_answer
 
     topic_answer = _answer_election_topic(normalized, country)
     if topic_answer:
@@ -186,6 +194,47 @@ def _answer_election_topic(normalized: str, country: str | None) -> dict | None:
         }
 
     return None
+
+
+def _answer_assistant_help(normalized: str) -> dict | None:
+    assistant_terms = ("assistant", "assist", "chat", "electra")
+    location_terms = ("where", "how do i use", "what can you do", "help me", "open")
+    if not any(term in normalized for term in assistant_terms):
+        return None
+    if not any(term in normalized for term in location_terms):
+        return None
+
+    return {
+        "reply": (
+            "You are using Electra Assistant now. Type a question in this chat about voter "
+            "registration, eligibility, voter ID, ballot types, voting methods, timelines, campaign "
+            "rules, counting, or disputes. You can also use the Topics and Timeline pages for "
+            "structured election information."
+        ),
+        "intent": "assistant_help",
+        "suggested_topics": [],
+    }
+
+
+def _answer_current_status(normalized: str, country: str | None) -> dict | None:
+    status_terms = ("current", "status", "live", "today", "latest", "now", "ongoing")
+    if "election" not in normalized and "vote" not in normalized and "poll" not in normalized:
+        return None
+    if not any(term in normalized for term in status_terms):
+        return None
+
+    country_code = _detect_country(normalized, country)
+    country_label = _COUNTRY_LABELS.get(country_code, "your selected country")
+    return {
+        "reply": (
+            f"I can show educational timelines and deadlines for {country_label}, but I do not "
+            "provide live election results or real-time election status. For official live status, "
+            "check the relevant election authority. In Electra, open the Timeline page and switch "
+            "countries to compare upcoming registration, polling, and result dates."
+        ),
+        "intent": "current_election_status",
+        "suggested_topics": ["voter-registration"],
+    }
 
 
 def _topic_reply(label: str, country_label: str) -> str:
@@ -268,11 +317,11 @@ def _answer_math(message: str) -> dict | None:
 
     return {
         "reply": (
-            f"{expression} = {value}. I can also help with election questions about registration, "
-            "eligibility, voter ID, ballots, and election timelines."
+            f"{expression} = {value}. I can also answer election questions about registration, "
+            "eligibility, voter ID, ballots, timelines, and voting methods."
         ),
         "intent": MATH_INTENT,
-        "suggested_topics": ["voter-registration", "voter-eligibility"],
+        "suggested_topics": [],
     }
 
 
@@ -291,7 +340,8 @@ def _extract_math_expression(message: str) -> str | None:
         return None
     if not re.search(r"\d\s*[+\-*/%]\s*\d", text):
         return None
-    return re.sub(r"\s+", "", text)
+    expression = re.sub(r"\s+", "", text)
+    return re.sub(r"\d+", lambda match: str(int(match.group(0))), expression)
 
 
 def _safe_eval_expression(expression: str) -> int | float:

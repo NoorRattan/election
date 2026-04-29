@@ -3,12 +3,12 @@ import { useCountry } from '../contexts/CountryContext';
 import { useTimeline } from '../hooks/useTimeline';
 import ElectionTimeline from '../components/timeline/ElectionTimeline';
 import CountrySelector from '../components/CountrySelector';
-import { COUNTRY_CONFIG } from '../utils/countryConfig';
+import { COUNTRY_CONFIG, COUNTRY_CODES } from '../utils/countryConfig';
 
 const LEVELS = ['all', 'local', 'state', 'national'];
 
 export default function Timeline() {
-  const { country }          = useCountry();
+  const { country, setCountry } = useCountry();
   const [level, setLevel]    = useState('all');
   const [stateProvince, setStateProv] = useState('');
   const { events, loading, error } = useTimeline({
@@ -20,6 +20,12 @@ export default function Timeline() {
   useEffect(() => { document.title = 'Election Timeline | Electra'; }, []);
 
   const countryName = country ? COUNTRY_CONFIG[country]?.name : '';
+
+  function handleCountryChange(e) {
+    setCountry(e.target.value || null);
+    setLevel('all');
+    setStateProv('');
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -35,6 +41,22 @@ export default function Timeline() {
         </section>
       ) : (
         <>
+          <div className="mb-6 max-w-sm">
+            <label htmlFor="timeline-country" className="block text-sm font-medium text-neutral-700 mb-1">
+              Timeline country
+            </label>
+            <select
+              id="timeline-country"
+              value={country}
+              onChange={handleCountryChange}
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 bg-white"
+            >
+              {COUNTRY_CODES.map((code) => (
+                <option key={code} value={code}>{COUNTRY_CONFIG[code].name}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Level filters */}
           <div className="flex flex-wrap gap-2 mb-4">
             {LEVELS.filter((l) => {
