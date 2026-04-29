@@ -59,7 +59,14 @@ export default defineConfig({
   webServer: {
     command: process.env.CI ? 'npm run preview -- --port 5173' : 'npm run dev',
     url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
+    // Always restart the server for tests so VITE_API_BASE_URL is set correctly.
+    // This ensures page.route() intercepts all API calls (relative URLs only).
+    reuseExistingServer: false,
     timeout: 120000, // 2 min for Vite cold start
+    env: {
+      // Override the API base URL to a relative path so Playwright's route
+      // interceptor can intercept it (absolute external URLs bypass interception).
+      VITE_API_BASE_URL: '/api/v1',
+    },
   },
 });

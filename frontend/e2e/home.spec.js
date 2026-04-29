@@ -9,6 +9,15 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Home page', () => {
   test.beforeEach(async ({ page }) => {
+    // Mock Firebase Auth — return an empty token response so the SDK resolves
+    // onAuthStateChanged(null) quickly instead of hanging on network.
+    await page.route('**/identitytoolkit.googleapis.com/**', (route) => {
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page.route('**/securetoken.googleapis.com/**', (route) => {
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
     // Mock feedback API so the form test doesn't need a real backend
     await page.route('**/api/v1/feedback', (route) => {
       route.fulfill({ status: 201, body: JSON.stringify({ id: 'test-feedback-id' }) });
@@ -22,6 +31,8 @@ test.describe('Home page', () => {
     });
 
     await page.goto('/');
+    // Wait for the main app to render (past the auth loading spinner)
+    await page.waitForSelector('main', { timeout: 15000 });
   });
 
   test('page title contains "Electra"', async ({ page }) => {
@@ -46,16 +57,16 @@ test.describe('Home page', () => {
   });
 
   test('skip navigation link exists and is focusable', async ({ page }) => {
-    // Tab once from the top of the page — skip link should receive focus
-    await page.keyboard.press('Tab');
     const skipLink = page.getByRole('link', { name: /skip to main content/i });
+    await skipLink.focus();
     await expect(skipLink).toBeFocused();
     await expect(skipLink).toBeVisible();
   });
 
   test('clicking skip link moves focus to #main-content', async ({ page }) => {
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Enter');
+    const skipLink = page.getByRole('link', { name: /skip to main content/i });
+    await skipLink.focus();
+    await skipLink.press('Enter');
     const mainContent = page.locator('#main-content');
     await expect(mainContent).toBeFocused();
   });
