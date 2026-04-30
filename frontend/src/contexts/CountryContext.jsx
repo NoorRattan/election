@@ -1,6 +1,6 @@
 /**
  * Country context. Persists the user's selected country to localStorage.
- * Default is null — triggers the CountrySelector when no country is chosen.
+ * Default is null - triggers the CountrySelector when no country is chosen.
  *
  * Country-sync design:
  *   CountryContext listens for the custom event 'electra:country-changed', which
@@ -20,12 +20,10 @@ import { createContext, useContext, useState, useEffect } from 'react'
 const CountryContext = createContext(null)
 
 const STORAGE_KEY = 'electra_country'
-const SYNC_EVENT  = 'electra:country-changed' // custom event name — do not hardcode elsewhere
+const SYNC_EVENT = 'electra:country-changed' // custom event name - do not hardcode elsewhere
 
 export function CountryProvider({ children }) {
-  const [country, setCountryState] = useState(
-    () => localStorage.getItem(STORAGE_KEY) || null
-  )
+  const [country, setCountryState] = useState(() => localStorage.getItem(STORAGE_KEY) || null)
 
   // Listen for cross-component country sync.
   // Dispatched by AuthContext after login when server-side country is restored.
@@ -34,7 +32,7 @@ export function CountryProvider({ children }) {
       const incoming = e.detail?.country
       if (incoming && incoming !== country) {
         setCountryState(incoming)
-        // localStorage is already set by the dispatcher — no need to write here
+        // localStorage is already set by the dispatcher - no need to write here
       }
     }
     window.addEventListener(SYNC_EVENT, handleSync)
@@ -51,9 +49,7 @@ export function CountryProvider({ children }) {
   }
 
   return (
-    <CountryContext.Provider value={{ country, setCountry }}>
-      {children}
-    </CountryContext.Provider>
+    <CountryContext.Provider value={{ country, setCountry }}>{children}</CountryContext.Provider>
   )
 }
 

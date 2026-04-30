@@ -1,8 +1,8 @@
 """
 Pydantic models for the /user/profile endpoint.
 
-UserProfile       — full profile returned by GET /user/profile
-UserProfileUpdate — partial update sent to PUT /user/profile
+UserProfile       - full profile returned by GET /user/profile
+UserProfileUpdate - partial update sent to PUT /user/profile
 """
 
 from datetime import datetime
@@ -39,7 +39,7 @@ class UserProfile(BaseModel):
 class UserProfileUpdate(BaseModel):
     """
     Partial update body for PUT /api/v1/user/profile.
-    All fields are optional — at least one must be provided (enforced in the route,
+    All fields are optional - at least one must be provided (enforced in the route,
     not in this model, because Pydantic cannot easily enforce "at least one non-None").
     """
 
@@ -51,6 +51,7 @@ class UserProfileUpdate(BaseModel):
     @field_validator("country")
     @classmethod
     def validate_country(cls, v: str | None) -> str | None:
+        """Validate optional country preference."""
         if v is not None and v not in VALID_COUNTRIES:
             raise ValueError(f"country must be one of: {', '.join(sorted(VALID_COUNTRIES))}")
         return v
@@ -58,6 +59,7 @@ class UserProfileUpdate(BaseModel):
     @field_validator("age_group")
     @classmethod
     def validate_age_group(cls, v: str | None) -> str | None:
+        """Validate optional age group preference."""
         if v is not None and v not in VALID_AGE_GROUPS:
             raise ValueError(f"age_group must be one of: {', '.join(sorted(VALID_AGE_GROUPS))}")
         return v

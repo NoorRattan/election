@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Electra chat widget uses **Dialogflow CX** (stable API — not beta) to answer questions about election processes in the UK, US, and India.
+The Electra chat widget uses **Dialogflow CX** (stable API  -  not beta) to answer questions about election processes in the UK, US, and India.
 
-The backend proxy endpoint `POST /api/v1/chat` routes user messages to Dialogflow and returns the structured response. **Graceful degradation:** if `DIALOGFLOW_AGENT_ID` is not configured, the endpoint returns a helpful static message (HTTP 200 — not an error). The chat widget continues to function in "offline" mode.
+The backend proxy endpoint `POST /api/v1/chat` routes user messages to Dialogflow and returns the structured response. **Graceful degradation:** if `DIALOGFLOW_AGENT_ID` is not configured, the endpoint returns a helpful static message (HTTP 200  -  not an error). The chat widget continues to function in "offline" mode.
 
 ---
 
@@ -12,7 +12,7 @@ The backend proxy endpoint `POST /api/v1/chat` routes user messages to Dialogflo
 
 | Requirement | Details |
 |-------------|---------|
-| GCP project | Dialogflow CX API must be enabled (APIs & Services → Enable APIs) |
+| GCP project | Dialogflow CX API must be enabled (APIs & Services -> Enable APIs) |
 | Service account | Needs **"Dialogflow API Client"** role |
 | Python package | `google-cloud-dialogflow-cx==1.15.0` (already in `backend/requirements.txt`) |
 
@@ -86,8 +86,8 @@ The deadline is usually 12 working days before election day.
 **Response:**
 ```
 US voter registration is managed by each state. Visit usa.gov or your
-state's Secretary of State website to register. Deadlines vary by state —
-typically 7–30 days before Election Day.
+state's Secretary of State website to register. Deadlines vary by state -
+typically 7-30 days before Election Day.
 ```
 
 **Custom payload:**
@@ -132,7 +132,7 @@ or through the Voter Helpline app. You must be 18 as of 1 January of the qualify
 **Response:**
 ```
 Voter ID requirements differ by country. In England, photo ID is required
-at polling stations since May 2023 — a free Voter Authority Certificate is available.
+at polling stations since May 2023  -  a free Voter Authority Certificate is available.
 In India, the EPIC card is the primary ID, with 12 alternative documents accepted.
 In the US, requirements vary by state.
 ```
@@ -212,7 +212,7 @@ the US FEC system and Super PACs, or India's Model Code of Conduct.
 
 ---
 
-### 8. Default Fallback Intent (built-in — edit the response)
+### 8. Default Fallback Intent (built-in  -  edit the response)
 
 This intent is created automatically by Dialogflow. Update its response text:
 
@@ -283,7 +283,7 @@ Expected response shape:
 
 After setting up the agent:
 
-1. Dialogflow CX Console → **Agent Settings** → **Export Agent**
+1. Dialogflow CX Console -> **Agent Settings** -> **Export Agent**
 2. Export to GCS: `gs://your-bucket/dialogflow-agent-backup.blob`
 3. Download and commit to: `docs/dialogflow-agent/electra-agent.blob`
 
@@ -297,10 +297,10 @@ After setting up the agent:
 The backend uses the **stable API** (not beta):
 
 ```python
-# CORRECT — stable API
+# CORRECT  -  stable API
 from google.cloud.dialogflow_cx_v3.services.sessions import SessionsClient
 
-# WRONG — do not use
+# WRONG  -  do not use
 # from google.cloud.dialogflow_cx_v3beta1 import ...
 ```
 

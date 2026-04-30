@@ -8,38 +8,38 @@ import { MemoryRouter } from 'react-router-dom'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import TimelineEvent from '../components/timeline/TimelineEvent'
 
-// ── Mocks ──────────────────────────────────────────────────────────────────
+// -- Mocks ------------------------------------------------------------------
 
 vi.mock('../services/calendarService', () => ({
   addEventToCalendar: vi.fn(),
 }))
 
 vi.mock('../utils/dateFormatter', () => ({
-  formatDate: vi.fn((date) => date),         // return date string as-is for simplicity
+  formatDate: vi.fn((date) => date), // return date string as-is for simplicity
   getRelativeDays: vi.fn(() => 'in 30 days'),
   isPastDate: vi.fn(() => false),
 }))
 
-// Badge and Button are real components — no need to mock them
+// Badge and Button are real components - no need to mock them
 
 import { addEventToCalendar } from '../services/calendarService'
 
-// ── Fixtures ───────────────────────────────────────────────────────────────
+// -- Fixtures ---------------------------------------------------------------
 
 const upcomingEvent = {
-  id:           'e1',
-  name:         'Local Election Day',
-  description:  'Polls open 7am-10pm.',
-  date:         '2099-05-07',
-  type:         'poll_day',
-  level:        'local',
+  id: 'e1',
+  name: 'Local Election Day',
+  description: 'Polls open 7am-10pm.',
+  date: '2099-05-07',
+  type: 'poll_day',
+  level: 'local',
   official_url: 'https://www.electoralcommission.org.uk',
   state_province: null,
 }
 
 const pastEvent = { ...upcomingEvent, id: 'e2', date: '2020-05-07' }
 
-// ── Helper ─────────────────────────────────────────────────────────────────
+// -- Helper -----------------------------------------------------------------
 
 const renderEvent = (event, isPast = false) =>
   render(
@@ -50,7 +50,7 @@ const renderEvent = (event, isPast = false) =>
     </MemoryRouter>
   )
 
-// ── Tests ──────────────────────────────────────────────────────────────────
+// -- Tests ------------------------------------------------------------------
 
 describe('TimelineEvent', () => {
   beforeEach(() => {
@@ -92,7 +92,7 @@ describe('TimelineEvent', () => {
 
   it('official link text is descriptive (not just a raw URL)', () => {
     renderEvent(upcomingEvent)
-    // Should show "Official source ↗" rather than the raw URL string
+    // Should show "Official source" rather than the raw URL string
     const link = screen.getByRole('link', { name: /official source/i })
     expect(link.textContent).not.toBe(upcomingEvent.official_url)
     expect(link.textContent.length).toBeGreaterThan(0)

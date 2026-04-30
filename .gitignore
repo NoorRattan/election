@@ -1,4 +1,4 @@
-# ─── Python / Backend ────────────────────────────────────────────────────────
+# --- Python / Backend --------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
@@ -44,7 +44,7 @@ htmlcov/
 dmypy.json
 .pyright/
 
-# ─── Node / Frontend ─────────────────────────────────────────────────────────
+# --- Node / Frontend ---------------------------------------------------------
 node_modules/
 frontend/node_modules/
 frontend/dist/
@@ -53,12 +53,12 @@ frontend/.vite/
 frontend/coverage/
 frontend/.nyc_output/
 
-# ─── Playwright E2E output ─────────────────────────────────────────────────
+# --- Playwright E2E output -------------------------------------------------
 frontend/playwright-report/
 frontend/test-results/
 frontend/test-output*.txt
 
-# ─── Secrets — NEVER COMMIT THESE ────────────────────────────────────────────
+# --- Secrets  -  NEVER COMMIT THESE --------------------------------------------
 .env
 .env.local
 .env.development
@@ -78,7 +78,7 @@ gcp-key.json
 # Local Dialogflow maintenance helpers with project-specific resource IDs
 backend/update_agent.py
 
-# ─── IDE / Editor ────────────────────────────────────────────────────────────
+# --- IDE / Editor ------------------------------------------------------------
 .idea/
 .vscode/
 *.swp
@@ -91,7 +91,7 @@ backend/update_agent.py
 .settings/
 *.sublime-workspace
 
-# ─── OS ──────────────────────────────────────────────────────────────────────
+# --- OS ----------------------------------------------------------------------
 .DS_Store
 .DS_Store?
 ._*
@@ -100,18 +100,18 @@ backend/update_agent.py
 ehthumbs.db
 Thumbs.db
 
-# ─── Docker ──────────────────────────────────────────────────────────────────
+# --- Docker ------------------------------------------------------------------
 *.log
 docker-compose.override.yml
 
-# ─── Misc ────────────────────────────────────────────────────────────────────
+# --- Misc --------------------------------------------------------------------
 *.bak
 *.tmp
 .cache/
 
-# ─── DO NOT IGNORE (templates must be committed) ─────────────────────────────
-# !backend/.env.example    ← committed — shows required variable names
-# !frontend/.env.example   ← committed — shows required variable names
+# --- DO NOT IGNORE (templates must be committed) -----------------------------
+# !backend/.env.example    <- committed  -  shows required variable names
+# !frontend/.env.example   <- committed  -  shows required variable names
 
 # Environments
 .env

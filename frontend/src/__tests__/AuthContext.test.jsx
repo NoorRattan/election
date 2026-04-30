@@ -99,7 +99,7 @@ describe('AuthContext', () => {
 
     expect(screen.getByTestId('loading')).toHaveTextContent('Ready')
     expect(screen.getByTestId('user')).toHaveTextContent('Test User')
-    
+
     // Should have updated profile with display name
     expect(mockUpdateProfile).toHaveBeenCalledWith({ display_name: 'Test User' })
   })
@@ -126,7 +126,7 @@ describe('AuthContext', () => {
 
     // Custom event should have been dispatched
     expect(dispatchSpy).toHaveBeenCalled()
-    const eventArg = dispatchSpy.mock.calls.find(call => call[0].type === COUNTRY_SYNC_EVENT)
+    const eventArg = dispatchSpy.mock.calls.find((call) => call[0].type === COUNTRY_SYNC_EVENT)
     expect(eventArg).toBeDefined()
     expect(eventArg[0].detail.country).toBe('US')
 

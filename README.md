@@ -1,4 +1,4 @@
-# Electra — Election Education Assistant
+# Electra  -  Election Education Assistant
 
 An interactive web application that teaches users about election processes in the
 **United Kingdom**, **United States**, and **India**. Designed for first-time voters,
@@ -13,25 +13,25 @@ students, and civic groups.
 ## Live Application
 
 - **Frontend:** [https://electra-app-2026.web.app](https://electra-app-2026.web.app)
-- **Backend API:** [https://electra-api-vmqaqf2faq-uc.a.run.app/docs](https://electra-api-vmqaqf2faq-uc.a.run.app/docs)
+- **Backend API:** [https://electra-api-368835973060.us-central1.run.app/api/v1/health](https://electra-api-368835973060.us-central1.run.app/api/v1/health)
 
 ## Architecture
 
 ```
 [Browser]
-│
-├── Firebase Hosting (CDN)
-│       └── React 18 SPA (Vite)
-│               │
-│               ├── Firebase Auth (Google OAuth + email/password)
-│               ├── Firebase Analytics (consent-gated, GDPR)
-│               └── Google Maps JS API (polling station map)
-│
-└── Cloud Run (FastAPI backend)
-    ├── Cloud Firestore (topics, quiz, users, timeline, feedback)
-    ├── Firebase Admin SDK (JWT verification)
-    ├── Dialogflow CX (conversational chat assistant)
-    └── Google Calendar URL API (Add to Calendar links)
+|
+|---- Firebase Hosting (CDN)
+|       `---- React 18 SPA (Vite)
+|               |
+|               |---- Firebase Auth (Google OAuth + email/password)
+|               |---- Firebase Analytics (consent-gated, GDPR)
+|               `---- Google Maps JS API (polling station map)
+|
+`---- Cloud Run (FastAPI backend)
+    |---- Cloud Firestore (topics, quiz, users, timeline, feedback)
+    |---- Firebase Admin SDK (JWT verification)
+    |---- Dialogflow CX (conversational chat assistant)
+    `---- Google Calendar URL API (Add to Calendar links)
 ```
 
 ## Google Services Used (8 total)
@@ -45,7 +45,7 @@ students, and civic groups.
 | **Google Calendar API** | "Add to Calendar" for election dates (URL approach) | Frontend calendarService.js |
 | **Google Maps JS API** | Polling station locator map | Frontend PollingMap.jsx |
 | **Firebase Analytics** | User engagement tracking (GDPR-compliant, consent-gated) | Frontend analytics.js |
-| **Dialogflow CX** | Conversational assistant chat | Backend chat route → dialogflow_service.py |
+| **Dialogflow CX** | Conversational assistant chat | Backend chat route -> dialogflow_service.py |
 
 ## Tech Stack
 
@@ -61,7 +61,7 @@ students, and civic groups.
 
 **Rate limiting**: The backend uses [slowapi](https://github.com/laurentS/slowapi) with
 in-memory counters per IP. Cloud Run with multiple instances means each instance has its
-own independent counter — the 5/hour feedback limit is not enforced globally across
+own independent counter  -  the 5/hour feedback limit is not enforced globally across
 all instances. For production hardening, replace with a Firestore-based or Redis counter.
 
 ## Local Setup
@@ -127,7 +127,7 @@ cd frontend && npm run test:coverage
 | `DIALOGFLOW_LOCATION` | Dialogflow location | `global` |
 | `ENVIRONMENT` | `development` or `production` | `development` |
 | `ALLOWED_ORIGINS` | Comma-separated CORS origins | `http://localhost:5173` |
-| `SECRET_KEY` | Random string ≥32 chars | `$(python -c "import secrets; print(secrets.token_hex(32))")` |
+| `SECRET_KEY` | Random string >=32 chars | `$(python -c "import secrets; print(secrets.token_hex(32))")` |
 | `RATE_LIMIT_PER_MINUTE` | Default slowapi limit | `120` |
 
 ### Frontend (`frontend/.env.local`)
@@ -148,11 +148,11 @@ cd frontend && npm run test:coverage
 
 See the `.github/workflows/deploy.yml` for the full CI/CD pipeline. The workflow:
 
-1. Runs backend tests with ≥80% coverage requirement
+1. Runs backend tests with >=80% coverage requirement
 2. Builds and pushes the Docker image to GCR
 3. Deploys to Cloud Run
 4. Builds the React app with production env vars
-5. Runs frontend tests with ≥70% coverage requirement
+5. Runs frontend tests with >=70% coverage requirement
 6. Deploys to Firebase Hosting
 
 ## Content Sources
@@ -173,7 +173,7 @@ Electra targets WCAG 2.1 AA compliance:
 - Skip navigation link on every page
 - All interactive elements keyboard navigable with visible focus rings
 - Screen reader announcements for dynamic content changes
-- Colour is never the sole indicator — icons and text labels always accompany colour
+- Colour is never the sole indicator  -  icons and text labels always accompany colour
 - All form inputs have associated `<label>` elements
 - Modal dialogs trap focus and restore on close
 

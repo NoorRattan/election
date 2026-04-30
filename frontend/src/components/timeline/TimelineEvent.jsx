@@ -1,10 +1,16 @@
-import Badge from '../ui/Badge';
-import Button from '../ui/Button';
-import { formatDate, getRelativeDays } from '../../utils/dateFormatter';
-import { addEventToCalendar } from '../../services/calendarService';
+import PropTypes from 'prop-types'
+import Badge from '../ui/Badge'
+import Button from '../ui/Button'
+import { formatDate, getRelativeDays } from '../../utils/dateFormatter'
+import { addEventToCalendar } from '../../services/calendarService'
 
-export default function TimelineEvent({ event, isPast, borderColor = 'border-neutral-300', country = 'UK' }) {
-  const relativeDays = getRelativeDays(event.date);
+export default function TimelineEvent({
+  event,
+  isPast,
+  borderColor = 'border-neutral-300',
+  country = 'UK',
+}) {
+  const relativeDays = getRelativeDays(event.date)
 
   return (
     <li
@@ -41,11 +47,11 @@ export default function TimelineEvent({ event, isPast, borderColor = 'border-neu
             rel="noopener noreferrer"
             className="text-xs text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
           >
-            Official source ↗
+            Official source
           </a>
         </div>
 
-        {/* Add to Calendar — upcoming events only */}
+        {/* Add to Calendar - upcoming events only */}
         {!isPast && (
           <Button
             variant="secondary"
@@ -53,10 +59,24 @@ export default function TimelineEvent({ event, isPast, borderColor = 'border-neu
             onClick={() => addEventToCalendar(event)}
             ariaLabel={`Add ${event.name} to Google Calendar`}
           >
-            📅 Add to Calendar
+            Add to Calendar
           </Button>
         )}
       </div>
     </li>
-  );
+  )
+}
+
+TimelineEvent.propTypes = {
+  event: PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    official_url: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    level: PropTypes.string.isRequired,
+  }).isRequired,
+  isPast: PropTypes.bool.isRequired,
+  borderColor: PropTypes.string,
+  country: PropTypes.string,
 }

@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  # Run backend tests first — deployment is blocked if they fail
+  # Run backend tests first  -  deployment is blocked if they fail
   backend-test:
     uses: ./.github/workflows/backend-test.yml
 
@@ -62,7 +62,7 @@ jobs:
       # Smoke test runs after Cloud Run deploy to verify the container starts
       # correctly and handles real HTTP requests. Catches bad env vars or import
       # errors that pass build but fail at runtime.
-      # Note: smoke-test.sh normalises the URL — strips /api/v1 if already present.
+      # Note: smoke-test.sh normalises the URL  -  strips /api/v1 if already present.
       - name: Post-deploy smoke test
         if: env.CAN_DEPLOY_BACKEND == 'true'
         run: bash scripts/smoke-test.sh
@@ -129,7 +129,7 @@ jobs:
           VITE_GOOGLE_MAPS_API_KEY:           ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
         run: npm run build
 
-      # Coverage thresholds are enforced in vite.config.js (lines/statements ≥70%, branches ≥60%).
+      # Coverage thresholds are enforced in vite.config.js (lines/statements >=70%, branches >=60%).
       # This step fails CI if any threshold is not met, preventing regressions.
       - name: Run frontend tests with coverage
         if: env.CAN_DEPLOY_FRONTEND == 'true'

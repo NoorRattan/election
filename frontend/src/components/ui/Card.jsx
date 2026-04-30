@@ -3,12 +3,19 @@
  * If onClick is provided, the card is interactive (role="button", keyboard accessible).
  */
 
+import PropTypes from 'prop-types'
+
 export default function Card({ children, className = '', onClick }) {
-  const isClickable = typeof onClick === 'function';
+  const isClickable = typeof onClick === 'function'
 
   const handleKeyDown = isClickable
-    ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e); } }
-    : undefined;
+    ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick(e)
+        }
+      }
+    : undefined
 
   return (
     <div
@@ -26,5 +33,11 @@ export default function Card({ children, className = '', onClick }) {
     >
       {children}
     </div>
-  );
+  )
+}
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 }

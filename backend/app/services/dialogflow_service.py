@@ -3,7 +3,7 @@ Dialogflow CX proxy service for the Electra chat feature.
 
 CRITICAL IMPORT PATH: Use the STABLE SDK, NOT the beta module.
   CORRECT:   from google.cloud.dialogflowcx_v3.services.sessions import SessionsClient
-  INCORRECT: from google.cloud.dialogflowcx_v3beta1 ... (this is the old beta — DO NOT USE)
+  INCORRECT: from google.cloud.dialogflowcx_v3beta1 ... (this is the old beta - DO NOT USE)
 
 Package: google-cloud-dialogflow-cx==1.15.0 (see requirements.txt)
 
@@ -46,7 +46,7 @@ async def query_dialogflow(
     """
     # Graceful degradation: if agent not configured, return static helpful message
     if not settings.dialogflow_agent_id:
-        logger.info("Dialogflow agent not configured — returning static fallback message.")
+        logger.info("Dialogflow agent not configured - returning static fallback message.")
         return {
             "reply": _STATIC_FALLBACK_REPLY,
             "intent": None,

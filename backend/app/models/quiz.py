@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 class QuizQuestion(BaseModel):
     """
     A single quiz question returned to the user before they answer.
-    Does NOT contain correct_index or explanation — those are revealed after submission.
+    Does NOT contain correct_index or explanation - those are revealed after submission.
     """
 
     model_config = ConfigDict(from_attributes=True)
@@ -39,6 +39,7 @@ class AnswerSubmission(BaseModel):
     @field_validator("selected_index")
     @classmethod
     def validate_index(cls, v: int) -> int:
+        """Restrict answer indexes to the available multiple-choice options."""
         if v not in (0, 1, 2, 3):
             raise ValueError("selected_index must be 0, 1, 2, or 3")
         return v
@@ -53,6 +54,7 @@ class QuizSubmitRequest(BaseModel):
     @field_validator("answers")
     @classmethod
     def answers_not_empty(cls, v: list) -> list:
+        """Require at least one submitted answer."""
         if not v:
             raise ValueError("answers list must not be empty")
         return v
@@ -66,7 +68,7 @@ class QuestionResult(BaseModel):
 
     question_id: str
     correct: bool
-    correct_index: int  # Now safe to reveal — user has already submitted
+    correct_index: int  # Now safe to reveal - user has already submitted
     explanation: str  # Explanation of why the correct answer is right
 
 

@@ -7,21 +7,21 @@
  *
  * Provides minimal stubs for every named export used across the app.
  */
-import { vi } from 'vitest';
+import { vi } from 'vitest'
 
-export const app = {};
+export const app = {}
 
 export const auth = {
   currentUser: null,
   signOut: vi.fn().mockResolvedValue(undefined),
-};
+}
 
 export const googleProvider = {
   setCustomParameters: vi.fn(),
-};
+}
 
-export let analytics = null;
+export let analytics = null
 
 export function getAnalyticsInstance() {
-  return Promise.resolve(analytics);
+  return Promise.resolve(analytics)
 }

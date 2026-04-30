@@ -4,29 +4,33 @@
  * Arrow keys navigate between cards; Enter/Space selects.
  */
 
-import { useRef } from 'react';
-import { COUNTRY_CONFIG, COUNTRY_CODES } from '../utils/countryConfig';
-import { useCountry } from '../contexts/CountryContext';
+import { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { COUNTRY_CONFIG, COUNTRY_CODES } from '../utils/countryConfig'
+import { useCountry } from '../contexts/CountryContext'
 
 export default function CountrySelector({ onSelect }) {
-  const { country, setCountry } = useCountry();
-  const cardRefs = useRef([]);
+  const { country, setCountry } = useCountry()
+  const cardRefs = useRef([])
 
   function handleSelect(code) {
-    setCountry(code);
-    if (onSelect) onSelect(code);
+    setCountry(code)
+    if (onSelect) onSelect(code)
   }
 
   function handleKeyDown(e, index) {
-    let next = index;
+    let next = index
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      e.preventDefault(); next = (index + 1) % COUNTRY_CODES.length;
+      e.preventDefault()
+      next = (index + 1) % COUNTRY_CODES.length
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault(); next = (index - 1 + COUNTRY_CODES.length) % COUNTRY_CODES.length;
+      e.preventDefault()
+      next = (index - 1 + COUNTRY_CODES.length) % COUNTRY_CODES.length
     } else if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault(); handleSelect(COUNTRY_CODES[index]);
+      e.preventDefault()
+      handleSelect(COUNTRY_CODES[index])
     }
-    if (next !== index) cardRefs.current[next]?.focus();
+    if (next !== index) cardRefs.current[next]?.focus()
   }
 
   return (
@@ -36,8 +40,8 @@ export default function CountrySelector({ onSelect }) {
       className="grid grid-cols-1 sm:grid-cols-3 gap-4"
     >
       {COUNTRY_CODES.map((code, i) => {
-        const cfg       = COUNTRY_CONFIG[code];
-        const isSelected = country === code;
+        const cfg = COUNTRY_CONFIG[code]
+        const isSelected = country === code
         return (
           <div
             key={code}
@@ -55,20 +59,30 @@ export default function CountrySelector({ onSelect }) {
                 : 'border-neutral-200 bg-white hover:border-primary-300 hover:shadow-sm',
             ].join(' ')}
           >
-            <div className="text-4xl mb-3" aria-hidden="true">{cfg.flag}</div>
+            <div className="text-4xl mb-3" aria-hidden="true">
+              {cfg.flag}
+            </div>
             <h3 className="font-semibold text-neutral-900 text-lg mb-1">{cfg.name}</h3>
             <p className="text-sm text-neutral-500">Voting age {cfg.officialVotingAge}+</p>
             {isSelected && (
               <div className="mt-3 text-xs font-medium text-primary-700 flex items-center gap-1">
                 <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 Selected
               </div>
             )}
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
+}
+
+CountrySelector.propTypes = {
+  onSelect: PropTypes.func,
 }

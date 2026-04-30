@@ -1,16 +1,18 @@
 /**
  * Small label pill for status indicators and category tags.
  * Variants: success | warning | info | neutral | error
- * Never relies on colour alone — the text label is always present.
+ * Never relies on colour alone - the text label is always present.
  */
+
+import PropTypes from 'prop-types'
 
 const VARIANT_CLASSES = {
   success: 'bg-success-50 text-success-700 border border-success-200',
   warning: 'bg-yellow-50 text-yellow-700 border border-yellow-200',
-  info:    'bg-primary-50 text-primary-700 border border-primary-200',
+  info: 'bg-primary-50 text-primary-700 border border-primary-200',
   neutral: 'bg-neutral-100 text-neutral-600 border border-neutral-200',
-  error:   'bg-error-50 text-error-700 border border-error-200',
-};
+  error: 'bg-error-50 text-error-700 border border-error-200',
+}
 
 export default function Badge({ variant = 'neutral', children, className = '' }) {
   return (
@@ -23,5 +25,11 @@ export default function Badge({ variant = 'neutral', children, className = '' })
     >
       {children}
     </span>
-  );
+  )
+}
+
+Badge.propTypes = {
+  variant: PropTypes.oneOf(['success', 'warning', 'info', 'neutral', 'error']),
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 }

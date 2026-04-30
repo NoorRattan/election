@@ -12,7 +12,7 @@ import Navbar from '../components/layout/Navbar'
 import { useAuth } from '../hooks/useAuth'
 import { useCountry } from '../contexts/CountryContext'
 
-// ── Mocks ──────────────────────────────────────────────────────────────────
+// -- Mocks ------------------------------------------------------------------
 
 vi.mock('../hooks/useAuth', () => ({
   useAuth: vi.fn(),
@@ -27,25 +27,29 @@ vi.mock('react-router-dom', async () => {
   return { ...actual, useNavigate: () => vi.fn() }
 })
 
-// COUNTRY_CONFIG is used in Navbar to look up flag + name — provide minimal stub
+// COUNTRY_CONFIG is used in Navbar to look up flag + name - provide minimal stub
 vi.mock('../utils/countryConfig', () => ({
   COUNTRY_CONFIG: {
     UK: { name: 'United Kingdom', flag: '🇬🇧' },
-    US: { name: 'United States',  flag: '🇺🇸' },
+    US: { name: 'United States', flag: '🇺🇸' },
   },
 }))
 
-// ── Helper ─────────────────────────────────────────────────────────────────
+// -- Helper -----------------------------------------------------------------
 
 const renderNavbar = ({ user = null, country = null } = {}) => {
   useAuth.mockReturnValue({ user, loading: false, signOut: vi.fn() })
   useCountry.mockReturnValue({ country, setCountry: vi.fn() })
-  return render(<MemoryRouter><Navbar /></MemoryRouter>)
+  return render(
+    <MemoryRouter>
+      <Navbar />
+    </MemoryRouter>
+  )
 }
 
-// ── Structure ──────────────────────────────────────────────────────────────
+// -- Structure --------------------------------------------------------------
 
-describe('Navbar — structure', () => {
+describe('Navbar - structure', () => {
   it('skip link has href="#main-content"', () => {
     renderNavbar()
     const skip = screen.getByText(/skip/i)
@@ -85,9 +89,9 @@ describe('Navbar — structure', () => {
   })
 })
 
-// ── Auth states ────────────────────────────────────────────────────────────
+// -- Auth states ------------------------------------------------------------
 
-describe('Navbar — auth states', () => {
+describe('Navbar - auth states', () => {
   it('shows "Sign In" when user is null', () => {
     renderNavbar({ user: null })
     expect(screen.getAllByText(/sign in/i).length).toBeGreaterThan(0)
@@ -123,7 +127,11 @@ describe('Navbar — auth states', () => {
       signOut,
     })
     useCountry.mockReturnValue({ country: null, setCountry: vi.fn() })
-    render(<MemoryRouter><Navbar /></MemoryRouter>)
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    )
     // Open the dropdown first
     fireEvent.click(screen.getByRole('button', { name: /account menu/i }))
     fireEvent.click(screen.getByText(/sign out/i))
@@ -131,9 +139,9 @@ describe('Navbar — auth states', () => {
   })
 })
 
-// ── Country badge ──────────────────────────────────────────────────────────
+// -- Country badge ----------------------------------------------------------
 
-describe('Navbar — country badge', () => {
+describe('Navbar - country badge', () => {
   it('shows "Select country" when country is null', () => {
     renderNavbar({ country: null })
     expect(screen.getByText(/select country/i)).toBeInTheDocument()
@@ -150,9 +158,9 @@ describe('Navbar — country badge', () => {
   })
 })
 
-// ── Mobile menu ────────────────────────────────────────────────────────────
+// -- Mobile menu ------------------------------------------------------------
 
-describe('Navbar — mobile', () => {
+describe('Navbar - mobile', () => {
   it('hamburger button has aria-expanded attribute', () => {
     renderNavbar()
     const hamburger = screen.getByRole('button', { name: /open menu|close menu/i })

@@ -36,6 +36,9 @@ jobs:
           ruff check app/ tests/ --output-format=github
           ruff format app/ tests/ --check
 
+      - name: Audit Python dependencies
+        run: pip-audit -r requirements.txt
+
       - name: Run tests with coverage
         env:
           GOOGLE_CLOUD_PROJECT: test-project

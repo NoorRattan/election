@@ -7,9 +7,9 @@ If the order is wrong, the real Firebase SDK initialises, fails to find credenti
 and all tests crash with a credentials error.
 """
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 # STEP 1: Set environment variables BEFORE any app import
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 import os
 import sys
 from unittest.mock import AsyncMock, MagicMock
@@ -23,9 +23,9 @@ os.environ.setdefault("ALLOWED_ORIGINS", "http://localhost:5173")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-chars-long-xxx")
 os.environ.setdefault("DIALOGFLOW_AGENT_ID", "")
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 # STEP 2: Mock firebase_admin in sys.modules BEFORE importing any app code
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 _mock_firebase_admin = MagicMock()
 _mock_firebase_admin._apps = {}  # Empty dict = "not yet initialised"
 _mock_firebase_admin.credentials = MagicMock()
@@ -34,7 +34,7 @@ _mock_firebase_admin.auth = MagicMock()
 
 # By default, verify_id_token raises InvalidIdTokenError for any token.
 # Tests that need a valid decoded token use authed_client (which bypasses verify_id_token
-# entirely via dependency override) — they are unaffected by this default.
+# entirely via dependency override)  -  they are unaffected by this default.
 class MockExpiredIdTokenError(Exception):
     pass
 
@@ -62,9 +62,9 @@ sys.modules["firebase_admin"] = _mock_firebase_admin
 sys.modules["firebase_admin.credentials"] = _mock_firebase_admin.credentials
 sys.modules["firebase_admin.auth"] = _mock_firebase_admin.auth
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 # STEP 3: Mock google.cloud.firestore in sys.modules
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 _mock_firestore = MagicMock()
 sys.modules["google"] = MagicMock()
 sys.modules["google.cloud"] = MagicMock()
@@ -79,17 +79,17 @@ sys.modules["google.cloud.dialogflowcx_v3.services.sessions"] = MagicMock()
 sys.modules["google.cloud.dialogflowcx_v3.types"] = MagicMock()
 sys.modules["google.cloud.dialogflowcx_v3.types.session"] = MagicMock()
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 # STEP 4: NOW it is safe to import the app
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 from fastapi.testclient import TestClient  # noqa: E402
 from main import app  # noqa: E402  (main.py is at backend/ root)
 
 from app.middleware.auth import require_auth  # noqa: E402
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 # FIXTURES
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 
 
 @pytest.fixture(scope="module")

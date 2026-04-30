@@ -26,7 +26,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.js'],
-    // Explicitly exclude Playwright e2e specs — vitest must not pick these up.
+    // Explicitly exclude Playwright e2e specs  -  vitest must not pick these up.
     exclude: ['**/node_modules/**', '**/e2e/**', '**/*.spec.{js,ts}'],
     // Redirect local firebase.js to a lightweight stub so tests don't need real
     // Firebase credentials or browser-only APIs (IndexedDB, etc.)
@@ -39,13 +39,13 @@ export default defineConfig({
       },
     ],
     coverage: {
-      provider: 'v8',                           // v8 (not c8 — deprecated)
+      provider: 'v8',                           // v8 (not c8  -  deprecated)
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: './coverage',
       include: ['src/**/*.{js,jsx}'],
       exclude: [
-        'src/main.jsx',                         // entry point — not unit testable in isolation
-        'src/firebase.js',                      // Firebase SDK init — mocked in all tests
+        'src/main.jsx',                         // entry point  -  not unit testable in isolation
+        'src/firebase.js',                      // Firebase SDK init  -  mocked in all tests
         'src/**/*.test.{js,jsx}',
         'src/test-setup.js',
       ],

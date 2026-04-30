@@ -28,14 +28,13 @@ vi.mock('../components/feedback/FeedbackForm', () => ({
 // Mock Modal so we don't have to deal with portals and focus trapping in unit tests
 // Just render its children if isOpen is true
 vi.mock('../components/ui/Modal', () => ({
-  default: ({ isOpen, children, title }) => (
+  default: ({ isOpen, children, title }) =>
     isOpen ? (
       <div data-testid="mock-modal">
         <h2>{title}</h2>
         {children}
       </div>
-    ) : null
-  ),
+    ) : null,
 }))
 
 function renderFooter() {
@@ -67,13 +66,22 @@ describe('Footer', () => {
 
   it('renders legal navigation links', () => {
     renderFooter()
-    expect(screen.getByRole('link', { name: /Privacy Policy/i })).toHaveAttribute('href', '/privacy')
-    expect(screen.getByRole('link', { name: /Accessibility Statement/i })).toHaveAttribute('href', '/accessibility')
+    expect(screen.getByRole('link', { name: /Privacy Policy/i })).toHaveAttribute(
+      'href',
+      '/privacy'
+    )
+    expect(screen.getByRole('link', { name: /Accessibility Statement/i })).toHaveAttribute(
+      'href',
+      '/accessibility'
+    )
   })
 
   it('renders project links', () => {
     renderFooter()
-    expect(screen.getByRole('link', { name: /GitHub Repository/i })).toHaveAttribute('href', 'https://github.com/NoorRattan/election')
+    expect(screen.getByRole('link', { name: /GitHub Repository/i })).toHaveAttribute(
+      'href',
+      'https://github.com/NoorRattan/election'
+    )
   })
 
   it('opens feedback modal with correct country when Send Feedback is clicked', async () => {
@@ -90,7 +98,7 @@ describe('Footer', () => {
     // Modal should now be open
     expect(screen.getByTestId('mock-modal')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Send Feedback' })).toBeInTheDocument() // Modal title
-    
+
     // Form should receive the country from context
     expect(screen.getByTestId('feedback-form')).toHaveTextContent('Feedback for UK')
   })

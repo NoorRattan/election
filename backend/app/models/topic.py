@@ -1,9 +1,9 @@
 """
 Pydantic models for the /topics endpoints.
 
-TopicSummary  — returned in topic list responses (no full content)
-TopicDetail   — returned when fetching a single topic by slug (includes Markdown content)
-TopicsResponse — wrapper for the list endpoint
+TopicSummary  - returned in topic list responses (no full content)
+TopicDetail   - returned when fetching a single topic by slug (includes Markdown content)
+TopicsResponse - wrapper for the list endpoint
 """
 
 from datetime import datetime
@@ -33,7 +33,7 @@ class TopicDetail(BaseModel):
     id: str
     slug: str
     title: str
-    content: str  # Full Markdown string — rendered by react-markdown on frontend
+    content: str  # Full Markdown string - rendered by react-markdown on frontend
     category: str
     country: list[str]
     prerequisites: list[str] = []  # List of topic slugs; empty list if none

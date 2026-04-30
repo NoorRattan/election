@@ -1,5 +1,5 @@
 /**
- * Tests for App.jsx — route rendering.
+ * Tests for App.jsx - route rendering.
  *
  * All page components are mocked so this file tests routing logic only,
  * not the implementation of each page. Auth state is controlled via the
@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
-// ── Hoist mocks before any imports ───────────────────────────────────────────
+// -- Hoist mocks before any imports -------------------------------------------
 const authMock = vi.hoisted(() => ({ user: null, loading: false }))
 
 vi.mock('../hooks/useAuth', () => ({ useAuth: () => authMock }))
@@ -20,21 +20,23 @@ vi.mock('../contexts/CountryContext', () => ({
   COUNTRY_SYNC_EVENT: 'electra:country-changed',
 }))
 
-// Lazy-page mocks — simple text sentinels are enough for routing tests
-vi.mock('../pages/Home',                   () => ({ default: () => <div>Home Page</div> }))
-vi.mock('../pages/Topics',                 () => ({ default: () => <div>Topics Page</div> }))
-vi.mock('../pages/TopicDetail',            () => ({ default: () => <div>Topic Detail Page</div> }))
-vi.mock('../pages/Timeline',               () => ({ default: () => <div>Timeline Page</div> }))
-vi.mock('../pages/Quiz',                   () => ({ default: () => <div>Quiz Page</div> }))
-vi.mock('../pages/Profile',               () => ({ default: () => <div>Profile Page</div> }))
-vi.mock('../pages/Login',                  () => ({ default: () => <div>Login Page</div> }))
-vi.mock('../pages/PrivacyPolicy',          () => ({ default: () => <div>Privacy Policy</div> }))
-vi.mock('../pages/AccessibilityStatement', () => ({ default: () => <div>Accessibility Statement</div> }))
-vi.mock('../pages/NotFound',               () => ({ default: () => <div>Not Found</div> }))
-vi.mock('../components/layout/Navbar',     () => ({ default: () => <nav data-testid="navbar" /> }))
-vi.mock('../components/layout/Footer',     () => ({ default: () => <footer data-testid="footer" /> }))
+// Lazy-page mocks - simple text sentinels are enough for routing tests
+vi.mock('../pages/Home', () => ({ default: () => <div>Home Page</div> }))
+vi.mock('../pages/Topics', () => ({ default: () => <div>Topics Page</div> }))
+vi.mock('../pages/TopicDetail', () => ({ default: () => <div>Topic Detail Page</div> }))
+vi.mock('../pages/Timeline', () => ({ default: () => <div>Timeline Page</div> }))
+vi.mock('../pages/Quiz', () => ({ default: () => <div>Quiz Page</div> }))
+vi.mock('../pages/Profile', () => ({ default: () => <div>Profile Page</div> }))
+vi.mock('../pages/Login', () => ({ default: () => <div>Login Page</div> }))
+vi.mock('../pages/PrivacyPolicy', () => ({ default: () => <div>Privacy Policy</div> }))
+vi.mock('../pages/AccessibilityStatement', () => ({
+  default: () => <div>Accessibility Statement</div>,
+}))
+vi.mock('../pages/NotFound', () => ({ default: () => <div>Not Found</div> }))
+vi.mock('../components/layout/Navbar', () => ({ default: () => <nav data-testid="navbar" /> }))
+vi.mock('../components/layout/Footer', () => ({ default: () => <footer data-testid="footer" /> }))
 
-// ── Helper ────────────────────────────────────────────────────────────────────
+// -- Helper --------------------------------------------------------------------
 async function renderAt(route) {
   const App = (await import('../App')).default
   return render(
@@ -44,7 +46,7 @@ async function renderAt(route) {
   )
 }
 
-// ── Tests ─────────────────────────────────────────────────────────────────────
+// -- Tests ---------------------------------------------------------------------
 describe('App routing', () => {
   it('renders Home at /', async () => {
     await renderAt('/')

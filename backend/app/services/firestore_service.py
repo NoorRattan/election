@@ -2,13 +2,13 @@
 Single point of access for all Firestore operations in the Electra backend.
 
 FIELD MAPPING CONTRACT:
-  - When reading FROM Firestore: map camelCase doc fields → snake_case dict keys
+  - When reading FROM Firestore: map camelCase doc fields -> snake_case dict keys
     before returning data to callers (routes, other services).
-  - When writing TO Firestore: map snake_case inputs → camelCase field names
+  - When writing TO Firestore: map snake_case inputs -> camelCase field names
     in the dict passed to Firestore .set() / .update() calls.
 
 No other module in this project reads or writes Firestore field names.
-This module owns the entire camelCase ↔ snake_case translation layer.
+This module owns the entire camelCase <-> snake_case translation layer.
 """
 
 import logging
@@ -170,7 +170,7 @@ async def get_quiz_questions(topic_id: str) -> list[dict]:
                 "question": data.get("question", ""),
                 "options": data.get("options", []),
                 "country": data.get("country", ["ALL"]),
-                "correct_index": data.get("correctIndex", 0),  # camelCase → snake_case
+                "correct_index": data.get("correctIndex", 0),  # camelCase -> snake_case
                 "explanation": data.get("explanation", ""),
                 "difficulty": data.get("difficulty", "medium"),
             }
@@ -207,10 +207,10 @@ async def get_user(uid: str) -> dict | None:
     return {
         "uid": uid,
         "email": data.get("email"),
-        "display_name": data.get("displayName"),  # camelCase → snake_case
+        "display_name": data.get("displayName"),  # camelCase -> snake_case
         "country": data.get("country"),
-        "age_group": data.get("ageGroup"),  # camelCase → snake_case
-        # gdprConsentAt: Firestore Timestamp → Python datetime (None for pre-consent users)
+        "age_group": data.get("ageGroup"),  # camelCase -> snake_case
+        # gdprConsentAt: Firestore Timestamp -> Python datetime (None for pre-consent users)
         "gdpr_consent_at": _ts_to_datetime(data.get("gdprConsentAt")),
         "created_at": _ts_to_datetime(data.get("createdAt")),
     }
@@ -230,11 +230,11 @@ async def upsert_user(uid: str, data: dict) -> None:
     if data.get("email"):
         firestore_data["email"] = data["email"]
     if data.get("display_name"):
-        firestore_data["displayName"] = data["display_name"]  # snake_case → camelCase
+        firestore_data["displayName"] = data["display_name"]  # snake_case -> camelCase
     if data.get("country"):
         firestore_data["country"] = data["country"]
     if data.get("age_group"):
-        firestore_data["ageGroup"] = data["age_group"]  # snake_case → camelCase
+        firestore_data["ageGroup"] = data["age_group"]  # snake_case -> camelCase
 
     # Only set createdAt on first creation
     doc = await doc_ref.get()
@@ -252,12 +252,12 @@ async def update_user(uid: str, updates: dict) -> None:
     firestore_updates: dict = {"lastSeen": SERVER_TIMESTAMP}
 
     if "display_name" in updates:
-        firestore_updates["displayName"] = updates["display_name"]  # snake_case → camelCase
+        firestore_updates["displayName"] = updates["display_name"]  # snake_case -> camelCase
     if "country" in updates:
         firestore_updates["country"] = updates["country"]
     if "age_group" in updates:
-        firestore_updates["ageGroup"] = updates["age_group"]  # snake_case → camelCase
-    # GDPR consent timestamp — set when user enables analytics consent in Profile settings
+        firestore_updates["ageGroup"] = updates["age_group"]  # snake_case -> camelCase
+    # GDPR consent timestamp - set when user enables analytics consent in Profile settings
     # Stored as Firestore Timestamp; datetime is accepted directly by the Firestore client
     if "gdpr_consent_at" in updates:
         firestore_updates["gdprConsentAt"] = updates["gdpr_consent_at"]
@@ -268,7 +268,7 @@ async def update_user(uid: str, updates: dict) -> None:
 async def delete_user_data(uid: str) -> None:
     """
     GDPR account deletion. Deletes all progress docs in the subcollection first,
-    then deletes the user document itself. Order matters — Firestore does not
+    then deletes the user document itself. Order matters - Firestore does not
     cascade subcollection deletes automatically.
     """
     db = get_db()
@@ -296,9 +296,9 @@ async def get_user_progress(uid: str) -> list[dict]:
         data = doc.to_dict()
         result.append(
             {
-                "topic_id": data.get("topicId", doc.id),  # topicId → topic_id
+                "topic_id": data.get("topicId", doc.id),  # topicId -> topic_id
                 "completed": data.get("completed", False),
-                "quiz_score": data.get("quizScore"),  # quizScore → quiz_score
+                "quiz_score": data.get("quizScore"),  # quizScore -> quiz_score
                 "completed_at": _ts_to_datetime(data.get("completedAt")),
                 "attempts": data.get("attempts", 0),
             }
@@ -314,9 +314,9 @@ async def update_progress(uid: str, topic_id: str, score: int) -> None:
     existing = await progress_ref.get()
 
     firestore_data: dict = {
-        "topicId": topic_id,  # snake_case → camelCase for storage
+        "topicId": topic_id,  # snake_case -> camelCase for storage
         "completed": True,
-        "quizScore": score,  # snake_case → camelCase for storage
+        "quizScore": score,  # snake_case -> camelCase for storage
         "attempts": 1,
     }
 
@@ -324,7 +324,7 @@ async def update_progress(uid: str, topic_id: str, score: int) -> None:
         existing_data = existing.to_dict() or {}
         current_attempts = existing_data.get("attempts", 0)
         firestore_data["attempts"] = current_attempts + 1
-        # Keep original completedAt — don't overwrite on retry
+        # Keep original completedAt - don't overwrite on retry
         await progress_ref.update(firestore_data)
     else:
         firestore_data["completedAt"] = SERVER_TIMESTAMP  # camelCase for storage
@@ -341,7 +341,7 @@ async def save_feedback(data: dict) -> None:
             "message": data.get("message", ""),
             "category": data.get("category", "other"),
             "country": data.get("country"),
-            "userId": data.get("user_id"),  # snake_case → camelCase
+            "userId": data.get("user_id"),  # snake_case -> camelCase
             "createdAt": SERVER_TIMESTAMP,
             "reviewed": False,
         }

@@ -1,6 +1,6 @@
-# Electra — Deployment Guide
+# Electra  -  Deployment Guide
 
-> **Referenced by:** README.md → Deployment section  
+> **Referenced by:** README.md -> Deployment section
 > **Audience:** Developers deploying Electra to production on Google Cloud Platform
 
 ---
@@ -11,8 +11,8 @@ Before deploying, ensure you have the following tools installed and authenticate
 
 | Tool | Minimum Version | Install |
 |------|----------------|---------|
-| `gcloud` CLI | ≥ 450.0.0 | [cloud.google.com/sdk](https://cloud.google.com/sdk/docs/install) |
-| `firebase` CLI | ≥ 13.0.0 | `npm install -g firebase-tools` |
+| `gcloud` CLI | >= 450.0.0 | [cloud.google.com/sdk](https://cloud.google.com/sdk/docs/install) |
+| `firebase` CLI | >= 13.0.0 | `npm install -g firebase-tools` |
 | Node.js | 20.x LTS | [nodejs.org](https://nodejs.org) |
 | Python | 3.11+ | [python.org](https://python.org) |
 | Docker | Latest stable | [docker.com](https://docker.com) (needed for local builds only) |
@@ -65,9 +65,9 @@ gcloud firestore databases create \
 ### 1.4 Link Firebase
 
 1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Click **Add project** → select your existing GCP project
+2. Click **Add project** -> select your existing GCP project
 3. Enable **Firebase Auth**:
-   - Go to **Authentication → Sign-in method**
+   - Go to **Authentication -> Sign-in method**
    - Enable: **Google** and **Email/Password** providers
 
 ### 1.5 Create a backend service account
@@ -97,7 +97,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 ### 1.6 Store credentials in Secret Manager
 
 ```bash
-# Download the key (temporary — delete after storing in Secret Manager)
+# Download the key (temporary  -  delete after storing in Secret Manager)
 gcloud iam service-accounts keys create /tmp/sa-key.json \
   --iam-account="${SA_EMAIL}"
 
@@ -109,13 +109,13 @@ gcloud secrets create FIREBASE_SERVICE_ACCOUNT_KEY \
 rm /tmp/sa-key.json
 ```
 
-> **⚠ CAUTION:** Never commit `sa-key.json` or any `*-key.json` file to the repository.
+> **WARNING: CAUTION:** Never commit `sa-key.json` or any `*-key.json` file to the repository.
 > The `.gitignore` is configured to reject them, but verify manually before pushing.
 
 ### 1.7 Restrict the Google Maps API key
 
-1. GCP Console → **APIs & Services → Credentials**
-2. Find your Maps API key → click **Edit**
+1. GCP Console -> **APIs & Services -> Credentials**
+2. Find your Maps API key -> click **Edit**
 3. Under **Application restrictions**: select **HTTP referrers (websites)**
 4. Add your Firebase Hosting domain: `https://your-project.web.app/*`
 
@@ -126,13 +126,13 @@ rm /tmp/sa-key.json
 ```bash
 # From repo root
 firebase init hosting
-# ↳ Select existing project
-# ↳ Public directory: frontend/dist
-# ↳ Single-page app rewrite: yes
-# ↳ Overwrite index.html: no
+# -> Select existing project
+# -> Public directory: frontend/dist
+# -> Single-page app rewrite: yes
+# -> Overwrite index.html: no
 
 firebase init firestore
-# ↳ Uses existing firestore.rules and firestore.indexes.json from the repo
+# -> Uses existing firestore.rules and firestore.indexes.json from the repo
 
 # Deploy security rules and indexes
 firebase deploy --only firestore:rules,firestore:indexes
@@ -160,7 +160,7 @@ Verify the data was written:
 # Using Firebase CLI
 firebase firestore:get /topics --project your-project-id
 
-# Or check Firebase Console → Firestore → Data
+# Or check Firebase Console -> Firestore -> Data
 ```
 
 ---
@@ -170,14 +170,14 @@ firebase firestore:get /topics --project your-project-id
 ### 4.1 First deployment (manual)
 
 ```bash
-# From repo root — submit the backend/ directory as the build context
+# From repo root  -  submit the backend/ directory as the build context
 gcloud builds submit backend/ \
   --config backend/cloudbuild.yaml \
   --substitutions _REGION=us-central1
 ```
 
 This builds the Docker image, pushes it to Container Registry, and deploys to Cloud Run.
-Build takes approximately 3–5 minutes on E2_HIGHCPU_8.
+Build takes approximately 3-5 minutes on E2_HIGHCPU_8.
 
 ### 4.2 Set Cloud Run environment variables
 
@@ -206,7 +206,7 @@ cd frontend
 
 # Copy and fill in environment variables
 cp .env.example .env.local
-# Edit .env.local — fill in all VITE_* values from Firebase Console
+# Edit .env.local  -  fill in all VITE_* values from Firebase Console
 
 # Build production bundle
 npm run build
@@ -225,7 +225,7 @@ All CI/CD workflows are in `.github/workflows/`. They run automatically on push 
 
 ### Required GitHub Secrets
 
-Add these in your repo: **Settings → Secrets and variables → Actions → New repository secret**
+Add these in your repo: **Settings -> Secrets and variables -> Actions -> New repository secret**
 
 | Secret | Value |
 |--------|-------|
@@ -233,7 +233,7 @@ Add these in your repo: **Settings → Secrets and variables → Actions → New
 | `GCP_SA_KEY` | JSON of service account with Cloud Build + Run + Storage + Firebase roles |
 | `FIREBASE_SERVICE_ACCOUNT` | JSON of Firebase service account (for `firebase deploy`) |
 | `VITE_API_BASE_URL` | `https://electra-api-xxx.run.app/api/v1` |
-| `VITE_FIREBASE_API_KEY` | From Firebase Console → Project Settings → Web App |
+| `VITE_FIREBASE_API_KEY` | From Firebase Console -> Project Settings -> Web App |
 | `VITE_FIREBASE_AUTH_DOMAIN` | `your-project.firebaseapp.com` |
 | `VITE_FIREBASE_PROJECT_ID` | Your GCP/Firebase project ID |
 | `VITE_FIREBASE_STORAGE_BUCKET` | `your-project.appspot.com` |
@@ -246,11 +246,11 @@ Add these in your repo: **Settings → Secrets and variables → Actions → New
 
 ```
 push to main
-  ├── backend-test.yml    → pytest + coverage check (≥ 80%)
-  ├── deploy.yml          → (after tests pass)
-  │     ├── gcloud builds submit  → Cloud Run deployment
-  │     └── firebase deploy       → Hosting deployment (after frontend tests pass)
-  └── e2e.yml             → Playwright E2E tests (on PR + main)
+  |---- backend-test.yml    -> pytest + coverage check (>= 80%)
+  |---- deploy.yml          -> (after tests pass)
+  |     |---- gcloud builds submit  -> Cloud Run deployment
+  |     `---- firebase deploy       -> Hosting deployment (after frontend tests pass)
+  `---- e2e.yml             -> Playwright E2E tests (on PR + main)
 ```
 
 ---
@@ -259,7 +259,7 @@ push to main
 
 Dialogflow CX provides the chat assistant. The backend degrades gracefully if not configured.
 
-1. GCP Console → **Dialogflow CX** → Create Agent
+1. GCP Console -> **Dialogflow CX** -> Create Agent
 2. Set location to match `DIALOGFLOW_LOCATION` (default: `global`)
 3. Create the following intents (or import from `docs/dialogflow-agent/` if provided):
    - `voter_registration_uk`
@@ -297,7 +297,7 @@ export API_URL=https://electra-api-xxx.run.app/api/v1
 bash scripts/smoke-test.sh
 ```
 
-Expected output: all checks show `✓` and the script exits with code `0`.
+Expected output: all checks show `OK` and the script exits with code `0`.
 
 ---
 
@@ -321,7 +321,7 @@ gcloud run services update-traffic electra-api \
 # Option 1: Redeploy from a previous build artifact (dist/)
 firebase deploy --only hosting
 
-# Option 2: Firebase Console → Hosting → Release history → Roll back
+# Option 2: Firebase Console -> Hosting -> Release history -> Roll back
 ```
 
 ---
@@ -330,8 +330,8 @@ firebase deploy --only hosting
 
 | Service | Free Tier | Estimated Monthly Cost |
 |---------|-----------|----------------------|
-| Cloud Run | 2M requests/month | $0–$5 |
-| Firestore | 50K reads, 20K writes/day | $0–$3 |
+| Cloud Run | 2M requests/month | $0-$5 |
+| Firestore | 50K reads, 20K writes/day | $0-$3 |
 | Firebase Hosting | 10 GB storage, 360 MB/day transfer | Free for small projects |
 | Maps API | 28,500 map loads/month | $0 (within free tier) |
 | Dialogflow CX | 1,000 text requests/month | $0 (within free tier) |

@@ -2,25 +2,25 @@
 Tests for POST /api/v1/chat endpoint.
 
 Covers:
-  - Valid request → Dialogflow response → 200
+  - Valid request -> Dialogflow response -> 200
   - Response schema validation
   - Dialogflow called with correct arguments
-  - Invalid request bodies → 422
-  - Graceful degradation when DIALOGFLOW_AGENT_ID is empty → static 200
-  - Dialogflow SDK error → 503
+  - Invalid request bodies -> 422
+  - Graceful degradation when DIALOGFLOW_AGENT_ID is empty -> static 200
+  - Dialogflow SDK error -> 503
   - Language code acceptance
   - No auth required
 
 Mock strategy:
   mocker.patch('app.routes.chat.dialogflow_service.query_dialogflow') with AsyncMock.
-  The real function calls the Dialogflow SDK — we never want that in tests.
+  The real function calls the Dialogflow SDK - we never want that in tests.
 """
 
 from unittest.mock import AsyncMock
 
 import pytest
 
-# ── Fixtures ──────────────────────────────────────────────────────────────────
+# -- Fixtures ------------------------------------------------------------------
 
 VALID_CHAT = {
     "message": "Can you explain parliament?",
@@ -44,7 +44,7 @@ def mock_dialogflow(mocker):
     )
 
 
-# ── Test Classes ───────────────────────────────────────────────────────────────
+# -- Test Classes ---------------------------------------------------------------
 
 
 class TestChatEndpoint:
@@ -208,6 +208,6 @@ class TestChatRateLimit:
             assert response.status_code == 200, f"language_code '{lang}' was rejected"
 
     def test_chat_does_not_require_auth(self, client, mock_dialogflow):
-        """POST /chat requires no auth — test with plain client (no token)."""
+        """POST /chat requires no auth - test with plain client (no token)."""
         response = client.post("/api/v1/chat", json=VALID_CHAT)
         assert response.status_code != 401

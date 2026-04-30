@@ -1,7 +1,7 @@
 """
 Centralised settings for the Electra backend.
 All environment variables are declared here.
-Import get_settings() and call it — never read os.environ directly in other modules.
+Import get_settings() and call it - never read os.environ directly in other modules.
 """
 
 from functools import lru_cache
@@ -10,6 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """Runtime configuration loaded from environment variables."""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -29,13 +31,16 @@ class Settings(BaseSettings):
 
     @property
     def is_production(self) -> bool:
+        """Return True when the API is running in production mode."""
         return self.environment.lower() == "production"
 
     @property
     def origins_list(self) -> list[str]:
+        """Parse the comma-separated CORS origin list."""
         return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
 
 
 @lru_cache
 def get_settings() -> Settings:
+    """Return the cached settings object for dependency-free imports."""
     return Settings()

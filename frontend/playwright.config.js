@@ -4,7 +4,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Playwright E2E test configuration for the Electra frontend.
  *
  * Test location: frontend/e2e/
- * Run locally:  npm run e2e           (Chromium only — fast)
+ * Run locally:  npm run e2e           (Chromium only  -  fast)
  * Run headed:   npm run e2e:headed
  * Run UI mode:  npm run e2e:ui
  * Full CI run:  set CI=true before running to include Firefox + WebKit
@@ -37,7 +37,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
 
-    // Collect trace on first retry — attach to HTML report for debugging
+    // Collect trace on first retry  -  attach to HTML report for debugging
     trace: 'on-first-retry',
 
     // Screenshot only on failure
@@ -64,7 +64,7 @@ export default defineConfig({
     // Server is always started externally:
     //   - locally: npm run dev (or reuse an already-running Vite dev server)
     //   - CI: the workflow starts `vite preview` explicitly before this step
-    // Never let Playwright manage the server process — that was causing the
+    // Never let Playwright manage the server process  -  that was causing the
     // 7-minute loop on CI when the internal spawn timed out.
     reuseExistingServer: true,
     timeout: 120_000, // 2 min for Vite cold start

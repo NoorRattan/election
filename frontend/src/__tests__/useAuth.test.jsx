@@ -13,7 +13,7 @@ import '@testing-library/jest-dom'
 import { useAuth } from '../hooks/useAuth'
 import { AuthProvider } from '../contexts/AuthContext'
 
-// The firebase module is imported by AuthContext — mock it to avoid real SDK calls
+// The firebase module is imported by AuthContext - mock it to avoid real SDK calls
 import { vi } from 'vitest'
 
 vi.mock('firebase/auth', () => ({
@@ -41,12 +41,16 @@ vi.mock('../services/api', () => ({
 
 describe('useAuth', () => {
   it('throws a meaningful error when used outside AuthProvider', () => {
-    // Suppress expected React error boundary output
-    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    expect(() => renderHook(() => useAuth())).toThrow(
-      'useAuth must be used within an AuthProvider'
-    )
-    spy.mockRestore()
+    const { result } = renderHook(() => {
+      try {
+        useAuth()
+        return null
+      } catch (error) {
+        return error.message
+      }
+    })
+
+    expect(result.current).toBe('useAuth must be used within an AuthProvider')
   })
 
   it('returns context value when used inside AuthProvider', () => {

@@ -2,8 +2,10 @@
  * Accessible progress bar. Uses role="progressbar" with full ARIA attributes.
  */
 
+import PropTypes from 'prop-types'
+
 export default function ProgressBar({ value = 0, label, ariaLabel }) {
-  const clampedValue = Math.max(0, Math.min(100, Math.round(value)));
+  const clampedValue = Math.max(0, Math.min(100, Math.round(value)))
 
   return (
     <div className="w-full">
@@ -27,5 +29,11 @@ export default function ProgressBar({ value = 0, label, ariaLabel }) {
         />
       </div>
     </div>
-  );
+  )
+}
+
+ProgressBar.propTypes = {
+  value: PropTypes.number,
+  label: PropTypes.string,
+  ariaLabel: PropTypes.string,
 }

@@ -7,10 +7,10 @@
 [project]
 name = "electra-api"
 version = "1.0.0"
-description = "Electra Election Education Assistant — FastAPI backend"
+description = "Electra Election Education Assistant - FastAPI backend"
 requires-python = ">=3.11"
 
-# ── ruff — linter + formatter (replaces flake8 + black + isort) ───────────────
+# -- ruff - linter + formatter (replaces flake8 + black + isort) ---------------
 
 [tool.ruff]
 target-version = "py311"
@@ -35,7 +35,7 @@ select = [
     "UP",  # pyupgrade
 ]
 ignore = [
-    "E501",  # line too long — ruff format handles wrapping
+    "E501",  # line too long - ruff format handles wrapping
     "B008",  # FastAPI's Depends() uses function calls as default args (intentional pattern)
 ]
 
@@ -47,14 +47,14 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 
-# ── coverage.py configuration ─────────────────────────────────────────────────
+# -- coverage.py configuration -------------------------------------------------
 
 [tool.coverage.run]
 source = ["app"]
 omit = [
     "tests/*",
     "seed_data.py",
-    # Google SDK service files — require live credentials for meaningful coverage.
+    # Google SDK service files - require live credentials for meaningful coverage.
     # Covered at the route level via mocking in test_auth.py / test_chat.py etc.
     "app/services/firestore_service.py",
     "app/services/dialogflow_service.py",
@@ -62,6 +62,6 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 80       # CI enforces this threshold — mirrors --cov-fail-under=80 in pytest.ini
+fail_under = 80       # CI enforces this threshold - mirrors --cov-fail-under=80 in pytest.ini
 show_missing = true   # Print line numbers of uncovered code
 skip_covered = false  # Show all files, not just those below threshold

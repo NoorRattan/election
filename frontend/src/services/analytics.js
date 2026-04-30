@@ -4,37 +4,39 @@
  * Consent is stored in localStorage under "electra_analytics_consent".
  */
 
-import { logEvent } from 'firebase/analytics';
-import { getAnalyticsInstance } from '../firebase';
+import { logEvent } from 'firebase/analytics'
+import { getAnalyticsInstance } from '../firebase'
 
-const CONSENT_KEY = 'electra_analytics_consent';
+const CONSENT_KEY = 'electra_analytics_consent'
 
 function hasConsent() {
-  return localStorage.getItem(CONSENT_KEY) === 'true';
+  return localStorage.getItem(CONSENT_KEY) === 'true'
 }
 
 export function grantAnalyticsConsent() {
-  localStorage.setItem(CONSENT_KEY, 'true');
+  localStorage.setItem(CONSENT_KEY, 'true')
 }
 
 export function revokeAnalyticsConsent() {
-  localStorage.removeItem(CONSENT_KEY);
+  localStorage.removeItem(CONSENT_KEY)
 }
 
 export function trackEvent(eventName, params = {}) {
-  if (!hasConsent()) return;
+  if (!hasConsent()) return
   getAnalyticsInstance().then((analytics) => {
-    if (!analytics) return;
+    if (!analytics) return
     try {
-      logEvent(analytics, eventName, params);
-    } catch { /* non-fatal */ }
-  });
+      logEvent(analytics, eventName, params)
+    } catch {
+      /* non-fatal */
+    }
+  })
 }
 
 export function trackPageView(pageName) {
-  trackEvent('page_view', { page_title: pageName });
+  trackEvent('page_view', { page_title: pageName })
 }
 
 export function trackQuizComplete(topicId, score) {
-  trackEvent('quiz_complete', { topic_id: topicId, score });
+  trackEvent('quiz_complete', { topic_id: topicId, score })
 }

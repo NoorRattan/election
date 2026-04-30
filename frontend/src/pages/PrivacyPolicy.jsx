@@ -1,42 +1,45 @@
 /**
- * Privacy Policy page — route /privacy
+ * Privacy Policy page - route /privacy
  * No authentication required. Fully readable without JavaScript.
  */
 
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function PrivacyPolicy() {
   useEffect(() => {
-    document.title = 'Privacy Policy | Electra';
-  }, []);
+    document.title = 'Privacy Policy | Electra'
+  }, [])
 
   return (
-    <main id="main-content" className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <Link
         to="/"
         className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded mb-6"
       >
-        ← Back to Home
+        Back to Home
       </Link>
 
       <h1 className="text-3xl font-bold text-neutral-900 mb-2">Privacy Policy</h1>
       <p className="text-sm text-neutral-500 mb-10">Last updated: April 2026</p>
 
       <div className="prose prose-neutral max-w-none space-y-10">
-
         <section aria-labelledby="privacy-what-we-collect">
           <h2 id="privacy-what-we-collect" className="text-xl font-semibold text-neutral-800 mb-3">
             What We Collect
           </h2>
-          <p className="text-neutral-600 mb-2">We collect only what is necessary to provide the service:</p>
+          <p className="text-neutral-600 mb-2">
+            We collect only what is necessary to provide the service:
+          </p>
           <ul className="list-disc pl-6 space-y-1 text-neutral-600">
             <li>Email address and display name (from Firebase Auth on sign-in)</li>
-            <li>Country preference and age group (if you choose to provide them in your profile)</li>
+            <li>
+              Country preference and age group (if you choose to provide them in your profile)
+            </li>
             <li>Quiz scores and topic completion progress (stored against your account)</li>
             <li>
-              Optional: anonymised usage analytics — <strong>only with your explicit consent</strong> (see
-              the Analytics section below)
+              Optional: anonymised usage analytics -{' '}
+              <strong>only with your explicit consent</strong> (see the Analytics section below)
             </li>
           </ul>
         </section>
@@ -50,7 +53,7 @@ export default function PrivacyPolicy() {
             <li>To save your learning progress across sessions and devices</li>
             <li>To improve the application using aggregated, anonymised analytics only</li>
             <li className="font-medium text-neutral-800">
-              We do not sell, share, or use your data for advertising — ever.
+              We do not sell, share, or use your data for advertising - ever.
             </li>
           </ul>
         </section>
@@ -60,19 +63,23 @@ export default function PrivacyPolicy() {
             Analytics
           </h2>
           <ul className="list-disc pl-6 space-y-1 text-neutral-600">
-            <li>Firebase Analytics is only initialised <strong>after you give explicit consent</strong></li>
+            <li>
+              Firebase Analytics is only initialised{' '}
+              <strong>after you give explicit consent</strong>
+            </li>
             <li>
               You can withdraw consent at any time in{' '}
               <Link
                 to="/profile"
                 className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
-                Profile → Settings
+                Profile settings
               </Link>
             </li>
             <li>
               Consent is stored locally (localStorage key:{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">electra_analytics_consent</code>)
+              <code className="bg-neutral-100 px-1 rounded text-sm">electra_analytics_consent</code>
+              )
             </li>
             <li>Analytics events are anonymised before transmission to Google</li>
           </ul>
@@ -90,7 +97,7 @@ export default function PrivacyPolicy() {
                 to="/profile"
                 className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
-                Profile → Account → Delete My Account
+                Profile account deletion settings
               </Link>
             </li>
             <li>Deletion is immediate and irreversible</li>
@@ -103,8 +110,8 @@ export default function PrivacyPolicy() {
           </h2>
           <ul className="list-disc pl-6 space-y-1 text-neutral-600">
             <li>
-              <strong>Right to access:</strong> request a copy of your data via the Feedback form on this
-              site
+              <strong>Right to access:</strong> request a copy of your data via the Feedback form on
+              this site
             </li>
             <li>
               <strong>Right to erasure:</strong> use Delete My Account (GDPR Article 17)
@@ -122,16 +129,16 @@ export default function PrivacyPolicy() {
           </h2>
           <ul className="list-disc pl-6 space-y-1 text-neutral-600">
             <li>
-              <strong>Firebase Auth (Google)</strong> — authentication
+              <strong>Firebase Auth (Google)</strong> - authentication
             </li>
             <li>
-              <strong>Google Cloud Firestore</strong> — data storage
+              <strong>Google Cloud Firestore</strong> - data storage
             </li>
             <li>
-              <strong>Google Maps</strong> — polling station locator (no sign-in required)
+              <strong>Google Maps</strong> - polling station locator (no sign-in required)
             </li>
             <li>
-              <strong>Dialogflow CX</strong> — chat assistant (messages may be processed by Google)
+              <strong>Dialogflow CX</strong> - chat assistant (messages may be processed by Google)
             </li>
           </ul>
           <p className="mt-3 text-neutral-600">
@@ -142,7 +149,7 @@ export default function PrivacyPolicy() {
               rel="noopener noreferrer"
               className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
             >
-              policies.google.com/privacy ↗
+              policies.google.com/privacy
             </a>
           </p>
         </section>
@@ -161,7 +168,7 @@ export default function PrivacyPolicy() {
                 rel="noopener noreferrer"
                 className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
               >
-                GitHub issue ↗
+                GitHub issue
               </a>{' '}
               with the label <code className="bg-neutral-100 px-1 rounded text-sm">privacy</code>
             </li>
@@ -173,12 +180,11 @@ export default function PrivacyPolicy() {
             Changes to This Policy
           </h2>
           <p className="text-neutral-600">
-            We will notify users of material changes via the application. Continued use after notification
-            constitutes acceptance of the updated policy.
+            We will notify users of material changes via the application. Continued use after
+            notification constitutes acceptance of the updated policy.
           </p>
         </section>
-
       </div>
-    </main>
-  );
+    </div>
+  )
 }

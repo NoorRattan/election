@@ -167,6 +167,7 @@ def fallback_answer(message: str, country: str | None = None) -> dict:
 
 
 def _answer_election_topic(normalized: str, country: str | None) -> dict | None:
+    """Return a topic-specific election answer when keywords match."""
     country_code = _detect_country(normalized, country)
 
     for keywords, base_slug, label in _KEYWORD_TOPICS:
@@ -197,6 +198,7 @@ def _answer_election_topic(normalized: str, country: str | None) -> dict | None:
 
 
 def _answer_assistant_help(normalized: str) -> dict | None:
+    """Explain how to use the assistant when the user asks for help."""
     assistant_terms = ("assistant", "assist", "chat", "electra")
     location_terms = ("where", "how do i use", "what can you do", "help me", "open")
     if not any(term in normalized for term in assistant_terms):
@@ -217,6 +219,7 @@ def _answer_assistant_help(normalized: str) -> dict | None:
 
 
 def _answer_current_status(normalized: str, country: str | None) -> dict | None:
+    """Deflect live-status questions to official sources and timeline content."""
     status_terms = ("current", "status", "live", "today", "latest", "now", "ongoing")
     if "election" not in normalized and "vote" not in normalized and "poll" not in normalized:
         return None
@@ -238,6 +241,7 @@ def _answer_current_status(normalized: str, country: str | None) -> dict | None:
 
 
 def _topic_reply(label: str, country_label: str) -> str:
+    """Build the explanatory answer body for a matched topic label."""
     if label == "registration":
         return (
             f"For voter registration in {country_label}, start with the official election or "
@@ -293,6 +297,7 @@ def _topic_reply(label: str, country_label: str) -> str:
 
 
 def _topic_slug_for(base_slug: str | None, label: str, country_code: str | None) -> str:
+    """Select the best topic slug for a local answer."""
     if label == "voter ID":
         return {
             "UK": "voter-id-uk",
@@ -303,6 +308,7 @@ def _topic_slug_for(base_slug: str | None, label: str, country_code: str | None)
 
 
 def _answer_math(message: str) -> dict | None:
+    """Return a small arithmetic answer for simple utility questions."""
     expression = _extract_math_expression(message)
     if not expression:
         return None
@@ -326,6 +332,7 @@ def _answer_math(message: str) -> dict | None:
 
 
 def _extract_math_expression(message: str) -> str | None:
+    """Extract a bounded arithmetic expression from a user message."""
     text = message.lower().strip()
     text = re.sub(r"^(what\s+is|what's|calculate|compute|solve)\s+", "", text)
     text = text.replace("plus", "+").replace("minus", "-")
@@ -345,11 +352,13 @@ def _extract_math_expression(message: str) -> str | None:
 
 
 def _safe_eval_expression(expression: str) -> int | float:
+    """Evaluate a sanitized arithmetic expression with a restricted AST."""
     node = ast.parse(expression, mode="eval")
     return _eval_ast(node.body)
 
 
 def _eval_ast(node: ast.AST) -> int | float:
+    """Evaluate only whitelisted AST nodes and operators."""
     if isinstance(node, ast.Constant) and isinstance(node.value, int | float):
         return node.value
     if isinstance(node, ast.BinOp):
@@ -370,6 +379,7 @@ def _eval_ast(node: ast.AST) -> int | float:
 
 
 def _detect_country(normalized: str, country: str | None) -> str | None:
+    """Infer a supported country code from explicit context or message text."""
     if country:
         country_code = country.strip().upper()
         if country_code in _COUNTRY_LABELS:
@@ -381,8 +391,10 @@ def _detect_country(normalized: str, country: str | None) -> str | None:
 
 
 def _is_greeting(normalized: str) -> bool:
+    """Return True for short greeting/help openers."""
     return normalized in {"hi", "hello", "hey", "help", "start", "what can you do"}
 
 
 def _normalize(text: str) -> str:
+    """Case-fold and collapse whitespace for keyword matching."""
     return re.sub(r"\s+", " ", text.casefold().strip())

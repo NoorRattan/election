@@ -7,18 +7,18 @@ import { render, screen } from '@testing-library/react'
 import { vi, describe, it, expect } from 'vitest'
 import QuizProgress from '../components/quiz/QuizProgress'
 
-// ── Helper ─────────────────────────────────────────────────────────────────
+// -- Helper -----------------------------------------------------------------
 
 const renderProgress = (currentIndex, total) =>
   render(<QuizProgress currentIndex={currentIndex} total={total} />)
 
-// ── Tests ──────────────────────────────────────────────────────────────────
+// -- Tests ------------------------------------------------------------------
 
 describe('QuizProgress', () => {
-  it('renders the correct number of step indicators (total=5 → 5 steps)', () => {
+  it('renders the correct number of step indicators (total=5 -> 5 steps)', () => {
     renderProgress(0, 5)
     // Each step has aria-hidden="true" but the container div has role="status".
-    // Steps are rendered as divs — count them by querying inside the status element.
+    // Steps are rendered as divs - count them by querying inside the status element.
     const container = screen.getByRole('status')
     const steps = container.querySelectorAll('[aria-hidden="true"]')
     expect(steps).toHaveLength(5)
@@ -32,7 +32,7 @@ describe('QuizProgress', () => {
     )
   })
 
-  it('aria-label updates correctly for currentIndex=2 → "question 3 of 5"', () => {
+  it('aria-label updates correctly for currentIndex=2 -> "question 3 of 5"', () => {
     renderProgress(2, 5)
     expect(screen.getByRole('status')).toHaveAttribute(
       'aria-label',
@@ -50,7 +50,7 @@ describe('QuizProgress', () => {
     const container = screen.getByRole('status')
     const steps = Array.from(container.querySelectorAll('[aria-hidden="true"]'))
     const currentStep = steps[2]
-    const otherStep   = steps[0]
+    const otherStep = steps[0]
     // Current step has "bg-primary-600" class; others have "bg-success-500" or "bg-neutral-200"
     expect(currentStep.className).toContain('bg-primary-600')
     expect(otherStep.className).not.toContain('bg-primary-600')
@@ -58,10 +58,10 @@ describe('QuizProgress', () => {
 
   it('completed steps (index < currentIndex) have a distinct class from upcoming steps', () => {
     renderProgress(2, 5)
-    const container    = screen.getByRole('status')
-    const steps        = Array.from(container.querySelectorAll('[aria-hidden="true"]'))
-    const completedStep = steps[0]  // index 0, currentIndex=2 → completed
-    const upcomingStep  = steps[4]  // index 4, currentIndex=2 → upcoming
+    const container = screen.getByRole('status')
+    const steps = Array.from(container.querySelectorAll('[aria-hidden="true"]'))
+    const completedStep = steps[0] // index 0, currentIndex=2 -> completed
+    const upcomingStep = steps[4] // index 4, currentIndex=2 -> upcoming
     expect(completedStep.className).toContain('bg-success-500')
     expect(upcomingStep.className).toContain('bg-neutral-200')
   })

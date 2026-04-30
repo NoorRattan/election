@@ -17,6 +17,7 @@ class FeedbackRequest(BaseModel):
     @field_validator("message")
     @classmethod
     def validate_message(cls, v: str) -> str:
+        """Ensure feedback text is present and bounded."""
         v = v.strip()
         if len(v) < 1:
             raise ValueError("message must not be empty")
@@ -27,6 +28,7 @@ class FeedbackRequest(BaseModel):
     @field_validator("category")
     @classmethod
     def validate_category(cls, v: str) -> str:
+        """Validate feedback category against the public enum."""
         if v not in VALID_CATEGORIES:
             raise ValueError(f"category must be one of: {', '.join(sorted(VALID_CATEGORIES))}")
         return v

@@ -1,22 +1,22 @@
-import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import ChatWidget from '../chat/ChatWidget';
+import { Outlet } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import Navbar from './Navbar'
+import Footer from './Footer'
+import ChatWidget from '../chat/ChatWidget'
 
 export default function Layout({ children }) {
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50 font-sans">
       <Navbar />
-      <main
-        id="main-content"
-        aria-label="Main content"
-        tabIndex={-1}
-        className="flex-1 w-full"
-      >
+      <main id="main-content" aria-label="Main content" tabIndex={-1} className="flex-1 w-full">
         {children || <Outlet />}
       </main>
       <ChatWidget />
       <Footer />
     </div>
-  );
+  )
+}
+
+Layout.propTypes = {
+  children: PropTypes.node,
 }

@@ -1,6 +1,6 @@
 # Contributing to Electra
 
-Thank you for your interest in contributing to Electra — an open-source civic education platform
+Thank you for your interest in contributing to Electra - an open-source civic education platform
 helping people around the world understand how elections work. Every contribution, from fixing a
 typo to adding a new country's election content, helps more people participate in democracy.
 
@@ -10,9 +10,9 @@ typo to adding a new country's election content, helps more people participate i
 
 We are committed to a welcoming, respectful, and inclusive community.
 
-- **Be respectful** — treat all contributors and maintainers with courtesy
-- **Be constructive** — critique ideas, never people
-- **Be inclusive** — we welcome contributors of all backgrounds, experience levels, and nationalities
+- **Be respectful** - treat all contributors and maintainers with courtesy
+- **Be constructive** - critique ideas, never people
+- **Be inclusive** - we welcome contributors of all backgrounds, experience levels, and nationalities
 - **Zero tolerance** for harassment, discrimination, or abusive language in any form
 
 Violations may result in removal from the project.
@@ -23,13 +23,13 @@ Violations may result in removal from the project.
 
 ### a. Reporting Bugs
 
-1. Check existing [GitHub Issues](https://github.com) first — it may already be reported
+1. Check existing [GitHub Issues](https://github.com) first - it may already be reported
 2. Open a new issue using the **Bug Report** template
 3. Include:
    - **Steps to reproduce** (numbered, specific)
-   - **Expected behaviour** — what should happen
-   - **Actual behaviour** — what actually happens
-   - **Browser / OS** — e.g. Chrome 124 / macOS 14.4
+   - **Expected behaviour** - what should happen
+   - **Actual behaviour** - what actually happens
+   - **Browser / OS** - e.g. Chrome 124 / macOS 14.4
    - Screenshots or console errors if relevant
 
 ### b. Suggesting Content Improvements
@@ -44,7 +44,7 @@ Election facts must be accurate and sourced. To suggest a content change:
      - UK: [Electoral Commission](https://www.electoralcommission.org.uk)
      - US: [usa.gov](https://www.usa.gov)
      - India: [Election Commission of India](https://eci.gov.in)
-3. **Do not submit opinionated or political content** — factual and neutral only
+3. **Do not submit opinionated or political content** - factual and neutral only
 4. Do not speculate about future election outcomes
 
 ### c. Code Contributions
@@ -59,7 +59,7 @@ Election facts must be accurate and sourced. To suggest a content change:
 
 ## Development Setup
 
-See [README.md — Local Development](README.md) for complete setup instructions.
+See [README.md - Local Development](README.md) for complete setup instructions.
 
 Quick summary:
 
@@ -122,11 +122,11 @@ chore(deps): bump firebase to 10.12.0
 - Use **ruff** for linting: `ruff check app/`
 - **Type hints** required on all function signatures
 - Docstrings on all public functions and classes
-- No bare `except:` — always specify the exception type
+- No bare `except:` - always specify the exception type
 
 ### Frontend (JavaScript/JSX)
 
-- **ESLint**: `npm run lint` — must pass with 0 warnings
+- **ESLint**: `npm run lint` - must pass with 0 warnings
 - No unused imports
 - Components should be small and focused (single responsibility)
 - Use descriptive variable and function names
@@ -137,10 +137,10 @@ chore(deps): bump firebase to 10.12.0
 
 All pull requests must:
 
-1. **Pass all existing tests** — no regressions allowed
+1. **Pass all existing tests** - no regressions allowed
 2. **Include tests for new features**:
-   - Backend: `pytest tests/` with coverage ≥ 80% (`--cov-fail-under=80`)
-   - Frontend: `npm run test:coverage` with coverage ≥ 70%
+   - Backend: `pytest tests/` with coverage >= 80% (`--cov-fail-under=80`)
+   - Frontend: `npm run test:coverage` with coverage >= 70%
 3. **Include E2E tests for new full user flows**: add a spec in `frontend/e2e/`
 
 Run tests locally before opening a PR:
@@ -193,7 +193,7 @@ When contributing election content (topics, timeline events, quiz questions):
 Before marking your PR as ready for review, confirm:
 
 - [ ] All tests pass locally (`pytest` + `npm test`)
-- [ ] Coverage threshold maintained (backend ≥ 80%, frontend ≥ 70%)
+- [ ] Coverage threshold maintained (backend >= 80%, frontend >= 70%)
 - [ ] Accessibility: keyboard tested manually
 - [ ] No secrets or API keys committed (check with `git diff --staged`)
 - [ ] Conventional Commits format used
@@ -207,5 +207,5 @@ Before marking your PR as ready for review, confirm:
 
 For questions, use **GitHub Issues** only.
 
-Please do not contact maintainers directly via email or social media for project-related questions —
+Please do not contact maintainers directly via email or social media for project-related questions -
 keeping discussions in GitHub Issues helps the whole community benefit from the answers.

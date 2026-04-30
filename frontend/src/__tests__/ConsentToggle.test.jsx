@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import ConsentToggle from '../components/ui/ConsentToggle'
 
-// ── Helper ─────────────────────────────────────────────────────────────────
+// -- Helper -----------------------------------------------------------------
 
 const renderToggle = (props = {}) =>
   render(
@@ -22,9 +22,9 @@ const renderToggle = (props = {}) =>
     />
   )
 
-// ── Rendering ──────────────────────────────────────────────────────────────
+// -- Rendering --------------------------------------------------------------
 
-describe('ConsentToggle — rendering', () => {
+describe('ConsentToggle - rendering', () => {
   it('shows the label text', () => {
     renderToggle()
     expect(screen.getByText('Usage Analytics')).toBeInTheDocument()
@@ -52,16 +52,16 @@ describe('ConsentToggle — rendering', () => {
 
   it('label htmlFor points to the button id', () => {
     renderToggle()
-    // getByLabelText uses the label's htmlFor → button id association
+    // getByLabelText uses the label's htmlFor -> button id association
     const switchEl = screen.getByLabelText('Usage Analytics')
     expect(switchEl).toHaveAttribute('role', 'switch')
     expect(switchEl).toHaveAttribute('id', 'test-toggle')
   })
 })
 
-// ── Interaction ────────────────────────────────────────────────────────────
+// -- Interaction ------------------------------------------------------------
 
-describe('ConsentToggle — interaction', () => {
+describe('ConsentToggle - interaction', () => {
   it('calls onChange with true when clicked and checked=false', () => {
     const onChange = vi.fn()
     renderToggle({ checked: false, onChange })
@@ -90,16 +90,16 @@ describe('ConsentToggle — interaction', () => {
     renderToggle({ onChange })
     const toggle = screen.getByRole('switch')
     toggle.focus()
-    // Native <button> treats Space as a click — fireEvent.keyDown mirrors that
+    // Native <button> treats Space as a click - fireEvent.keyDown mirrors that
     fireEvent.keyDown(toggle, { key: ' ', code: 'Space' })
     fireEvent.click(toggle) // Space on a button dispatches a click
     expect(onChange).toHaveBeenCalled()
   })
 })
 
-// ── Accessibility ──────────────────────────────────────────────────────────
+// -- Accessibility ----------------------------------------------------------
 
-describe('ConsentToggle — accessibility', () => {
+describe('ConsentToggle - accessibility', () => {
   it('button has a visible focus ring class', () => {
     renderToggle()
     const btn = screen.getByRole('switch')

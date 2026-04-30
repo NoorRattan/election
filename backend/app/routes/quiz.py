@@ -27,7 +27,7 @@ async def get_quiz_questions(topic_id: str, token: AuthToken):
     """
     Fetch quiz questions for a topic. Auth required.
     Questions are shuffled server-side. correct_index and explanation are NEVER
-    included in this response — they are revealed only after submission.
+    included in this response - they are revealed only after submission.
     """
     if not _SLUG_PATTERN.match(topic_id):
         raise HTTPException(
@@ -81,7 +81,7 @@ async def submit_quiz(request: QuizSubmitRequest, token: AuthToken):
     for answer in request.answers:
         question_data = await db.get_question_by_id(answer.question_id)
         if question_data is None:
-            # Skip unknown question IDs rather than raising — robust to stale data
+            # Skip unknown question IDs rather than raising - robust to stale data
             logger.warning(
                 "Quiz submit: unknown question_id '%s' submitted by uid '%s'",
                 answer.question_id,
@@ -105,7 +105,7 @@ async def submit_quiz(request: QuizSubmitRequest, token: AuthToken):
     total = len(results)
     score = round((correct_count / total) * 100) if total > 0 else 0
 
-    # Update progress — non-fatal if Firestore write fails
+    # Update progress - non-fatal if Firestore write fails
     progress_updated = False
     try:
         await db.update_progress(uid=uid, topic_id=request.topic_id, score=score)

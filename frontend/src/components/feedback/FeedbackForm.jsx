@@ -1,72 +1,73 @@
 /**
- * FeedbackForm — submits user feedback via POST /api/v1/feedback.
+ * FeedbackForm - submits user feedback via POST /api/v1/feedback.
  *
  * Can be used:
  *   (a) as a standalone section on any page
  *   (b) embedded in a Modal (when triggered from Footer or Profile)
  *
  * Props:
- *   onSuccess  (function|undefined) — called after successful submission
- *   onClose    (function|undefined) — if provided, renders a Cancel button
- *   country    (string|null)        — pre-fills country from context
+ *   onSuccess  (function|undefined) - called after successful submission
+ *   onClose    (function|undefined) - if provided, renders a Cancel button
+ *   country    (string|null)        - pre-fills country from context
  */
 
-import { useState, useRef } from 'react';
-import { feedbackApi } from '../../services/api';
+import { useState, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { feedbackApi } from '../../services/api'
 
 const CATEGORIES = [
   { value: 'suggestion', label: 'Suggestion' },
-  { value: 'bug',        label: 'Bug Report' },
-  { value: 'content',    label: 'Content Error' },
-  { value: 'other',      label: 'Other' },
-];
+  { value: 'bug', label: 'Bug Report' },
+  { value: 'content', label: 'Content Error' },
+  { value: 'other', label: 'Other' },
+]
 
-const MAX_LENGTH = 2000;
+const MAX_LENGTH = 2000
 
 export default function FeedbackForm({ onSuccess, onClose, country = null }) {
-  const [message,    setMessage]    = useState('');
-  const [category,   setCategory]   = useState('suggestion');
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted,  setSubmitted]  = useState(false);
-  const [error,      setError]      = useState(null);
-  const [fieldError, setFieldError] = useState(null);
+  const [message, setMessage] = useState('')
+  const [category, setCategory] = useState('suggestion')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState(null)
+  const [fieldError, setFieldError] = useState(null)
 
-  const successHeadingRef = useRef(null);
+  const successHeadingRef = useRef(null)
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setFieldError(null);
-    setError(null);
+    e.preventDefault()
+    setFieldError(null)
+    setError(null)
 
-    const trimmed = message.trim();
+    const trimmed = message.trim()
     if (!trimmed) {
-      setFieldError('Please enter a message before submitting.');
-      return;
+      setFieldError('Please enter a message before submitting.')
+      return
     }
     if (trimmed.length > MAX_LENGTH) {
-      setFieldError(`Message must be ${MAX_LENGTH} characters or fewer.`);
-      return;
+      setFieldError(`Message must be ${MAX_LENGTH} characters or fewer.`)
+      return
     }
 
-    setSubmitting(true);
+    setSubmitting(true)
     try {
-      await feedbackApi.submit(trimmed, category, country);
-      setSubmitted(true);
-      onSuccess?.();
+      await feedbackApi.submit(trimmed, category, country)
+      setSubmitted(true)
+      onSuccess?.()
       // Move focus to success heading for screen reader announcement
-      setTimeout(() => successHeadingRef.current?.focus(), 50);
+      setTimeout(() => successHeadingRef.current?.focus(), 50)
     } catch (err) {
       if (err?.response?.status === 429) {
-        setError('Too many requests. Please try again in an hour.');
+        setError('Too many requests. Please try again in an hour.')
       } else {
-        setError('Something went wrong. Please try again.');
+        setError('Something went wrong. Please try again.')
       }
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
   }
 
-  // ── Success state ──────────────────────────────────────────────────────────
+  // -- Success state ----------------------------------------------------------
   if (submitted) {
     return (
       <div className="text-center py-6 space-y-3">
@@ -98,17 +99,12 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
           </button>
         )}
       </div>
-    );
+    )
   }
 
-  // ── Form state ─────────────────────────────────────────────────────────────
+  // -- Form state -------------------------------------------------------------
   return (
-    <form
-      onSubmit={handleSubmit}
-      aria-label="Feedback form"
-      noValidate
-      className="space-y-5"
-    >
+    <form onSubmit={handleSubmit} aria-label="Feedback form" noValidate className="space-y-5">
       {/* Category */}
       <div>
         <label
@@ -144,10 +140,13 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
           rows={5}
           maxLength={MAX_LENGTH}
           value={message}
-          onChange={(e) => { setMessage(e.target.value); setFieldError(null); }}
+          onChange={(e) => {
+            setMessage(e.target.value)
+            setFieldError(null)
+          }}
           aria-describedby="feedback-char-count feedback-field-error"
           className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 focus:outline-2 focus:outline-primary-600 resize-vertical"
-          placeholder="Tell us what you think…"
+          placeholder="Tell us what you think..."
         />
         <p
           id="feedback-char-count"
@@ -160,11 +159,7 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
 
         {/* Field-level validation error */}
         {fieldError && (
-          <p
-            id="feedback-field-error"
-            role="alert"
-            className="text-sm text-error-600 mt-1"
-          >
+          <p id="feedback-field-error" role="alert" className="text-sm text-error-600 mt-1">
             {fieldError}
           </p>
         )}
@@ -172,7 +167,10 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
 
       {/* API-level error */}
       {error && (
-        <p role="alert" className="text-sm text-error-600 bg-error-50 border border-error-200 rounded-lg px-3 py-2">
+        <p
+          role="alert"
+          className="text-sm text-error-600 bg-error-50 border border-error-200 rounded-lg px-3 py-2"
+        >
           {error}
         </p>
       )}
@@ -184,7 +182,7 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
           disabled={submitting}
           className="flex-1 px-4 py-2 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 disabled:opacity-60 focus:outline-2 focus:outline-primary-600 transition-colors"
         >
-          {submitting ? 'Sending…' : 'Send Feedback'}
+          {submitting ? 'Sending...' : 'Send Feedback'}
         </button>
         {onClose && (
           <button
@@ -197,5 +195,11 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
         )}
       </div>
     </form>
-  );
+  )
+}
+
+FeedbackForm.propTypes = {
+  onSuccess: PropTypes.func,
+  onClose: PropTypes.func,
+  country: PropTypes.string,
 }

@@ -24,14 +24,14 @@ async def submit_feedback(
     NOTE: This rate limit is enforced by slowapi with IN-MEMORY counters.
     On Cloud Run with multiple instances, each instance has its own counter.
     A user could potentially submit to different instances to bypass the limit.
-    This is an accepted trade-off — Pydantic validation is the primary abuse defence.
+    This is an accepted trade-off - Pydantic validation is the primary abuse defence.
     """
     await db.save_feedback(
         {
             "message": feedback.message,
             "category": feedback.category,
             "country": feedback.country,
-            "user_id": None,  # Feedback is anonymous — no auth on this endpoint
+            "user_id": None,  # Feedback is anonymous - no auth on this endpoint
         }
     )
     return {"message": "Feedback received. Thank you!"}

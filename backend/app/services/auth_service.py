@@ -1,5 +1,5 @@
 """
-Auth service — thin wrappers around Firebase Admin SDK auth operations.
+Auth service - thin wrappers around Firebase Admin SDK auth operations.
 Routes use app.middleware.auth for dependency-injection-based token verification.
 This module provides synchronous helpers for scripts and non-FastAPI contexts.
 """
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def verify_token(token: str) -> dict | None:
     """
     Synchronous token verification. Returns decoded token dict or None on failure.
-    NOTE: Do not call from async FastAPI route handlers — use run_in_executor.
+    NOTE: Do not call from async FastAPI route handlers - use run_in_executor.
     This function exists for CLI scripts and sync contexts only.
     """
     try:
@@ -29,7 +29,7 @@ def verify_token(token: str) -> dict | None:
 async def create_or_update_user_on_login(uid: str, token_data: dict) -> None:
     """
     Called after successful login to sync user data to Firestore.
-    Preserves any existing country preference — does not overwrite with None.
+    Preserves any existing country preference - does not overwrite with None.
     """
     await db.upsert_user(
         uid,

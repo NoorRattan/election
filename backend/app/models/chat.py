@@ -16,6 +16,7 @@ class ChatRequest(BaseModel):
     @field_validator("message")
     @classmethod
     def validate_message(cls, v: str) -> str:
+        """Ensure chat messages are present and bounded."""
         v = v.strip()
         if len(v) < 1:
             raise ValueError("message must not be empty")

@@ -29,7 +29,7 @@ async def get_profile(token: AuthToken):
     user_data = await db.get_user(uid)
 
     if user_data is None:
-        # First login — create the document
+        # First login - create the document
         await db.upsert_user(
             uid,
             {

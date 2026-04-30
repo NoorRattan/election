@@ -19,9 +19,10 @@ logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
+
 def _init_firebase() -> None:
     if firebase_admin._apps:
-        # Already initialised — happens during tests where conftest pre-initialises a mock
+        # Already initialised - happens during tests where conftest pre-initialises a mock
         return
 
     key_path = settings.firebase_service_account_key
@@ -29,22 +30,28 @@ def _init_firebase() -> None:
     if key_path and os.path.isfile(key_path):
         # Development: service account JSON file present on disk
         cred = firebase_admin.credentials.Certificate(key_path)
-        firebase_admin.initialize_app(cred, {
-            "projectId": settings.google_cloud_project,
-        })
+        firebase_admin.initialize_app(
+            cred,
+            {
+                "projectId": settings.google_cloud_project,
+            },
+        )
         logger.info("Firebase initialised from service account file: %s", key_path)
     else:
         # Production (Cloud Run): use Application Default Credentials
         # The Cloud Run service account has the required IAM roles
-        firebase_admin.initialize_app(options={
-            "projectId": settings.google_cloud_project,
-        })
+        firebase_admin.initialize_app(
+            options={
+                "projectId": settings.google_cloud_project,
+            }
+        )
         logger.info("Firebase initialised with Application Default Credentials.")
+
 
 _init_firebase()
 
 app = FastAPI(
-    title="Electra — Election Education Assistant API",
+    title="Electra - Election Education Assistant API",
     version=settings.api_version,
     description="Backend API for the Interactive Election Education Assistant.",
     docs_url=None if settings.is_production else "/docs",
@@ -63,6 +70,7 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type"],
 )
 
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
@@ -70,10 +78,9 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     if settings.is_production:
-        response.headers["Strict-Transport-Security"] = (
-            "max-age=31536000; includeSubDomains"
-        )
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -89,14 +96,16 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "An internal error occurred. Please try again later."},
     )
 
+
 PREFIX = "/api/v1"
 
-app.include_router(topics.router,   prefix=PREFIX, tags=["Topics"])
+app.include_router(topics.router, prefix=PREFIX, tags=["Topics"])
 app.include_router(timeline.router, prefix=PREFIX, tags=["Timeline"])
-app.include_router(quiz.router,     prefix=PREFIX, tags=["Quiz"])
-app.include_router(user.router,     prefix=PREFIX, tags=["User"])
+app.include_router(quiz.router, prefix=PREFIX, tags=["Quiz"])
+app.include_router(user.router, prefix=PREFIX, tags=["User"])
 app.include_router(feedback.router, prefix=PREFIX, tags=["Feedback"])
-app.include_router(chat.router,     prefix=PREFIX, tags=["Chat"])
+app.include_router(chat.router, prefix=PREFIX, tags=["Chat"])
+
 
 @app.get("/", include_in_schema=False)
 async def root():

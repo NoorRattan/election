@@ -5,5 +5,6 @@ pytest-mock==3.14.0
 coverage==7.5.1
 pytest-cov==4.1.0
 httpx==0.27.0
+pip-audit==2.9.0
 # Linting and formatting (replaces flake8 + black + isort)
 ruff==0.4.4

@@ -127,7 +127,7 @@ class TestSubmitQuiz:
             json={
                 "topic_id": "voter-registration",
                 "answers": [
-                    {"question_id": "q_vr_001", "selected_index": 0}  # wrong — correct is 2
+                    {"question_id": "q_vr_001", "selected_index": 0}  # wrong - correct is 2
                 ],
             },
         )
@@ -189,13 +189,13 @@ class TestSubmitQuiz:
                 "answers": [{"question_id": "q_vr_001", "selected_index": 2}],
             },
         )
-        assert resp.status_code == 200  # Non-fatal — still returns score
+        assert resp.status_code == 200  # Non-fatal - still returns score
         assert resp.json()["progress_updated"] is False
 
 
 class TestTimeline:
     def test_missing_country_returns_422(self, client):
-        # country is required — omitting it should fail validation
+        # country is required - omitting it should fail validation
         resp = client.get("/api/v1/timeline")
         assert resp.status_code == 422
 

@@ -8,7 +8,7 @@ Usage in any route:
     async def my_route(token: AuthToken):
         uid = token["uid"]
 
-IMPORTANT: verify_id_token() is synchronous — it is always called via run_in_executor
+IMPORTANT: verify_id_token() is synchronous - it is always called via run_in_executor
 to avoid blocking the async event loop.
 """
 
@@ -28,6 +28,7 @@ bearer_scheme = HTTPBearer(auto_error=False)
 async def require_auth(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
 ) -> dict:
+    """Validate a Firebase bearer token and return its decoded claims."""
     if credentials is None or not credentials.credentials:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

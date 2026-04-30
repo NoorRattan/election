@@ -15,21 +15,21 @@ Electra stores all educational content in **Google Cloud Firestore**. There are 
 | **Quiz Questions** | `quiz_questions` | Subject matter experts |
 
 > [!IMPORTANT]
-> Content is **live in Firestore** — no code changes or deployments are required to add, update, or hide content. Changes take effect immediately.
+> Content is **live in Firestore**  -  no code changes or deployments are required to add, update, or hide content. Changes take effect immediately.
 
 ---
 
 ## Accessing Firestore
 
-### Option A — Firebase Console (recommended for non-developers)
+### Option A  -  Firebase Console (recommended for non-developers)
 
 1. Go to [console.firebase.google.com](https://console.firebase.google.com)
 2. Select your Electra project
-3. Click **Firestore Database** → **Data** tab
+3. Click **Firestore Database** -> **Data** tab
 4. Navigate to the collection you want to edit
 5. Click any document to edit its fields inline
 
-### Option B — Firebase CLI (batch imports)
+### Option B  -  Firebase CLI (batch imports)
 
 ```bash
 firebase firestore:import <file.json>
@@ -37,13 +37,13 @@ firebase firestore:import <file.json>
 
 See `backend/seed_data.py` for the exact JSON format used during initial seeding.
 
-### Option C — `seed_data.py` (developers only)
+### Option C  -  `seed_data.py` (developers only)
 
 ```bash
 cd backend && python seed_data.py
 ```
 
-Safe to re-run — all writes use `merge=True` and will not overwrite manually edited fields.
+Safe to re-run  -  all writes use `merge=True` and will not overwrite manually edited fields.
 
 > [!NOTE]
 > All Firestore field names use **camelCase** (e.g. `topicId`, `updatedAt`, `officialUrl`).  
@@ -56,7 +56,7 @@ Safe to re-run — all writes use `merge=True` and will not overwrite manually e
 ### Topics
 
 **Collection:** `topics`  
-**Document ID:** URL-safe slug — lowercase, hyphens only (e.g. `voter-registration-2026`)
+**Document ID:** URL-safe slug  -  lowercase, hyphens only (e.g. `voter-registration-2026`)
 
 #### Required Fields
 
@@ -137,7 +137,7 @@ Source: [Electoral Commission](https://www.electoralcommission.org.uk)
 
 6. **Length limit:** Keep content under **3,000 words** per topic for readability.
 
-7. **Heading hierarchy:** Start headings at `##` (h2). Do not use `#` (h1) — the page title is the h1.
+7. **Heading hierarchy:** Start headings at `##` (h2). Do not use `#` (h1)  -  the page title is the h1.
 
 ---
 
@@ -151,7 +151,7 @@ Source: [Electoral Commission](https://www.electoralcommission.org.uk)
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | Short event name (e.g. `"General Election Day"`). Under 60 characters. |
-| `description` | string | 1–3 sentences explaining the event. |
+| `description` | string | 1-3 sentences explaining the event. |
 | `date` | timestamp | The event date. Use **midnight UTC** of the event day. |
 | `country` | string | Exactly one of: `"UK"` \| `"US"` \| `"IN"` |
 | `level` | string | **Must** be one of: `"local"` \| `"state"` \| `"national"` |
@@ -167,10 +167,10 @@ Source: [Electoral Commission](https://www.electoralcommission.org.uk)
 
 #### Adding a New Election Date
 
-1. Open Firestore Console → `timeline_events` collection
+1. Open Firestore Console -> `timeline_events` collection
 2. Click **Add document**, choose a slug as the document ID
 3. Fill in all required fields above
-4. The event appears in the app **immediately** — no deployment needed
+4. The event appears in the app **immediately**  -  no deployment needed
 
 > [!NOTE]
 > Events are displayed relative to today's date. Events with a `date` in the past will display with a "Past" badge. Events in the future display "Add to Calendar" links.
@@ -189,8 +189,8 @@ Source: [Electoral Commission](https://www.electoralcommission.org.uk)
 | `topicId` | string | Must exactly match an existing topic's `slug`. |
 | `question` | string | The question text. Clear and unambiguous. |
 | `options` | array | **Exactly 4** strings. The answer options. |
-| `correctIndex` | number | `0`, `1`, `2`, or `3` — the index of the correct option in `options`. |
-| `explanation` | string | Shown after submission. Explains WHY the correct answer is right. Include a source citation. 1–3 sentences. |
+| `correctIndex` | number | `0`, `1`, `2`, or `3`  -  the index of the correct option in `options`. |
+| `explanation` | string | Shown after submission. Explains WHY the correct answer is right. Include a source citation. 1-3 sentences. |
 | `country` | array | Array of country codes this question applies to (same format as topics). |
 | `difficulty` | string | **Must** be one of: `"easy"` \| `"medium"` \| `"hard"` |
 
@@ -214,10 +214,10 @@ Source: [Electoral Commission](https://www.electoralcommission.org.uk)
 #### Important: `correctIndex` counts from 0
 
 ```
-options[0] = "16"   → correctIndex: 0
-options[1] = "17"   → correctIndex: 1
-options[2] = "18"   → correctIndex: 2  ✓ correct
-options[3] = "21"   → correctIndex: 3
+options[0] = "16"   -> correctIndex: 0
+options[1] = "17"   -> correctIndex: 1
+options[2] = "18"   -> correctIndex: 2  OK correct
+options[3] = "21"   -> correctIndex: 3
 ```
 
 ---
@@ -243,11 +243,11 @@ Use this checklist before setting `published: true` on any new content:
 ```
 [ ] All facts sourced from official government websites
 [ ] Source URLs included inline in the Markdown content
-[ ] Country codes correct (UK / US / IN / ALL — uppercase)
+[ ] Country codes correct (UK / US / IN / ALL  -  uppercase)
 [ ] Category is one of the allowed values
 [ ] published = true (when ready to go live)
 [ ] Quiz questions added (if this is a core learning topic)
-[ ] correctIndex verified — count from 0, not 1
+[ ] correctIndex verified  -  count from 0, not 1
 [ ] Content tested in the live app after publish
 [ ] Content is politically neutral
 [ ] No broken links (all href values verified)
