@@ -58,38 +58,31 @@ jobs:
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
 
 
-      # ── Start preview server in background ─────────────────────────────────
-      # Playwright's webServer block would also start this, but having CI manage
-      # it explicitly avoids the timeout loop caused by Playwright spawning and
-      # waiting for the process internally.
-      - name: Start Vite preview server
-        run: npx vite preview --port 5173 &
-        env:
-          VITE_API_BASE_URL: /api/v1
-
-      # ── Wait until the preview server is accepting connections ────────────────
-      # Uses curl instead of wait-on to avoid runtime npm install delays.
-      - name: Wait for preview server
+      # ── Run E2E Tests (Server & Playwright in same step) ───────────────────
+      # The server must be started in the SAME step as Playwright, otherwise
+      # GitHub Actions kills the background process between steps, causing
+      # Playwright to timeout on every single test (resulting in a 37+ min run).
+      - name: Run E2E Tests
         run: |
+          # 1. Start preview server in background
+          npx vite preview --port 5173 &
+          
+          # 2. Wait for server to be ready
+          echo "Waiting for server to start..."
           for i in $(seq 1 30); do
             if curl -sf http://localhost:5173 > /dev/null 2>&1; then
-              echo "✓ Preview server is up (attempt $i)"
-              exit 0
+              echo "✓ Preview server is up!"
+              break
             fi
-            echo "Waiting for server... attempt $i/30"
             sleep 2
           done
-          echo "✗ Preview server did not start within 60s"
-          exit 1
-
-      # ── Run E2E tests (Chromium only in CI) ───────────────────────────────
-      # Firefox and mobile Safari run locally only (npm run e2e) to keep CI fast.
-      - name: Run Playwright tests
-        run: npx playwright test --project=chromium
+          
+          # 3. Run tests (Chromium only in CI)
+          npx playwright test --project=chromium
         env:
+          VITE_API_BASE_URL: /api/v1
           PLAYWRIGHT_BASE_URL: http://localhost:5173
           CI: true
-          # Tell Playwright the server is already running — skip webServer block
           PLAYWRIGHT_SKIP_SERVER_STARTUP: true
 
       # ── Upload test report (even on failure) ──────────────────────────────
