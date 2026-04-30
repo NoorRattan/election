@@ -59,12 +59,10 @@ jobs:
             --set-env-vars "ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }},ALLOWED_ORIGINS=https://electra-app-2026.web.app\,https://electra-app-2026.firebaseapp.com,FIREBASE_SERVICE_ACCOUNT_KEY=" \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
-      # UPDATED (Prompt 09 — GAP-06): Post-deploy smoke test added.
-      # Runs AFTER Cloud Run deploy. If the container starts but fails to handle requests
-      # (bad env var, import error, etc.), this step catches it and fails the workflow.
-      # VITE_API_BASE_URL is already a GitHub Secret (used in the frontend build step).
-      # Note: smoke-test.sh normalises the URL — strips trailing /api/v1 if present,
-      #       then appends its own paths. Handles both https://host/api/v1 and https://host.
+      # Smoke test runs after Cloud Run deploy to verify the container starts
+      # correctly and handles real HTTP requests. Catches bad env vars or import
+      # errors that pass build but fail at runtime.
+      # Note: smoke-test.sh normalises the URL — strips /api/v1 if already present.
       - name: Post-deploy smoke test
         if: env.CAN_DEPLOY_BACKEND == 'true'
         run: bash scripts/smoke-test.sh
@@ -98,9 +96,21 @@ jobs:
         if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm ci
 
-      # UPDATED (Prompt 09 — GAP-05): Frontend ESLint step added before build.
-      # Runs BEFORE build so that jsx-a11y accessibility violations fail fast.
-      # Warnings do not fail CI — only errors do.
+      # Security: fail CI if any moderate or higher npm vulnerability is found.
+      # Run 'npm audit fix' locally to resolve before merging.
+      - name: Security audit
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
+        run: npm audit --audit-level=moderate
+
+      # Secret scanning: fail CI if any secret is found in the git history.
+      - name: Scan for secrets (gitleaks)
+        if: env.CAN_DEPLOY_FRONTEND == 'true'
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ESLint runs before the production build. jsx-a11y accessibility rule
+      # violations fail CI immediately rather than shipping broken markup.
       - name: Lint frontend
         if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm run lint
@@ -119,12 +129,14 @@ jobs:
           VITE_GOOGLE_MAPS_API_KEY:           ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
         run: npm run build
 
-      # FIX #19: Frontend coverage enforced in CI (was missing before audit)
+      # Coverage thresholds are enforced in vite.config.js (lines/statements ≥70%, branches ≥60%).
+      # This step fails CI if any threshold is not met, preventing regressions.
       - name: Run frontend tests with coverage
         if: env.CAN_DEPLOY_FRONTEND == 'true'
         run: npm run test:coverage
 
-      # FIX #18: Pinned to @v0.9.0 — NOT floating @v0 which can break on upstream changes
+      # Pinned to @v0.9.0 (exact version) to prevent upstream breaking changes
+      # from silently breaking deployments on a floating @v0 reference.
       - uses: FirebaseExtended/action-hosting-deploy@v0.9.0
         if: env.CAN_DEPLOY_FRONTEND == 'true'
         with:

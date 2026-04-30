@@ -2,8 +2,7 @@
  * Root application component. Defines all routes using React Router v6.
  * All page components are lazy-loaded for code splitting.
  * Protected routes redirect to /login when user is not authenticated.
- *
- * UPDATED (Prompt 06): Added /privacy and /accessibility public routes.
+ * Public routes: /, /topics, /topics/:slug, /timeline, /login, /privacy, /accessibility.
  */
 
 import React, { lazy, Suspense } from 'react';

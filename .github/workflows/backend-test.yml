@@ -10,8 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # FIX #16: working-directory is required — without it, pip install runs from repo root
-    # and fails to find backend/requirements-dev.txt
+    # working-directory scopes all steps to the backend folder so that
+    # pip install finds requirements-dev.txt without a path prefix.
     defaults:
       run:
         working-directory: backend
@@ -28,10 +28,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      # UPDATED (Prompt 09 — GAP-04): Ruff lint step added before pytest.
-      # Runs lint FIRST so that syntax/style errors fail fast (lint is faster than tests).
-      # --output-format=github formats violations as GitHub Actions annotations (inline on PRs).
-      # ruff format --check fails if any file would be reformatted (without actually reformatting).
+      # Lint runs before tests so that syntax/style errors fail fast.
+      # --output-format=github formats violations as inline PR annotations.
+      # ruff format --check validates formatting without modifying files.
       - name: Lint with ruff
         run: |
           ruff check app/ tests/ --output-format=github

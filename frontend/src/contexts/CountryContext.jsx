@@ -2,22 +2,17 @@
  * Country context. Persists the user's selected country to localStorage.
  * Default is null — triggers the CountrySelector when no country is chosen.
  *
- * UPDATED (Prompt 09 — GAP-01): Fixed silent country sync bug.
+ * Country-sync design:
+ *   CountryContext listens for the custom event 'electra:country-changed', which
+ *   AuthContext dispatches (via CustomEvent) after syncing a signed-in user's country
+ *   preference from Firestore. The event carries the value in detail.country, so
+ *   no additional localStorage read is required.
  *
- * THE BUG (before this fix):
- *   AuthContext dispatched window.dispatchEvent(new Event('storage')) after writing
- *   the country to localStorage. The native 'storage' event only fires across DIFFERENT
- *   tabs/windows — not the same browsing context. CountryContext also only reads
- *   localStorage once (in the useState initializer), so even a correct StorageEvent
- *   would have no effect.
- *
- * THE FIX:
- *   CountryContext listens for the custom event 'electra:country-changed' which
- *   AuthContext dispatches via new CustomEvent(COUNTRY_SYNC_EVENT, { detail: { country } }).
- *   The event carries the country value in detail.country, so no localStorage read is needed.
+ *   The native 'storage' event is intentionally not used because it only fires
+ *   across different tabs/windows, never within the same browsing context.
  *
  * COUNTRY_SYNC_EVENT is exported as a named constant so AuthContext can import it
- * instead of hardcoding the string. This is the single source of truth for the event name.
+ * instead of hardcoding the event name string. This is the single source of truth.
  */
 
 import { createContext, useContext, useState, useEffect } from 'react'

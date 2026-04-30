@@ -4,10 +4,8 @@
  *   2. Legal (Privacy Policy, Accessibility Statement, Send Feedback)
  *   3. Project (GitHub, tagline)
  *
- * UPDATED (Prompt 06):
- *   - Privacy Policy: <Link to="/privacy"> (React Router internal nav)
- *   - Accessibility Statement: <Link to="/accessibility"> (React Router internal nav)
- *   - "Send Feedback" button opens a Modal containing FeedbackForm
+ * Privacy Policy and Accessibility Statement use React Router <Link> for
+ * client-side navigation. "Send Feedback" opens a Modal with FeedbackForm.
  */
 
 import { useState } from 'react';

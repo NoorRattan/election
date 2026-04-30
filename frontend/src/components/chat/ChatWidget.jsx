@@ -1,10 +1,10 @@
 /**
  * Floating chat assistant widget.
  *
- * FIX #3: Session ID is stored in useState (component state) NOT sessionStorage.
- * crypto.randomUUID() is called once on component mount via useState initialiser.
- * The session ID persists across renders within the same component lifecycle
- * but resets if the widget is unmounted and remounted.
+ * Session ID is stored in component state (useState), not sessionStorage.
+ * crypto.randomUUID() is called once on mount via the useState initialiser.
+ * This approach keeps the session ID ephemeral: it resets when the widget
+ * unmounts, preventing stale Dialogflow sessions from a previous page visit.
  *
  * Accessibility:
  * - Panel: role="dialog", aria-label="Chat assistant", aria-modal="true"
@@ -19,7 +19,7 @@ import { useCountry } from '../../contexts/CountryContext';
 import Button from '../ui/Button';
 
 export default function ChatWidget() {
-  // FIX #3: sessionId in component state — NOT sessionStorage
+  // Ephemeral session ID — see module JSDoc for rationale
   const [sessionId] = useState(() => crypto.randomUUID());
 
   const { country }         = useCountry();

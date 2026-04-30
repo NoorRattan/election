@@ -39,20 +39,23 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      # ── Build frontend with placeholder env vars ───────────────────────────
-      # Real secrets are NOT needed — all API calls are mocked in tests.
+      # ── Build frontend with real Firebase credentials ─────────────────────
+      # Real Firebase credentials are required so the Firebase SDK initialises
+      # correctly and the app renders. Auth returns null user (unauthenticated),
+      # which is exactly what the E2E specs test against.
+      # All /api/v1/* calls are still mocked via page.route() — no real backend needed.
       - name: Build frontend
         run: npm run build
         env:
           VITE_API_BASE_URL: /api/v1
-          VITE_FIREBASE_API_KEY: test-key
-          VITE_FIREBASE_AUTH_DOMAIN: test.firebaseapp.com
-          VITE_FIREBASE_PROJECT_ID: test-project
-          VITE_FIREBASE_STORAGE_BUCKET: test-project.appspot.com
-          VITE_FIREBASE_MESSAGING_SENDER_ID: '000000000000'
-          VITE_FIREBASE_APP_ID: '1:000000000000:web:000000'
-          VITE_FIREBASE_MEASUREMENT_ID: G-TEST00000
-          VITE_GOOGLE_MAPS_API_KEY: test-maps-key
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
 
 
       # ── Run E2E tests (Chromium only in CI) ───────────────────────────────

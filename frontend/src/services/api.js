@@ -1,10 +1,11 @@
 /**
  * Axios instance and typed API method groups for the Electra backend.
  *
- * FIX #14 — CRITICAL: The axios request interceptor attaches the Firebase ID token.
- * It imports `auth` from ../firebase directly and reads auth.currentUser.getIdToken().
- * React hooks (useAuth) CANNOT be called outside React components.
- * This is the only correct pattern for an axios interceptor.
+ * Auth token design: The request interceptor reads auth.currentUser.getIdToken()
+ * from the Firebase auth object imported directly from ../firebase. Using a React
+ * hook (useAuth) here is not possible because hooks can only be called inside
+ * React components. Importing the firebase auth singleton directly is the only
+ * correct pattern for an axios interceptor.
  */
 
 import axios from 'axios';

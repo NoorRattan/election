@@ -1,8 +1,9 @@
 /**
  * Main site navigation bar.
  *
- * FIX #2: "Quiz" is NOT a nav link. /quiz/:topicId requires a topic ID parameter.
- * There is no standalone /quiz route. Nav links are Topics and Timeline only.
+ * Note: Quiz is intentionally absent from the nav links. The quiz route is
+ * /quiz/:topicId and requires a topic ID parameter — there is no standalone
+ * /quiz entry point. Users reach quizzes via individual topic pages.
  *
  * Accessibility:
  * - Skip link as very first child (sr-only, visible on focus)

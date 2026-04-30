@@ -1,20 +1,12 @@
 /**
  * Authentication context. Provides Firebase Auth state and methods to the entire app.
  *
- * UPDATED (Prompt 09 — GAP-01): Fixed the broken country sync dispatch.
- *
- * THE BUG (before this fix):
- *   window.dispatchEvent(new Event('storage')) was called after writing the country
- *   to localStorage. The native 'storage' event only fires across DIFFERENT tabs —
- *   not the same browsing context. CountryContext never received this signal.
- *
- * THE FIX:
- *   Dispatch a CustomEvent with the COUNTRY_SYNC_EVENT name (imported from CountryContext).
- *   The event carries { detail: { country } } so CountryContext updates React state
- *   directly from the event payload — no localStorage read required on that side.
- *
- * All other logic (sign-in methods, onAuthStateChanged, getIdToken, profile PUT sync)
- * is unchanged from Prompt 07.
+ * Country-sync design:
+ *   After a successful sign-in, the user's country preference from their Firestore profile
+ *   is written to localStorage and then broadcast via a CustomEvent (COUNTRY_SYNC_EVENT).
+ *   A CustomEvent is required instead of the native 'storage' event because the native
+ *   event only fires across different browser tabs, never within the same browsing context.
+ *   CountryContext listens for this event and updates its React state from the event payload.
  */
 
 import React, { createContext, useEffect, useState, useCallback } from 'react';
