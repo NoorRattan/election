@@ -13,7 +13,7 @@ students, and civic groups.
 ## Live Application
 
 - **Frontend:** [https://electra-app-2026.web.app](https://electra-app-2026.web.app)
-- **Backend API:** [https://electra-api-368835973060.us-central1.run.app/api/v1/health](https://electra-api-368835973060.us-central1.run.app/api/v1/health)
+- **Backend API:** [https://electra-api-vmqaqf2faq-uc.a.run.app/docs](https://electra-api-vmqaqf2faq-uc.a.run.app/docs)
 
 ## Architecture
 
@@ -51,7 +51,7 @@ students, and civic groups.
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, Vite, Vanilla CSS, React Router v6, Recharts |
+| Frontend | React 18, Vite, Tailwind CSS v3, React Router v6, Recharts |
 | Backend | Python 3.11, FastAPI, Pydantic v2, SlowAPI |
 | Database | Google Cloud Firestore (native mode) |
 | Auth | Firebase Auth (JWT) + Firebase Admin SDK |
