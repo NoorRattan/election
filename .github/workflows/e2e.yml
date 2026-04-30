@@ -69,7 +69,7 @@ jobs:
 
       # ── Wait until the preview server is accepting connections ────────────────
       - name: Wait for preview server
-        run: npx wait-on http://localhost:5173 --timeout 60000
+        run: npx -y wait-on http://localhost:5173 --timeout 60000
 
       # ── Run E2E tests (Chromium only in CI) ───────────────────────────────
       # Firefox and mobile Safari run locally only (npm run e2e) to keep CI fast.
