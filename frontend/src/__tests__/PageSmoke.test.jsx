@@ -258,6 +258,46 @@ describe('page smoke coverage', () => {
     expect(screen.getByRole('button', { name: /submit quiz/i })).toBeDisabled();
   });
 
+  it('Quiz handles states: loading, submitting, error, and results', () => {
+    authMock.state = { user: { uid: 'user-1' }, loading: false };
+    
+    // Test Error state
+    quizMock.state = { ...quizMock.state, status: 'error', errorMessage: 'Failed to load quiz' };
+    const { rerender } = renderWithProviders(<Quiz />, '/quiz/test');
+    expect(screen.getByText(/failed to load quiz/i)).toBeVisible();
+
+    // Test Submitting state
+    quizMock.state = { ...quizMock.state, status: 'submitting' };
+    rerender(
+      <MemoryRouter initialEntries={['/quiz/test']}>
+        <CountryProvider><Quiz /></CountryProvider>
+      </MemoryRouter>
+    );
+    expect(screen.getByText(/submitting your answers/i)).toBeVisible();
+
+    // Test Results state
+    quizMock.state = { ...quizMock.state, status: 'results', results: { score: 100, total: 1, correct: 1, results: [] } };
+    rerender(
+      <MemoryRouter initialEntries={['/quiz/test']}>
+        <CountryProvider><Quiz /></CountryProvider>
+      </MemoryRouter>
+    );
+    expect(screen.getByText(/quiz complete/i)).toBeVisible();
+  });
+
+  it('Quiz redirects to login if unauthenticated', () => {
+    authMock.state = { user: null, loading: false };
+    quizMock.state = { ...quizMock.state, status: 'idle' };
+    renderWithProviders(
+      <Routes>
+        <Route path="/quiz/:topicId" element={<Quiz />} />
+        <Route path="/login" element={<div>Login Page</div>} />
+      </Routes>,
+      '/quiz/test'
+    );
+    expect(screen.getByText(/login page/i)).toBeVisible();
+  });
+
   it('Login switches modes and validates mismatched signup passwords', async () => {
     const user = userEvent.setup();
 
@@ -267,11 +307,52 @@ describe('page smoke coverage', () => {
     expect(screen.getByRole('heading', { name: /create your account/i })).toBeVisible();
 
     await user.type(screen.getByLabelText(/email/i), 'voter@example.com');
+    await user.type(screen.getByLabelText(/^password$/i), 'short');
+    await user.type(screen.getByLabelText(/confirm password/i), 'short');
+    await user.click(screen.getByRole('button', { name: /create account/i }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/at least 6 characters/i);
+
+    // Now test mismatched passwords
+    await user.clear(screen.getByLabelText(/^password$/i));
     await user.type(screen.getByLabelText(/^password$/i), 'secret1');
+    await user.clear(screen.getByLabelText(/confirm password/i));
     await user.type(screen.getByLabelText(/confirm password/i), 'secret2');
     await user.click(screen.getByRole('button', { name: /create account/i }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/passwords do not match/i);
+  });
+
+  it('Login handles email signin errors and Google signin errors', async () => {
+    const user = userEvent.setup();
+    authMock.state.signInWithEmail.mockRejectedValue(new Error('Invalid credentials'));
+    authMock.state.signInWithGoogle.mockRejectedValue(new Error('Google sign-in failed'));
+
+    renderWithProviders(<Login />, '/login');
+
+    // Test Email error
+    await user.type(screen.getByLabelText(/email/i), 'wrong@example.com');
+    await user.type(screen.getByLabelText(/^password$/i), 'wrongpass');
+    await user.click(screen.getByRole('button', { name: /sign in/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/invalid credentials/i);
+
+    // Test Google error
+    await user.click(screen.getByRole('button', { name: /continue with google/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/google sign-in failed/i);
+  });
+
+  it('Login switches to reset mode and handles reset submission', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Login />, '/login');
+
+    await user.click(screen.getByRole('button', { name: /forgot password/i }));
+    expect(screen.getByRole('heading', { name: /reset password/i })).toBeVisible();
+
+    await user.type(screen.getByLabelText(/email/i), 'reset@example.com');
+    
+    // We don't have a mock for sendPasswordResetEmail directly in authMock since it's imported from firebase/auth
+    // but we can trigger the UI to ensure the form tries to submit.
+    await user.click(screen.getByRole('button', { name: /send reset email/i }));
   });
 
   it('Profile loads account, progress, settings, and consent controls', async () => {

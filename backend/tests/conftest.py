@@ -33,10 +33,15 @@ _mock_firebase_admin.auth = MagicMock()
 # By default, verify_id_token raises InvalidIdTokenError for any token.
 # Tests that need a valid decoded token use authed_client (which bypasses verify_id_token
 # entirely via dependency override) — they are unaffected by this default.
-_mock_firebase_admin.auth.ExpiredIdTokenError = Exception
-_mock_firebase_admin.auth.InvalidIdTokenError = Exception
-_mock_firebase_admin.auth.UserDisabledError = Exception
-_mock_firebase_admin.auth.FirebaseAuthError = Exception
+class MockExpiredIdTokenError(Exception): pass
+class MockInvalidIdTokenError(Exception): pass
+class MockUserDisabledError(Exception): pass
+class MockFirebaseAuthError(Exception): pass
+
+_mock_firebase_admin.auth.ExpiredIdTokenError = MockExpiredIdTokenError
+_mock_firebase_admin.auth.InvalidIdTokenError = MockInvalidIdTokenError
+_mock_firebase_admin.auth.UserDisabledError = MockUserDisabledError
+_mock_firebase_admin.auth.FirebaseAuthError = MockFirebaseAuthError
 _mock_firebase_admin.auth.verify_id_token = MagicMock(
     side_effect=_mock_firebase_admin.auth.InvalidIdTokenError("mock: invalid token")
 )
@@ -53,6 +58,13 @@ sys.modules["google.cloud"] = MagicMock()
 sys.modules["google.cloud.firestore"] = _mock_firestore
 sys.modules["google.cloud.firestore_v1"] = MagicMock()
 sys.modules["google.cloud.firestore_v1.async_client"] = MagicMock()
+
+# Mock dialogflow
+sys.modules["google.cloud.dialogflowcx_v3"] = MagicMock()
+sys.modules["google.cloud.dialogflowcx_v3.services"] = MagicMock()
+sys.modules["google.cloud.dialogflowcx_v3.services.sessions"] = MagicMock()
+sys.modules["google.cloud.dialogflowcx_v3.types"] = MagicMock()
+sys.modules["google.cloud.dialogflowcx_v3.types.session"] = MagicMock()
 
 # ──────────────────────────────────────────────────────────────────────────────
 # STEP 4: NOW it is safe to import the app

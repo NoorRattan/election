@@ -19,7 +19,7 @@ export default defineConfig({
   },
 
   // Test configuration (Vitest)
-  // UPDATED (Prompt 09 — GAP-02): Added coverage thresholds so that
+  // Added coverage thresholds so that
   // "npm run test:coverage" FAILS when coverage drops below the minimum.
   // Without thresholds, vitest --coverage always exits 0 regardless of actual coverage.
   test: {

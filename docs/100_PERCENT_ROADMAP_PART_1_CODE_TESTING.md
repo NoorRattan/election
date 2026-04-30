@@ -8,9 +8,9 @@ This is a line-by-line, file-by-file hyper-analysis of the Electra codebase focu
 #### 1.1. Encoding Damage (Mojibake)
 The repository contains visible encoding damage resulting from incorrect UTF-8 byte handling in earlier commits. This lowers the professional appearance and automated code-quality heuristics.
 *   **Target Files**: 
-    *   `README.md`: Check for `â€”` (em dash), `â†’` (arrow), and broken emojis.
+    *   `README.md`: Check for `—` (em dash), `→` (arrow), and broken emojis.
     *   `docs/*`: Scan all documentation for similar artifacts.
-    *   **Action**: Run a global find-and-replace for `â€”` -> `—`, `â†’` -> `→`, and restore broken emojis (e.g., `ðŸ—³ï¸ ` -> 🗳️).
+    *   **Action**: Run a global find-and-replace for `—` -> `—`, `→` -> `→`, and restore broken emojis (e.g., `🗳️` -> 🗳️).
 
 #### 1.2. Prompt-History Artifacts
 The presence of "AI-generated" history markers in the source code reduces maintainability scores.

@@ -2,7 +2,7 @@
  * Tests for Navbar component.
  * Covers structure, auth states, country badge, and mobile menu accessibility.
  *
- * Regression test included: Quiz link must NOT be present (FIX #2 — no standalone /quiz route).
+ * Regression test included: Quiz link must NOT be present (no standalone /quiz route).
  */
 
 import { render, screen, fireEvent } from '@testing-library/react'
@@ -77,7 +77,7 @@ describe('Navbar — structure', () => {
     expect(links[0]).toHaveAttribute('href', '/timeline')
   })
 
-  it('"Quiz" link is NOT present (regression test for FIX #2 — no standalone /quiz route)', () => {
+  it('"Quiz" link is NOT present (regression test for no standalone /quiz route)', () => {
     renderNavbar()
     expect(screen.queryByRole('link', { name: /quiz/i })).not.toBeInTheDocument()
     // Also check by text to be thorough

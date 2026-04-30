@@ -45,7 +45,7 @@ The application already passes Axe WCAG 2.1 AA automated checks, which is why th
     *   **Action**: Ensure that absolute positioning or fixed-height wrappers do not clip text when the user scales the browser font size to 200%. Writing a specific Playwright test that sets viewport scaling and checks for overlapping bounding boxes is the gold standard for this.
 
 ### Summary Checklist for the Next Engineer
-1. Find and replace `â€”` and other mojibake.
+1. Find and replace `—` and other mojibake.
 2. Delete `// UPDATED` prompt-history comments.
 3. Write Jest unit tests for `App.jsx`, `Layout.jsx`, `Footer.jsx`, `Navbar.jsx`, and `useAuth.js`.
 4. Wrap decorative emojis in `aria-hidden`.

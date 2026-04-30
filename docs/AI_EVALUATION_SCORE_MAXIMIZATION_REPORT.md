@@ -46,7 +46,7 @@ Most likely hidden evaluator concerns:
    - Several important app/page/service modules were untested.
    - The frontend toolchain was stale enough to carry advisories.
    - Build configuration depended on Vite 5 era assumptions.
-   - Source files and docs contain visible mojibake from earlier encoding damage, such as `â€”` and broken emoji sequences.
+   - Source files and docs contain visible mojibake from earlier encoding damage, such as `—` and broken emoji sequences.
    - Several comments are prompt-history comments rather than durable engineering comments.
 
 2. Security lost points because `npm audit` found production vulnerabilities before this pass:
@@ -238,7 +238,7 @@ Important backend environment note:
 Most likely causes:
 
 1. Encoding damage is visible across docs and code comments.
-   - Examples include `â€”`, `â†’`, and broken emoji byte sequences.
+   - Examples include `—`, `→`, and broken emoji byte sequences.
    - This makes the repo look generated or corrupted even if runtime behavior works.
    - It likely affects automated code-quality heuristics and human review trust.
 

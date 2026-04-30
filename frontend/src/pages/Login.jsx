@@ -8,6 +8,12 @@ import { auth } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/ui/Button';
 
+/**
+ * Login component handles user authentication.
+ * Supports sign in, sign up, and password reset flows via Firebase Auth.
+ * 
+ * @returns {JSX.Element} The rendered Login page component.
+ */
 export default function Login() {
   const { signInWithGoogle, signInWithEmail, user } = useAuth();
   const navigate  = useNavigate();

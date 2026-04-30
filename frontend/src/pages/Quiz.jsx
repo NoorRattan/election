@@ -7,6 +7,12 @@ import QuizCard from '../components/quiz/QuizCard';
 import QuizResult from '../components/quiz/QuizResult';
 import Button from '../components/ui/Button';
 
+/**
+ * Quiz page component.
+ * Authenticates users, fetches questions, processes answers, and submits results.
+ * 
+ * @returns {JSX.Element} The rendered Quiz page.
+ */
 export default function Quiz() {
   const { topicId }     = useParams();
   const { user, loading: authLoading } = useAuth();
