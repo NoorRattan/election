@@ -58,6 +58,19 @@ jobs:
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
 
 
+      # ── Start preview server in background ─────────────────────────────────
+      # Playwright's webServer block would also start this, but having CI manage
+      # it explicitly avoids the timeout loop caused by Playwright spawning and
+      # waiting for the process internally.
+      - name: Start Vite preview server
+        run: npx vite preview --port 5173 &
+        env:
+          VITE_API_BASE_URL: /api/v1
+
+      # ── Wait until the preview server is accepting connections ────────────────
+      - name: Wait for preview server
+        run: npx wait-on http://localhost:5173 --timeout 60000
+
       # ── Run E2E tests (Chromium only in CI) ───────────────────────────────
       # Firefox and mobile Safari run locally only (npm run e2e) to keep CI fast.
       - name: Run Playwright tests
@@ -65,6 +78,8 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: http://localhost:5173
           CI: true
+          # Tell Playwright the server is already running — skip webServer block
+          PLAYWRIGHT_SKIP_SERVER_STARTUP: true
 
       # ── Upload test report (even on failure) ──────────────────────────────
       - name: Upload Playwright report

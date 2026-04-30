@@ -61,9 +61,12 @@ export default defineConfig({
   webServer: {
     command: isCI ? 'npm run preview -- --port 5173' : 'npm run dev',
     url: 'http://localhost:5173',
-    // Allow reuse of a server that is already running (e.g. from `npm run dev`).
-    // Set to false on CI so the preview server always gets a clean start.
-    reuseExistingServer: !isCI,
+    // Server is always started externally:
+    //   - locally: npm run dev (or reuse an already-running Vite dev server)
+    //   - CI: the workflow starts `vite preview` explicitly before this step
+    // Never let Playwright manage the server process — that was causing the
+    // 7-minute loop on CI when the internal spawn timed out.
+    reuseExistingServer: true,
     timeout: 120_000, // 2 min for Vite cold start
     env: {
       // Override the API base URL to a relative path so Playwright's route
