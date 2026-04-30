@@ -33,10 +33,20 @@ _mock_firebase_admin.auth = MagicMock()
 # By default, verify_id_token raises InvalidIdTokenError for any token.
 # Tests that need a valid decoded token use authed_client (which bypasses verify_id_token
 # entirely via dependency override) — they are unaffected by this default.
-class MockExpiredIdTokenError(Exception): pass
-class MockInvalidIdTokenError(Exception): pass
-class MockUserDisabledError(Exception): pass
-class MockFirebaseAuthError(Exception): pass
+class MockExpiredIdTokenError(Exception):
+    pass
+
+
+class MockInvalidIdTokenError(Exception):
+    pass
+
+
+class MockUserDisabledError(Exception):
+    pass
+
+
+class MockFirebaseAuthError(Exception):
+    pass
 
 _mock_firebase_admin.auth.ExpiredIdTokenError = MockExpiredIdTokenError
 _mock_firebase_admin.auth.InvalidIdTokenError = MockInvalidIdTokenError
