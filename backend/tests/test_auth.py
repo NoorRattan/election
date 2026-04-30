@@ -58,9 +58,10 @@ class TestAuthMiddleware:
 
     def test_auth_expired_token(self, client, mocker):
         import firebase_admin.auth
+
         mocker.patch(
             "firebase_admin.auth.verify_id_token",
-            side_effect=firebase_admin.auth.ExpiredIdTokenError("expired", "expired")
+            side_effect=firebase_admin.auth.ExpiredIdTokenError("expired", "expired"),
         )
         resp = client.get(
             "/api/v1/user/profile",
@@ -71,9 +72,10 @@ class TestAuthMiddleware:
 
     def test_auth_invalid_token(self, client, mocker):
         import firebase_admin.auth
+
         mocker.patch(
             "firebase_admin.auth.verify_id_token",
-            side_effect=firebase_admin.auth.InvalidIdTokenError("invalid")
+            side_effect=firebase_admin.auth.InvalidIdTokenError("invalid"),
         )
         resp = client.get(
             "/api/v1/user/profile",
@@ -84,9 +86,10 @@ class TestAuthMiddleware:
 
     def test_auth_user_disabled(self, client, mocker):
         import firebase_admin.auth
+
         mocker.patch(
             "firebase_admin.auth.verify_id_token",
-            side_effect=firebase_admin.auth.UserDisabledError("disabled")
+            side_effect=firebase_admin.auth.UserDisabledError("disabled"),
         )
         resp = client.get(
             "/api/v1/user/profile",
@@ -97,8 +100,7 @@ class TestAuthMiddleware:
 
     def test_auth_unexpected_error(self, client, mocker):
         mocker.patch(
-            "firebase_admin.auth.verify_id_token",
-            side_effect=Exception("Unexpected boom")
+            "firebase_admin.auth.verify_id_token", side_effect=Exception("Unexpected boom")
         )
         resp = client.get(
             "/api/v1/user/profile",

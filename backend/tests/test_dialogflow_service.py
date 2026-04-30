@@ -33,7 +33,9 @@ async def test_query_dialogflow_no_agent_id(mocker):
 async def test_query_dialogflow_success(mock_settings, mocker):
     # Mock SessionsClient and its types
     mock_sessions_client = MagicMock()
-    mock_session_path = "projects/test-project/locations/global/agents/test-agent-id/sessions/session123"
+    mock_session_path = (
+        "projects/test-project/locations/global/agents/test-agent-id/sessions/session123"
+    )
     mock_sessions_client.session_path.return_value = mock_session_path
 
     mock_detect_intent_response = MagicMock()
