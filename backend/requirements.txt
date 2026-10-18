@@ -2,9 +2,12 @@ fastapi==0.143.5
 uvicorn[standard]==0.54.0
 pydantic==2.14.1
 pydantic-settings==2.16.0
-google-cloud-firestore==2.16.0
+google-cloud-firestore==2.27.0
 firebase-admin==6.5.0
-google-cloud-dialogflow-cx==1.15.0
+google-cloud-dialogflow-cx==2.6.0
+
+# Keep the Google SDK resolver above the patched protobuf release.
+protobuf==5.29.6
 google-auth==2.29.0
 httpx==0.28.1
 python-dotenv==1.2.4
