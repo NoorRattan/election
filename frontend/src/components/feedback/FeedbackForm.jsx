@@ -84,7 +84,7 @@ export default function FeedbackForm({ onSuccess, onClose, country = null }) {
         <h2
           ref={successHeadingRef}
           tabIndex={-1}
-          className="text-xl font-semibold text-neutral-900 outline-none"
+          className="text-xl font-semibold text-neutral-900 outline-hidden"
         >
           Thank you for your feedback!
         </h2>

@@ -52,7 +52,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-xl text-primary-700 focus:outline-2 focus:outline-offset-2 focus:outline-primary-600 rounded"
+            className="flex items-center gap-2 font-bold text-xl text-primary-700 focus:outline-2 focus:outline-offset-2 focus:outline-primary-600 rounded-sm"
           >
             <svg
               className="h-7 w-7"
@@ -146,7 +146,7 @@ export default function Navbar() {
                       to="/profile"
                       role="menuitem"
                       onClick={() => setDropOpen(false)}
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:bg-neutral-50"
+                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 focus:outline-hidden focus:bg-neutral-50"
                     >
                       My Profile
                     </Link>
@@ -156,7 +156,7 @@ export default function Navbar() {
                         setDropOpen(false)
                         handleSignOut()
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-error-600 hover:bg-error-50 focus:outline-none focus:bg-error-50"
+                      className="w-full text-left px-4 py-2 text-sm text-error-600 hover:bg-error-50 focus:outline-hidden focus:bg-error-50"
                     >
                       Sign Out
                     </button>

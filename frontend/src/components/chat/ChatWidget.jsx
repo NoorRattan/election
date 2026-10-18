@@ -142,7 +142,7 @@ export default function ChatWidget() {
             <button
               onClick={() => setIsOpen(false)}
               aria-label="Close chat"
-              className="text-neutral-400 hover:text-neutral-700 focus:outline-2 focus:outline-primary-600 rounded p-0.5"
+              className="text-neutral-400 hover:text-neutral-700 focus:outline-2 focus:outline-primary-600 rounded-sm p-0.5"
             >
               <svg
                 className="h-4 w-4"

@@ -20,7 +20,7 @@ export default function Card({ children, className = '', onClick }) {
   return (
     <div
       className={[
-        'bg-white rounded-lg shadow-sm border border-neutral-200 p-6',
+        'bg-white rounded-lg shadow-xs border border-neutral-200 p-6',
         isClickable
           ? 'cursor-pointer hover:shadow-md hover:border-primary-300 transition-shadow duration-150 focus:outline-2 focus:outline-offset-2 focus:outline-primary-600'
           : '',

@@ -50,7 +50,7 @@ export default function TopicDetail() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
       <Link
         to="/topics"
-        className="text-sm text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded mb-6 inline-block"
+        className="text-sm text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded-sm mb-6 inline-block"
       >
         Back to Topics
       </Link>
@@ -79,7 +79,7 @@ export default function TopicDetail() {
                 <li key={slug}>
                   <Link
                     to={`/topics/${slug}`}
-                    className="text-primary-600 hover:underline text-sm focus:outline-2 focus:outline-primary-600 rounded capitalize"
+                    className="text-primary-600 hover:underline text-sm focus:outline-2 focus:outline-primary-600 rounded-sm capitalize"
                   >
                     {slug.replace(/-/g, ' ')}
                   </Link>

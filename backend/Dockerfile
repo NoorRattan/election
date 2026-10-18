@@ -2,7 +2,7 @@
 # Base: python:3.11-slim for small image size
 # Runs as non-root user for security (Cloud Run requirement)
 
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app

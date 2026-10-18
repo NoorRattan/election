@@ -231,7 +231,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => switchMode('reset')}
-                className="text-xs text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-xs text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
               >
                 Forgot password?
               </button>
@@ -266,7 +266,7 @@ export default function Login() {
           By signing in you agree to our{' '}
           <Link
             to="/privacy"
-            className="text-neutral-700 underline hover:text-neutral-900 focus:outline-2 focus:outline-primary-600 rounded"
+            className="text-neutral-700 underline hover:text-neutral-900 focus:outline-2 focus:outline-primary-600 rounded-sm"
           >
             Privacy Policy
           </Link>

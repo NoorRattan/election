@@ -39,7 +39,7 @@ export default function Footer() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-primary-600 hover:text-primary-800 hover:underline underline focus:outline-2 focus:outline-primary-600 rounded"
+                    className="text-sm text-primary-600 hover:text-primary-800 hover:underline underline focus:outline-2 focus:outline-primary-600 rounded-sm"
                   >
                     {label}
                   </a>
@@ -55,7 +55,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy"
-                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded"
+                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded-sm"
                 >
                   Privacy Policy
                 </Link>
@@ -63,7 +63,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/accessibility"
-                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded"
+                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded-sm"
                 >
                   Accessibility Statement
                 </Link>
@@ -72,7 +72,7 @@ export default function Footer() {
                 <button
                   type="button"
                   onClick={() => setFeedbackOpen(true)}
-                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded bg-transparent border-0 p-0 cursor-pointer"
+                  className="text-sm text-neutral-600 hover:text-neutral-900 hover:underline focus:outline-2 focus:outline-neutral-400 rounded-sm bg-transparent border-0 p-0 cursor-pointer"
                 >
                   Send Feedback
                 </button>
@@ -89,7 +89,7 @@ export default function Footer() {
                   href="https://github.com/NoorRattan/election"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-neutral-400 rounded"
+                  className="text-sm text-neutral-600 underline hover:text-neutral-900 focus:outline-2 focus:outline-neutral-400 rounded-sm"
                 >
                   GitHub Repository
                 </a>

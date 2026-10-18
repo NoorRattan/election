@@ -113,7 +113,7 @@ export default function Topics() {
             <Link
               key={topic.slug}
               to={`/topics/${topic.slug}`}
-              className="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm hover:shadow-md hover:border-primary-300 transition-all focus:outline-2 focus:outline-primary-600 block"
+              className="bg-white rounded-xl border border-neutral-200 p-6 shadow-xs hover:shadow-md hover:border-primary-300 transition-all focus:outline-2 focus:outline-primary-600 block"
             >
               <div className="flex flex-wrap gap-2 mb-3">
                 <Badge variant="info">{topic.category}</Badge>

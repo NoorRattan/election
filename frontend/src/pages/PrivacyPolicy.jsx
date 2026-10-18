@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <Link
         to="/"
-        className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded mb-6"
+        className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm mb-6"
       >
         Back to Home
       </Link>
@@ -71,14 +71,14 @@ export default function PrivacyPolicy() {
               You can withdraw consent at any time in{' '}
               <Link
                 to="/profile"
-                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
               >
                 Profile settings
               </Link>
             </li>
             <li>
               Consent is stored locally (localStorage key:{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">electra_analytics_consent</code>
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">electra_analytics_consent</code>
               )
             </li>
             <li>Analytics events are anonymised before transmission to Google</li>
@@ -95,7 +95,7 @@ export default function PrivacyPolicy() {
               You can permanently delete your account and all associated data from{' '}
               <Link
                 to="/profile"
-                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
               >
                 Profile account deletion settings
               </Link>
@@ -147,7 +147,7 @@ export default function PrivacyPolicy() {
               href="https://policies.google.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
             >
               policies.google.com/privacy
             </a>
@@ -166,11 +166,11 @@ export default function PrivacyPolicy() {
                 href="https://github.com/NoorRattan/election/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
               >
                 GitHub issue
               </a>{' '}
-              with the label <code className="bg-neutral-100 px-1 rounded text-sm">privacy</code>
+              with the label <code className="bg-neutral-100 px-1 rounded-sm text-sm">privacy</code>
             </li>
           </ul>
         </section>

@@ -56,7 +56,7 @@ export default function CountrySelector({ onSelect }) {
               'focus:outline-2 focus:outline-offset-2 focus:outline-primary-600',
               isSelected
                 ? 'border-primary-600 bg-primary-50 shadow-md'
-                : 'border-neutral-200 bg-white hover:border-primary-300 hover:shadow-sm',
+                : 'border-neutral-200 bg-white hover:border-primary-300 hover:shadow-xs',
             ].join(' ')}
           >
             <div className="text-4xl mb-3" aria-hidden="true">

@@ -100,7 +100,7 @@ describe('ConsentToggle - interaction', () => {
 // -- Accessibility ----------------------------------------------------------
 
 describe('ConsentToggle - accessibility', () => {
-  it('button has a visible focus ring class', () => {
+  it('button has a visible focus ring-3 class', () => {
     renderToggle()
     const btn = screen.getByRole('switch')
     // The class list should contain "focus" (focus-visible:ring or focus:outline)

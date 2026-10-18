@@ -21,7 +21,7 @@ export default function QuizResult({ score, total, correct, results, onRetry, on
   const scoreLabel = score >= 80 ? 'Excellent!' : score >= 50 ? 'Good effort' : 'Keep practising'
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-sm max-w-2xl mx-auto">
+    <div className="bg-white rounded-xl border border-neutral-200 p-8 shadow-xs max-w-2xl mx-auto">
       {/* Score display */}
       <div className="text-center mb-8">
         <div className={`text-6xl font-bold ${scoreColor}`} aria-label={`${score} percent`}>

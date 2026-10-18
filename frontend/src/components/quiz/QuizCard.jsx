@@ -13,7 +13,7 @@ export default function QuizCard({
   totalQuestions,
 }) {
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+    <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-xs">
       <fieldset>
         <legend className="font-semibold text-neutral-900 text-base mb-1 w-full">
           <span className="sr-only">

@@ -15,7 +15,7 @@ export default function AccessibilityStatement() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <Link
         to="/"
-        className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded mb-6"
+        className="inline-flex items-center text-sm text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm mb-6"
       >
         Back to Home
       </Link>
@@ -52,7 +52,7 @@ export default function AccessibilityStatement() {
             <li>Skip navigation link on every page (visible on focus)</li>
             <li>
               All form inputs have associated{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">&lt;label&gt;</code> elements
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">&lt;label&gt;</code> elements
             </li>
             <li>
               Colour contrast ratio at least 4.5:1 for normal text and at least 3:1 for large text
@@ -61,13 +61,13 @@ export default function AccessibilityStatement() {
             <li>Focus indicators visible on all keyboard-focusable elements</li>
             <li>
               Animated content respects{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">prefers-reduced-motion</code>{' '}
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">prefers-reduced-motion</code>{' '}
               media query (where applicable)
             </li>
             <li>
               All SVG icons are either{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">aria-hidden</code> (decorative)
-              or have <code className="bg-neutral-100 px-1 rounded text-sm">aria-label</code>{' '}
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">aria-hidden</code> (decorative)
+              or have <code className="bg-neutral-100 px-1 rounded-sm text-sm">aria-label</code>{' '}
               (functional)
             </li>
             <li>
@@ -75,15 +75,15 @@ export default function AccessibilityStatement() {
             </li>
             <li>
               Quiz questions use{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">&lt;fieldset&gt;</code>/
-              <code className="bg-neutral-100 px-1 rounded text-sm">&lt;legend&gt;</code> pattern
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">&lt;fieldset&gt;</code>/
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">&lt;legend&gt;</code> pattern
               (WCAG 1.3.1)
             </li>
             <li>
               Dynamic content announced via{' '}
-              <code className="bg-neutral-100 px-1 rounded text-sm">aria-live</code> regions (
-              <code className="bg-neutral-100 px-1 rounded text-sm">role=&quot;status&quot;</code>{' '}
-              or <code className="bg-neutral-100 px-1 rounded text-sm">role=&quot;alert&quot;</code>
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">aria-live</code> regions (
+              <code className="bg-neutral-100 px-1 rounded-sm text-sm">role=&quot;status&quot;</code>{' '}
+              or <code className="bg-neutral-100 px-1 rounded-sm text-sm">role=&quot;alert&quot;</code>
               )
             </li>
           </ul>
@@ -122,7 +122,7 @@ export default function AccessibilityStatement() {
                 href="https://webaim.org/resources/contrastchecker/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+                className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
               >
                 WebAIM Contrast Checker
               </a>
@@ -142,12 +142,12 @@ export default function AccessibilityStatement() {
               href="https://github.com/NoorRattan/election/issues"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
             >
               GitHub issue
             </a>{' '}
             with the label{' '}
-            <code className="bg-neutral-100 px-1 rounded text-sm">accessibility</code>. We aim to
+            <code className="bg-neutral-100 px-1 rounded-sm text-sm">accessibility</code>. We aim to
             respond to accessibility reports within <strong>5 working days</strong>.
           </p>
         </section>
@@ -162,7 +162,7 @@ export default function AccessibilityStatement() {
               href="https://www.w3.org/WAI/standards-guidelines/wcag/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-600 underline hover:text-primary-800 focus:outline-2 focus:outline-primary-600 rounded-sm"
             >
               Web Content Accessibility Guidelines (WCAG) 2.1
             </a>

@@ -15,7 +15,7 @@ export default function TimelineEvent({
   return (
     <li
       className={[
-        'bg-white rounded-lg border-l-4 shadow-sm p-5 transition-opacity',
+        'bg-white rounded-lg border-l-4 shadow-xs p-5 transition-opacity',
         borderColor,
         isPast ? 'opacity-60' : '',
       ].join(' ')}
@@ -24,7 +24,7 @@ export default function TimelineEvent({
         <div className="flex-1 min-w-0">
           {/* Date and relative label */}
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="text-xs font-semibold text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-sm">
               {formatDate(event.date, country)}
             </span>
             {isPast ? (
@@ -45,7 +45,7 @@ export default function TimelineEvent({
             href={event.official_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded"
+            className="text-xs text-primary-600 hover:text-primary-800 hover:underline focus:outline-2 focus:outline-primary-600 rounded-sm"
           >
             Official source
           </a>

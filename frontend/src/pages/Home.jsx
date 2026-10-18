@@ -93,7 +93,7 @@ export default function Home() {
           ].map(({ step, icon, title, desc }) => (
             <div
               key={step}
-              className="bg-white rounded-xl border border-neutral-200 p-6 text-center shadow-sm"
+              className="bg-white rounded-xl border border-neutral-200 p-6 text-center shadow-xs"
             >
               <div className="text-4xl mb-3" aria-hidden="true">
                 {icon}
@@ -134,7 +134,7 @@ export default function Home() {
           <div className="mt-6 text-center">
             <Link
               to="/timeline"
-              className="text-primary-600 hover:text-primary-800 hover:underline text-sm font-medium focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-600 hover:text-primary-800 hover:underline text-sm font-medium focus:outline-2 focus:outline-primary-600 rounded-sm"
             >
               View full election timeline
             </Link>

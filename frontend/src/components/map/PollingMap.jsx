@@ -82,7 +82,7 @@ export default function PollingMap() {
               href={finderUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-700 hover:text-primary-900 hover:underline text-sm font-medium focus:outline-2 focus:outline-primary-600 rounded"
+              className="text-primary-700 hover:text-primary-900 hover:underline text-sm font-medium focus:outline-2 focus:outline-primary-600 rounded-sm"
             >
               {finderUrl}
             </a>
